@@ -8,7 +8,7 @@ Lors de notre master MIAGE, Serigne Rawane et moi-même avons réalisé un proje
 * C
 * Python 3
 * GitHub
-* JSON
+* Node-RED
 
 ### Matériels 
 * Une carte ESP32
