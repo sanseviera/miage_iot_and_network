@@ -5,10 +5,18 @@ Lors de notre master MIAGE, Serigne Rawane et moi-même avons réalisé un proje
 
 ### Logiciels
 * Arduino IDE 1.8.19
+* C
 * Python 3
 * GitHub
+* JSON
 
 ### Matériels 
+* Une carte ESP32
+* Des LEDs de couleurs
+* Capteur de lumière
+* Des résistances
+* Un ventilateur
+* Un thermomètre
 
 ## Documentation utilisateur
 
