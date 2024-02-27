@@ -3,6 +3,8 @@
 #include <Adafruit_NeoPixel.h>
 #include <ArduinoJson.h>
 
+#include "colors.h"
+
 //-------------Structures---------------------    
 struct Information { 
   int chanceFeu; // une valeur en pourcentage
@@ -19,7 +21,7 @@ struct Information {
 struct Information info = {0 , 0.0 , 0.0 , 0, 0, 0.0, 0.0, 0.0};
 
 struct Parametre{
-  const int temperatureSeuilHaut = 25;
+  const int temperatureSeuilHaut = 23;
   const int temperatureSeuilBas = 22;
   const int lumiereAlerte = 3000;
   const float temperatureAlerte = 20;
@@ -29,8 +31,11 @@ struct Parametre{
   const int ledPinVerte = 16;
   const int ledPinJaune = 2;
   const int bandeLedPin = 5;
-  const int brocheVentilateur = 26;
+  const int brocheVentilateur = 27;
   const int brocheBande = 13;
+  const int brocheLightIntensity = A5;
+  const int brocheTermometre = 23;
+
   //----------------------------
   const double periodeTimerGeneral = 1000;
   const double periodeTimerBandeLed = 300;
@@ -41,7 +46,7 @@ struct Parametre parametre = {};
 //----------------------------------
 
 
-OneWire oneWire(23);
+OneWire oneWire(parametre.brocheTermometre);
 DallasTemperature tempSensor(&oneWire);
 int numberKeyPresses = 0;
 Adafruit_NeoPixel strip(parametre.bandeLedPin, parametre.brocheBande, NEO_GRB + NEO_KHZ800);
@@ -65,8 +70,10 @@ void initCapteurChaleur(){
 }
 
 void initVentilo(){
-  
-  pinMode(parametre.brocheVentilateur, OUTPUT); // broche 26
+  ledcAttachPin(27, 0);
+  ledcSetup(0, 25000, 8); 
+  ledcWrite(0,255);
+  //pinMode(parametre.brocheVentilateur, OUTPUT); // broche 26
 }
 
 //--------------Fonction de base--------------------
@@ -81,12 +88,21 @@ void setChauffage(){
 
 void setVentilo(){
   if(info.etatRegulateurTemperature == 0){
+    int tmp = 0;
+    if(info.temperature >= parametre.temperatureSeuilHaut && info.temperature < parametre.temperatureSeuilHaut+1){
+      tmp = 64;
+    } else if(info.temperature+1 >= parametre.temperatureSeuilHaut && info.temperature < parametre.temperatureSeuilHaut+2){
+      tmp = 127;
+    } else if(info.temperature+2 >= parametre.temperatureSeuilHaut && info.temperature < parametre.temperatureSeuilHaut+3){
+      tmp = 191;
+    } else {
+      tmp = 255;
+    }
     digitalWrite(parametre.ledPinVerte, HIGH);
-    analogWrite(parametre.brocheVentilateur, info.temperature * 4);
+    ledcWrite(0, tmp);
   } else{
     digitalWrite(parametre.ledPinVerte, LOW);
-    analogWrite(parametre.brocheVentilateur, 0);
-  }
+    ledcWrite(0, 0);  }
 }
 
 
@@ -117,7 +133,7 @@ void setEtatRegulateurTemperature(){
 
 int lireCapteurLumiere(){
   int sensorValue;
-  sensorValue = analogRead(A5); // Read analog input on ADC1_CHANNEL_5 (GPIO 33)
+  sensorValue = analogRead(parametre.brocheLightIntensity); // Read analog input on ADC1_CHANNEL_5 (GPIO 33)
   return sensorValue;
 }
 
@@ -218,7 +234,7 @@ void setDetectorFire(){
 
 void informationPrint(){
   Serial.printf("Température : %f°\n",info.temperature);
-  Serial.printf("Lumière : %f\n",info.lumiere);
+  Serial.printf("Lumière : %i\n",info.lumiere);
   Serial.printf("Chance de feu : %i%%\n",info.chanceFeu);
   Serial.print("-----------------------\n");
 }
@@ -251,7 +267,7 @@ void setup(){
   initCapteurChaleur();
   initVentilo();
   setBandeLed();
-  delay(1000);
+  delay(2000);
 }
 
 void loop() {
