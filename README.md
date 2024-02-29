@@ -20,6 +20,11 @@ Lors de notre master MIAGE, Serigne Rawane et moi-même avons réalisé un proje
 
 ## Documentation utilisateur
 
+### Lancer NODE-RED
+```node-red [-v] [-?] [--settings settings.js] [--userDir DIR]
+         [--port PORT] [--title TITLE] [--safe] [flows.json|projectName]
+         [-D X=Y|@file]```
+
 ## Documentation technique
 
 ### Git

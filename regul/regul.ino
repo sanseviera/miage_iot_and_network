@@ -11,18 +11,17 @@ struct Information {
   float lumiere;
   float temperature;
   int etatRegulateurTemperature; //  0) refroidi , 1) est éteind , 2) chauffe
-  bool alerteEtatLed; // pour faire clignoter la led
   // Variable pour le TIMER
   long timerGeneral;
   long timerBandeLed;
   long timerCommunication;
   
 };
-struct Information info = {0 , 0.0 , 0.0 , 0, 0, 0.0, 0.0, 0.0};
+struct Information info = {0 , 0.0 , 0.0 , 0, 0.0, 0.0, 0.0};
 
 struct Parametre{
-  const int temperatureSeuilHaut = 23;
-  const int temperatureSeuilBas = 22;
+  const int temperatureSeuilHaut = 28;
+  const int temperatureSeuilBas = 21;
   const int lumiereAlerte = 3000;
   const float temperatureAlerte = 20;
   const int pourcentageAvantAlerte = 80; // Pourcentage à atteindre pour déclencher l'alerte.
@@ -169,21 +168,8 @@ void setLed(){
   int colorB = 0; 
   int colorC = 0; 
 
-  if(info.chanceFeu > 80){
-    if(info.alerteEtatLed==1){
-      info.alerteEtatLed = 0;
-      colorA = 0;
-      colorB = 0;
-      colorC = 255;
-    } else {
-      info.alerteEtatLed =1;
-      colorA = 0;
-      colorB = 0;
-      colorC = 0;
-    }
-    
-  }
-  else if(info.etatRegulateurTemperature == 0){
+  
+  if(info.etatRegulateurTemperature == 0){
     colorA = 255;
     colorB = 0;
     colorC = 0;
@@ -255,7 +241,6 @@ void makeJSON(){
   serializeJson(jdoc, payload);
 
   /* 3) Send the request to the network and Receive the answer */
-  Serial.println("Emission of the String/Payload ");
   Serial.println(payload);
 }
 
@@ -290,7 +275,7 @@ void loop() {
   }
   if(info.timerCommunication == 0 || millis() - info.timerCommunication > parametre.periodeTimerCommunication){
     info.timerCommunication=millis();
-    informationPrint();
+    //informationPrint();
     makeJSON();
   }
   
