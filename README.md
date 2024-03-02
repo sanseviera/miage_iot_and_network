@@ -27,6 +27,12 @@ Lors de notre master MIAGE, Serigne Rawane et moi-même avons réalisé un proje
 
 ## Documentation technique
 
+### Problémes rencontré 
+
+#### Arduino IDE
+* Sur un des ordinateurs ```ledc.h``` à du être installé depuis le gestionnaire des bibliotéques.
+
+
 ### Git
 
 #### Les branches 

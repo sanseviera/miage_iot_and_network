@@ -2,8 +2,9 @@
 #include "DallasTemperature.h"
 #include <Adafruit_NeoPixel.h>
 #include <ArduinoJson.h>
-
 #include "colors.h"
+
+#define Old 0
 
 //-------------Structures---------------------    
 struct Information { 
@@ -12,15 +13,18 @@ struct Information {
   float temperature;
   int etatRegulateurTemperature; //  0) refroidi , 1) est éteind , 2) chauffe
   // Variable pour le TIMER
-  long timerGeneral;
-  long timerBandeLed;
-  long timerCommunication;
+  float timerGeneral;
+  float timerBandeLed;
+  float timerCommunication;
+  int vitesseVentilateur;
+  int feu; // 1 ou 0, il y a un feu ou non
+  int regulation; // 1 ou 0 on régul ou non
   
 };
-struct Information info = {0 , 0.0 , 0.0 , 0, 0.0, 0.0, 0.0};
+struct Information info = {0 , 0.0 , 0.0 , 0, 0.0, 0.0, 0.0, 0 , 0};
 
 struct Parametre{
-  const int temperatureSeuilHaut = 28;
+  const int temperatureSeuilHaut = 22;
   const int temperatureSeuilBas = 21;
   const int lumiereAlerte = 3000;
   const float temperatureAlerte = 20;
@@ -50,9 +54,6 @@ DallasTemperature tempSensor(&oneWire);
 int numberKeyPresses = 0;
 Adafruit_NeoPixel strip(parametre.bandeLedPin, parametre.brocheBande, NEO_GRB + NEO_KHZ800);
 
-void IRAM_ATTR isr() { // Interrupt Handler
-  numberKeyPresses++;
-} 
 
 
 //--------------Fonction de base INITIALISATION--------------------
@@ -68,12 +69,18 @@ void initCapteurChaleur(){
     tempSensor.begin();
 }
 
-void initVentilo(){
-  ledcAttachPin(27, 0);
-  ledcSetup(0, 25000, 8); 
-  ledcWrite(0,255);
-  //pinMode(parametre.brocheVentilateur, OUTPUT); // broche 26
+
+void initVentilo() {
+  #if Old
+    ledcAttach(27, 25000, 8); // Associe le canal PWM 0 à la broche GPIO 27
+    ledcWrite(27, 255); 
+    // pinMode(parametre.brocheVentilateur, OUTPUT); // Décommentez et utilisez si nécessaire
+  #else
+    ledcAttachPin(27, 0); 
+    ledcSetup(0, 25000, 8);  
+  #endif
 }
+
 
 //--------------Fonction de base--------------------
 
@@ -89,12 +96,16 @@ void setVentilo(){
   if(info.etatRegulateurTemperature == 0){
     int tmp = 0;
     if(info.temperature >= parametre.temperatureSeuilHaut && info.temperature < parametre.temperatureSeuilHaut+1){
+      info.vitesseVentilateur = 64;
       tmp = 64;
     } else if(info.temperature+1 >= parametre.temperatureSeuilHaut && info.temperature < parametre.temperatureSeuilHaut+2){
+      info.vitesseVentilateur = 127;
       tmp = 127;
     } else if(info.temperature+2 >= parametre.temperatureSeuilHaut && info.temperature < parametre.temperatureSeuilHaut+3){
+      info.vitesseVentilateur = 191;
       tmp = 191;
     } else {
+      info.vitesseVentilateur = 255;
       tmp = 255;
     }
     digitalWrite(parametre.ledPinVerte, HIGH);
@@ -107,24 +118,30 @@ void setVentilo(){
 
 void setAlerte(){
   if(info.chanceFeu >= parametre.pourcentageAvantAlerte ){
+    info.feu = 1;
     digitalWrite(parametre.ledPinJaune, HIGH);
   } else{
+    info.feu = 0;
     digitalWrite(parametre.ledPinJaune, LOW);
   }
 }
 
 void setEtatRegulateurTemperature(){
-  if(info.chanceFeu  > 80) // Si le risque de feu est trop grand on arrête tout
+  if(info.chanceFeu  > parametre.pourcentageAvantAlerte) // Si le risque de feu est trop grand on arrête tout
   {
+    info.regulation = 0;
     info.etatRegulateurTemperature = 1;
   } 
   else if(info.temperature < parametre.temperatureSeuilBas){
+    info.regulation = 1;
     info.etatRegulateurTemperature = 2;
   }
   else if(info.temperature > parametre.temperatureSeuilHaut){
+     info.regulation = 1;
     info.etatRegulateurTemperature = 0;
   }
   else{
+    info.regulation = 0;
     info.etatRegulateurTemperature = 1;
   }
 }
@@ -229,13 +246,62 @@ void makeJSON(){
   char payload[256]; 
 
   /* 1) Build the JSON object ... easily with API !*/
-  StaticJsonDocument<256> jdoc; 
-  jdoc["chanceFeu"] = info.chanceFeu;
-  jdoc["lumiere"] = info.lumiere;
-  jdoc["temperature"] = info.temperature;
-  jdoc["etatRegulateurTemperature"] = info.etatRegulateurTemperature; 
-  jdoc["time"] =  millis();
+  JsonDocument jdoc;
+     JsonDocument status;
+    JsonDocument location;
+      JsonDocument gps;
+    JsonDocument regul;
+    JsonDocument information;
+    JsonDocument net;
+    JsonDocument reporthost;
 
+
+  /* 1) Build the JSON object ... easily with API !*/
+  
+  /* 1.1) Etage 3 */
+  gps["lat"] = 43.62453842;
+  gps ["long"] = 43.62453842;
+  
+  /* 1.2) Etage 2 */
+  status["temperature"] = info.temperature;
+  status["light"] = info.lumiere;
+  status["regul"] = info.regulation;
+  status["fire"] = info.feu;
+  status["heat"] = info.temperature < parametre.temperatureSeuilBas;
+  status["cold"] = info.temperature > parametre.temperatureSeuilHaut;
+  status["fanspeed"] = info.vitesseVentilateur;
+
+  location["room"] = 312;
+  location["location"] = gps; 
+  location["address"] = "Les lucioles";
+
+  regul["seuilBas"] = parametre.temperatureSeuilHaut ;
+  regul["seuilHaut"] = parametre.temperatureSeuilBas;
+  regul["lumiereAlerte"] = parametre.lumiereAlerte;
+  regul["temperatureAlerte"] = parametre.temperatureAlerte;
+  regul["pourcentageAvantAlerte"] = parametre.pourcentageAvantAlerte;
+
+  information["indent"] = "ESP32 123";
+  information["user"] = "GM";
+  information["loc"] = "A biot";
+
+  net["uptime"] = "55";
+  net["ssid"] = "Livebox-B870";
+  net["mac"] = "AC:67:B2:37:C9:48";
+  net["ip"] = "192.168.1.45";
+
+  reporthost["target_ip"] = "127.0.0.1" ;
+  reporthost["target_port"] = 1880 ;
+  reporthost["sp"] = 2 ;
+
+  /* 1.3) Etage 1 */
+  
+  jdoc["status"] =  status;
+  jdoc["location"] =  location;
+  jdoc["regul"] =  regul;
+  jdoc["information"] =  information;
+  jdoc["net"] =  net;
+  jdoc["reporthost"] =  reporthost;
 
   /* 2) SERIALIZATION => fill the payload string from jdoc object */
   serializeJson(jdoc, payload);
