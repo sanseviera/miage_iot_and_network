@@ -24,8 +24,8 @@ struct Information {
 struct Information info = {0 , 0.0 , 0.0 , 0, 0.0, 0.0, 0.0, 0 , 0};
 
 struct Parametre{
-  const int temperatureSeuilHaut = 22;
-  const int temperatureSeuilBas = 21;
+  const int temperatureSeuilHaut = 25;
+  const int temperatureSeuilBas = 24;
   const int lumiereAlerte = 3000;
   const float temperatureAlerte = 20;
   const int pourcentageAvantAlerte = 80; // Pourcentage à atteindre pour déclencher l'alerte.
@@ -55,7 +55,6 @@ int numberKeyPresses = 0;
 Adafruit_NeoPixel strip(parametre.bandeLedPin, parametre.brocheBande, NEO_GRB + NEO_KHZ800);
 
 
-
 //--------------Fonction de base INITIALISATION--------------------
 
 void initLed(int ledPin) {
@@ -80,7 +79,6 @@ void initVentilo() {
     ledcSetup(0, 25000, 8);  
   #endif
 }
-
 
 //--------------Fonction de base--------------------
 
@@ -146,13 +144,11 @@ void setEtatRegulateurTemperature(){
   }
 }
 
-
 int lireCapteurLumiere(){
   int sensorValue;
   sensorValue = analogRead(parametre.brocheLightIntensity); // Read analog input on ADC1_CHANNEL_5 (GPIO 33)
   return sensorValue;
 }
-
 
 float lireCapteurChaleur(){
   float t;
@@ -161,22 +157,14 @@ float lireCapteurChaleur(){
   return t;
 }
 
-
 void setBandeLed(){
   strip.begin();
   delay(1);
  for(int i=0; i<1; i++) {
  //turn color to red
- strip.setPixelColor(i, strip.Color(255, 0, 0));
+ strip.setPixelColor(i, strip.Color(rgball[3][0] , rgball[3][1], rgball[3][2]));
  }
- for(int i=1; i<4; i++) {
- //turn color to green
- strip.setPixelColor(i, strip.Color(0, 255, 0));
- }
- for(int i=4; i<parametre.bandeLedPin; i++) {
- //turn color to green
- strip.setPixelColor(i, strip.Color(0, 0, 255));
- }
+
  strip.show();
 }
 
@@ -184,33 +172,25 @@ void setLed(){
   int colorA = 0; 
   int colorB = 0; 
   int colorC = 0; 
-
   
-  if(info.etatRegulateurTemperature == 0){
-    colorA = 255;
-    colorB = 0;
-    colorC = 0;
+  if(info.temperature > parametre.temperatureSeuilBas && info.temperature < parametre.temperatureSeuilHaut){
+    colorA = rgball[0][0] ;
+    colorB = rgball[0][1] ;
+    colorC = rgball[0][2] ;
   }
-  else if(info.etatRegulateurTemperature == 1){
-    colorA = 255;
-    colorB = 153;
-    colorC = 51;
+  else if(info.temperature < parametre.temperatureSeuilBas ){
+    colorA = rgball[1][0] ;
+    colorB = rgball[1][1] ;
+    colorC = rgball[1][2] ;
   }
-  else if (info.etatRegulateurTemperature == 2){
-    colorA = 0;
-    colorB = 204;
-    colorC = 0;
+  else if (info.temperature > parametre.temperatureSeuilHaut ){
+    colorA = rgball[2][0] ;
+    colorB = rgball[2][1] ;
+    colorC = rgball[2][2] ;
   }
-  else{
-
-  }
-
-
-      for(int i=0; i<5; i++) {
+  for(int i=0; i<5; i++) {
     strip.setPixelColor(i, strip.Color(colorA, colorB, colorC));
   }
-
-
 
     strip.show();
 }
@@ -255,7 +235,6 @@ void makeJSON(){
     JsonDocument net;
     JsonDocument reporthost;
 
-
   /* 1) Build the JSON object ... easily with API !*/
   
   /* 1.1) Etage 3 */
@@ -265,14 +244,14 @@ void makeJSON(){
   /* 1.2) Etage 2 */
   status["temperature"] = info.temperature;
   status["light"] = info.lumiere;
-  status["regul"] = info.regulation;
-  status["fire"] = info.feu;
+  status["regul"] = info.regulation == 1;
+  status["fire"] = info.feu == 1;
   status["heat"] = info.temperature < parametre.temperatureSeuilBas;
   status["cold"] = info.temperature > parametre.temperatureSeuilHaut;
   status["fanspeed"] = info.vitesseVentilateur;
 
   location["room"] = 312;
-  location["location"] = gps; 
+  location["gps"] = gps; 
   location["address"] = "Les lucioles";
 
   regul["seuilBas"] = parametre.temperatureSeuilHaut ;

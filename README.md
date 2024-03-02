@@ -1,4 +1,5 @@
 # miage_iot_and_network
+<<<<<<< HEAD
 Lors de notre master MIAGE, Serigne Rawane et moi-même avons réalisé un projet dans le cadre du cours "IoT & réseaux" de M. MENEZ Gilles. Le projet consiste en la réalisation d'un régulateur de température avec un ESP32 et les langages C et Python.
 
 ## Outils utilisés 
@@ -43,3 +44,6 @@ Lors de notre master MIAGE, Serigne Rawane et moi-même avons réalisé un proje
 
 ##### Autres branches
 
+=======
+Lors de notre master MIAGE (première année), Serigne Rawane et moi-même avons réalisé un projet dans le cadre du cours "IoT & réseaux" de M. MENEZ Gilles. Le projet consiste en la réalisation d'un régulateur de température avec un ESP32 et les langages C et Python.
+>>>>>>> 49ab33e743e78f5545ca66fcd82f1452485c3aa0
