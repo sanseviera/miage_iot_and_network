@@ -11,6 +11,8 @@ struct Information {
   int chanceFeu; // une valeur en pourcentage
   float lumiere;
   float temperature;
+  float maxEnregistre;
+  float minEnregistre;
   int etatRegulateurTemperature; //  0) refroidi , 1) est éteind , 2) chauffe
   // Variable pour le TIMER
   float timerGeneral;
@@ -21,7 +23,7 @@ struct Information {
   int regulation; // 1 ou 0 on régul ou non
   
 };
-struct Information info = {0 , 0.0 , 0.0 , 0, 0.0, 0.0, 0.0, 0 , 0};
+struct Information info = {0 , 0.0 , 0.0 , 0.0 , 100000.0 , 0, 0.0, 0.0, 0.0, 0 , 0};
 
 struct Parametre{
   const int temperatureSeuilHaut = 25;
@@ -222,9 +224,15 @@ void informationPrint(){
   Serial.print("-----------------------\n");
 }
 
-char* makeText(int i){
+const char* makeText(int i){
   if(i){
-    return "HALT";}
+    return "WALK";}
+  else{return "HALT";}
+}
+
+const char* makeText2(int i){
+  if(i){
+    return "ON";}
   else{return "OFF";}
 }
 
@@ -249,11 +257,13 @@ void makeJSON(){
   
   /* 1.2) Etage 2 */
   status["temperature"] = info.temperature;
+  status["temperatureMax"] = info.maxEnregistre;
+  status["temperatureMin"] = info.minEnregistre;
   status["light"] = info.lumiere;
   status["regul"] = makeText(info.regulation == 1);
   status["fire"] = info.feu == 1;
-  status["heat"] = makeText(info.temperature < parametre.temperatureSeuilBas && info.regulation);
-  status["cold"] = makeText(info.temperature > parametre.temperatureSeuilHaut && info.regulation);
+  status["heat"] = makeText2(info.temperature < parametre.temperatureSeuilBas && info.regulation);
+  status["cold"] = makeText2(info.temperature > parametre.temperatureSeuilHaut && info.regulation);
   status["fanspeed"] = info.vitesseVentilateur;
 
   location["room"] = 312;
@@ -270,7 +280,7 @@ void makeJSON(){
   information["user"] = "GM";
   information["loc"] = "A biot";
 
-  net["uptime"] = "55";
+  net["uptime"] = String(millis());
   net["ssid"] = "Livebox-B870";
   net["mac"] = "AC:67:B2:37:C9:48";
   net["ip"] = "192.168.1.45";
@@ -295,6 +305,18 @@ void makeJSON(){
   Serial.println(payload);
 }
 
+void setMaxTemperature(){
+  if (info.maxEnregistre <= info.temperature){
+    info.maxEnregistre =  info.temperature;
+  }
+}
+
+
+void setMinTemperature(){
+  if (info.minEnregistre >= info.temperature){
+    info.minEnregistre =  info.temperature;
+  }
+}
 //-------------Fonction native---------------------
 
 void setup(){
@@ -313,7 +335,9 @@ void loop() {
     info.timerGeneral=millis();
     info.lumiere = lireCapteurLumiere();
     info.temperature = lireCapteurChaleur();
-
+    
+    setMaxTemperature();
+    setMinTemperature();
     setDetectorFire();
     setEtatRegulateurTemperature();
     setChauffage();
