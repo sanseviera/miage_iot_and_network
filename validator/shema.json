@@ -7,11 +7,13 @@
             "type": "object",
             "properties": {
                 "temperature":{"type":"number"},
+                "temperatureMax":{"type":"number"},
+                "temperatureMin":{"type":"number"},
                 "light":{"type":"integer"},
-                "regul":{"type":"boolean"},
+                "regul":{"type":"string", "enum": ["WALK", "HALT"]},
                 "fire":{"type":"boolean"},
-                "heat":{"type":"boolean"},
-                "cold":{"type":"boolean"},
+                "heat":{"type":"string", "enum": ["ON", "OFF"]},
+                "cold":{"type":"string", "enum": ["ON", "OFF"]},
                 "fanspeed":{"type":"integer"}
             },
             "required": ["temperature","light","regul","fire","heat","cold","fanspeed"],
@@ -25,7 +27,7 @@
                     "type": "object",
                     "properties": {
                         "lat":{"type": "number"},                        
-                        "long":{"type": "number"}
+                        "lon":{"type": "number"}
                     },
                     "required": [],
                     "additionalProperties": false
@@ -38,8 +40,8 @@
         "regul": {
             "type": "object",
             "properties": {
-                "seuilBas":{"type": "integer"},
-                "seuilHaut":{"type": "integer"},
+                "lt":{"type": "integer"},
+                "ht":{"type": "integer"},
                 "lumiereAlerte":{"type": "integer"},
                 "temperatureAlerte":{"type": "integer"},
                 "pourcentageAvantAlerte":{"type": "integer"}
@@ -50,7 +52,7 @@
         "information": {
             "type": "object",
             "properties": {
-                "indent":{"type": "string"},
+                "ident":{"type": "string"},
                 "user":{"type": "string"},
                 "loc":{"type": "string"}
             },

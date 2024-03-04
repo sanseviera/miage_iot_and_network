@@ -1,37 +1,35 @@
 {
     "status":{
-        "temperature":23.25,
-        "temperatureMax":26.5,
-        "temperatureMin":23.125,
-        "light":765,
-        "regul":"WALK",
+        "temperature":22.5625,
+        "light":547,
+        "regul":false,
         "fire":false,
-        "heat":"ON",
-        "cold":"OFF",
-        "fanspeed":64
+        "heat":true,
+        "cold":false,
+        "fanspeed":0
     },
     "location":{
         "room":312,
         "gps":{
             "lat":43.62453842,
-            "lon":43.62453842
+            "long":43.62453842
         },
         "address":"Les lucioles"
     },
     "regul":{
-        "lt":25,
-        "ht":24,
+        "seuilBas":25,
+        "seuilHaut":24,
         "lumiereAlerte":3000,
         "temperatureAlerte":20,
         "pourcentageAvantAlerte":80
     },
     "information":{
-        "ident":"ESP32 123",
+        "indent":"ESP32 123",
         "user":"GM",
         "loc":"A biot"
     },
     "net":{
-        "uptime":"574152",
+        "uptime":"55",
         "ssid":"Livebox-B870",
         "mac":"AC:67:B2:37:C9:48",
         "ip":"192.168.1.45"
