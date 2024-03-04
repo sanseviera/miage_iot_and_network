@@ -252,8 +252,8 @@ void makeJSON(){
   status["light"] = info.lumiere;
   status["regul"] = makeText(info.regulation == 1);
   status["fire"] = info.feu == 1;
-  status["heat"] = makeText(info.temperature < parametre.temperatureSeuilBas);
-  status["cold"] = makeText(info.temperature > parametre.temperatureSeuilHaut);
+  status["heat"] = makeText(info.temperature < parametre.temperatureSeuilBas && info.regulation);
+  status["cold"] = makeText(info.temperature > parametre.temperatureSeuilHaut && info.regulation);
   status["fanspeed"] = info.vitesseVentilateur;
 
   location["room"] = 312;
