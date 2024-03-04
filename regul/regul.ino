@@ -223,7 +223,7 @@ void informationPrint(){
 }
 
 void makeJSON(){
-  char payload[256]; 
+  char payload[2048]; 
 
   /* 1) Build the JSON object ... easily with API !*/
   JsonDocument jdoc;
