@@ -222,6 +222,12 @@ void informationPrint(){
   Serial.print("-----------------------\n");
 }
 
+char* makeText(int i){
+  if(i){
+    return "HALT";}
+  else{return "OFF";}
+}
+
 void makeJSON(){
   char payload[2048]; 
 
@@ -239,28 +245,28 @@ void makeJSON(){
   
   /* 1.1) Etage 3 */
   gps["lat"] = 43.62453842;
-  gps ["long"] = 43.62453842;
+  gps ["lon"] = 43.62453842;
   
   /* 1.2) Etage 2 */
   status["temperature"] = info.temperature;
   status["light"] = info.lumiere;
-  status["regul"] = info.regulation == 1;
+  status["regul"] = makeText(info.regulation == 1);
   status["fire"] = info.feu == 1;
-  status["heat"] = info.temperature < parametre.temperatureSeuilBas;
-  status["cold"] = info.temperature > parametre.temperatureSeuilHaut;
+  status["heat"] = makeText(info.temperature < parametre.temperatureSeuilBas);
+  status["cold"] = makeText(info.temperature > parametre.temperatureSeuilHaut);
   status["fanspeed"] = info.vitesseVentilateur;
 
   location["room"] = 312;
   location["gps"] = gps; 
   location["address"] = "Les lucioles";
 
-  regul["seuilBas"] = parametre.temperatureSeuilHaut ;
-  regul["seuilHaut"] = parametre.temperatureSeuilBas;
+  regul["lt"] = parametre.temperatureSeuilHaut ;
+  regul["ht"] = parametre.temperatureSeuilBas;
   regul["lumiereAlerte"] = parametre.lumiereAlerte;
   regul["temperatureAlerte"] = parametre.temperatureAlerte;
   regul["pourcentageAvantAlerte"] = parametre.pourcentageAvantAlerte;
 
-  information["indent"] = "ESP32 123";
+  information["ident"] = "ESP32 123";
   information["user"] = "GM";
   information["loc"] = "A biot";
 
