@@ -26,8 +26,8 @@ struct Information {
 struct Information info = {0 , 0.0 , 0.0 , 0.0 , 100000.0 , 0, 0.0, 0.0, 0.0, 0 , 0};
 
 struct Parametre{
-  const int temperatureSeuilHaut = 25;
-  const int temperatureSeuilBas = 24;
+  int temperatureSeuilHaut = 25;
+  int temperatureSeuilBas = 24;
   const int lumiereAlerte = 3000;
   const float temperatureAlerte = 20;
   const int pourcentageAvantAlerte = 80; // Pourcentage à atteindre pour déclencher l'alerte.
@@ -236,6 +236,23 @@ const char* makeText2(int i){
   else{return "OFF";}
 }
 
+
+void readData() {
+  if (Serial.available()) {
+    String data_received = Serial.readStringUntil('\n');
+    String tempSeuilHaut = data_received;
+    int delimiterPos = data_received.indexOf(':');
+    if (delimiterPos != -1) {
+      String sbValueString = data_received.substring(delimiterPos + 1);
+      sbValueString.trim();  // Supprimer les espaces inutiles
+      if (!sbValueString.isEmpty()) {
+        int tempSeuilBas = sbValueString.toInt();
+        parametre.temperatureSeuilBas = tempSeuilBas;
+      }
+    }
+  }
+}
+  
 void makeJSON(){
   char payload[2048]; 
 
@@ -350,8 +367,9 @@ void loop() {
   }
   if(info.timerCommunication == 0 || millis() - info.timerCommunication > parametre.periodeTimerCommunication){
     info.timerCommunication=millis();
-    //informationPrint();
+    //readData();
     makeJSON();
+
   }
   
 
