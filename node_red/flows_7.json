@@ -1,0 +1,1436 @@
+[
+    {
+        "id": "bc35c1bae53a9503",
+        "type": "tab",
+        "label": "Flux 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "e3ada3dbd8ea84c1",
+        "type": "serial in",
+        "z": "bc35c1bae53a9503",
+        "name": "",
+        "serial": "5a43db9eb9158404",
+        "x": 70,
+        "y": 480,
+        "wires": [
+            [
+                "0686e832b25e4791",
+                "bff64b08ea4e75ef"
+            ]
+        ]
+    },
+    {
+        "id": "0686e832b25e4791",
+        "type": "debug",
+        "z": "bc35c1bae53a9503",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 240,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "bff64b08ea4e75ef",
+        "type": "json",
+        "z": "bc35c1bae53a9503",
+        "name": "JSON 1",
+        "property": "payload",
+        "action": "",
+        "pretty": true,
+        "x": 260,
+        "y": 480,
+        "wires": [
+            [
+                "c42f902ffc1cca38",
+                "9886cd4d250b67e2",
+                "4906a228f7055b04",
+                "1b1d6876d0958283",
+                "7d82d077e2567809",
+                "d1b0ca5e85d72a7a",
+                "86d9d72e16ad309b",
+                "c0dd0ef8d0ae4a3b",
+                "2609081bacfd6663",
+                "8496cc2515ee5dac",
+                "ba181d715d465398",
+                "395f1a954cd83454",
+                "fcb7c29c3eaf7a98",
+                "55c61ce1b0adc8e2",
+                "a65255dca903163d",
+                "f321b7804085d051",
+                "3db1c9f26334e353",
+                "3e0266b097abd433",
+                "8ddfe3f2bc772151",
+                "1c92d0556d304261",
+                "da4e431eed62820c",
+                "b6c9d5085479e5ab"
+            ]
+        ]
+    },
+    {
+        "id": "c42f902ffc1cca38",
+        "type": "function",
+        "z": "bc35c1bae53a9503",
+        "name": "temperature",
+        "func": "msg.topic = \"temperature\";\nmsg.payload = msg.payload.status.temperature;\nconsole.log(\"temperature : \" + String(msg.payload));\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 510,
+        "y": 240,
+        "wires": [
+            [
+                "17d7ae14d9105a1f",
+                "665ab7750205bc13"
+            ]
+        ]
+    },
+    {
+        "id": "9886cd4d250b67e2",
+        "type": "function",
+        "z": "bc35c1bae53a9503",
+        "name": "luminosité",
+        "func": "msg.topic = \"light\";\nmsg.payload = msg.payload.status.light;\nconsole.log(\"light : \" + String(msg.payload));\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 500,
+        "y": 480,
+        "wires": [
+            [
+                "59078737ae0e9575",
+                "c6643518dfbce1b2"
+            ]
+        ]
+    },
+    {
+        "id": "59078737ae0e9575",
+        "type": "ui_chart",
+        "z": "bc35c1bae53a9503",
+        "name": "Luminosité par ms",
+        "group": "7387bee681bcee7d",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "label": "Variation de la luminosité par ms",
+        "chartType": "line",
+        "legend": "true",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "100",
+        "removeOlderUnit": "604800",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 790,
+        "y": 540,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "1b1d6876d0958283",
+        "type": "function",
+        "z": "bc35c1bae53a9503",
+        "name": "feuDetecte",
+        "func": "msg.topic = \"feu\";\nmsg.payload = msg.payload.status.fire;\nconsole.log(\"feu : \" + String(msg.payload));\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 510,
+        "y": 840,
+        "wires": [
+            [
+                "2637e09d01b1429d"
+            ]
+        ]
+    },
+    {
+        "id": "7d82d077e2567809",
+        "type": "function",
+        "z": "bc35c1bae53a9503",
+        "name": "chaleur",
+        "func": "msg.topic = \"chaleur\";\nmsg.payload = msg.payload.status.heat;\nconsole.log(\"chaleur : \" + String(msg.payload));\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 500,
+        "y": 600,
+        "wires": [
+            [
+                "694d59c5ecb928c9"
+            ]
+        ]
+    },
+    {
+        "id": "d1b0ca5e85d72a7a",
+        "type": "function",
+        "z": "bc35c1bae53a9503",
+        "name": "froid",
+        "func": "msg.topic = \"froid\";\nmsg.payload = msg.payload.status.cold;\nconsole.log(\"froid : \" + String(msg.payload));\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 490,
+        "y": 720,
+        "wires": [
+            [
+                "96317f68b6425521"
+            ]
+        ]
+    },
+    {
+        "id": "86d9d72e16ad309b",
+        "type": "function",
+        "z": "bc35c1bae53a9503",
+        "name": "SH",
+        "func": "msg.topic = \"sh\";\nmsg.payload = msg.payload.regul.lt;\nconsole.log(\"sh : \" + String(msg.payload));\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 490,
+        "y": 360,
+        "wires": [
+            [
+                "17d7ae14d9105a1f",
+                "f9531e0828a783dc"
+            ]
+        ]
+    },
+    {
+        "id": "c0dd0ef8d0ae4a3b",
+        "type": "function",
+        "z": "bc35c1bae53a9503",
+        "name": "SB",
+        "func": "msg.topic = \"sb\";\nmsg.payload = msg.payload.regul.ht;\nconsole.log(\"sb : \" + String(msg.payload));\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 490,
+        "y": 420,
+        "wires": [
+            [
+                "17d7ae14d9105a1f",
+                "4919c09f9b4c419f"
+            ]
+        ]
+    },
+    {
+        "id": "4906a228f7055b04",
+        "type": "function",
+        "z": "bc35c1bae53a9503",
+        "name": "verifieJSON",
+        "func": "console.log(\"JSON : \" + JSON.stringify(msg));\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 510,
+        "y": 120,
+        "wires": [
+            [
+                "540fc473431d7032"
+            ]
+        ]
+    },
+    {
+        "id": "17d7ae14d9105a1f",
+        "type": "ui_chart",
+        "z": "bc35c1bae53a9503",
+        "name": "Temperature par ms",
+        "group": "7387bee681bcee7d",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "label": "Variation de la temperature par ms",
+        "chartType": "line",
+        "legend": "true",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "seuil bas",
+        "ymax": "seuil haut",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "604800",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 800,
+        "y": 260,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f9531e0828a783dc",
+        "type": "ui_numeric",
+        "z": "bc35c1bae53a9503",
+        "name": "Seuil Haut",
+        "label": "Seuil Haut",
+        "tooltip": "",
+        "group": "964393819945c32a",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "wrap": true,
+        "passthru": true,
+        "topic": "topic",
+        "topicType": "msg",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "50",
+        "step": "",
+        "className": "",
+        "x": 770,
+        "y": 360,
+        "wires": [
+            [
+                "86acf55a369541df"
+            ]
+        ]
+    },
+    {
+        "id": "4919c09f9b4c419f",
+        "type": "ui_numeric",
+        "z": "bc35c1bae53a9503",
+        "name": "Seuil Bas",
+        "label": "Seuil Bas",
+        "tooltip": "",
+        "group": "964393819945c32a",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "wrap": true,
+        "passthru": true,
+        "topic": "topic",
+        "topicType": "msg",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "50",
+        "step": "",
+        "className": "",
+        "x": 760,
+        "y": 420,
+        "wires": [
+            [
+                "0086e1b205a5419a"
+            ]
+        ]
+    },
+    {
+        "id": "2609081bacfd6663",
+        "type": "function",
+        "z": "bc35c1bae53a9503",
+        "name": "uptime",
+        "func": "msg.topic = \"uptime\";\nmsg.payload = Math.round(msg.payload.net.uptime / 1000);\nconsole.log(\"uptime : \" + String(msg.payload));\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 490,
+        "y": 960,
+        "wires": [
+            [
+                "b0c928e38563d77c"
+            ]
+        ]
+    },
+    {
+        "id": "8496cc2515ee5dac",
+        "type": "function",
+        "z": "bc35c1bae53a9503",
+        "name": "reporthost",
+        "func": "msg.topic = \"reporthost\";\nmsg.payload = msg.payload.reporthost;\nconsole.log(\"JSON : \" + JSON.stringify(msg));\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 500,
+        "y": 1020,
+        "wires": [
+            [
+                "420f87974a4df1b0"
+            ]
+        ]
+    },
+    {
+        "id": "ba181d715d465398",
+        "type": "function",
+        "z": "bc35c1bae53a9503",
+        "name": "information",
+        "func": "msg.topic = \"informations\";\nmsg.payload = msg.payload.information;\nconsole.log(\"JSON : \" + JSON.stringify(msg));\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 510,
+        "y": 1080,
+        "wires": [
+            [
+                "be5335b2daa6afb9"
+            ]
+        ]
+    },
+    {
+        "id": "b0c928e38563d77c",
+        "type": "ui_gauge",
+        "z": "bc35c1bae53a9503",
+        "name": "Temps de fonctionnement",
+        "group": "a23d4295e04948a5",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Temps de fonctionnement",
+        "label": "secondes",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "10800",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 810,
+        "y": 960,
+        "wires": []
+    },
+    {
+        "id": "be5335b2daa6afb9",
+        "type": "ui_template",
+        "z": "bc35c1bae53a9503",
+        "group": "cb8a0f06d4d77f74",
+        "name": "Infos",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "format": "<div>\n    <p>Identifiant : {{msg.payload.ident}}</p>\n    <p>User : {{msg.payload.user}}</p>\n    <p>Localisation : {{msg.payload.loc}}</p>\n</div>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 750,
+        "y": 1080,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "420f87974a4df1b0",
+        "type": "ui_template",
+        "z": "bc35c1bae53a9503",
+        "group": "cb8a0f06d4d77f74",
+        "name": "reporthost",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "format": "<div>\n    <p>IP : {{msg.payload.target_ip}}</p>\n    <p>Port : {{msg.payload.target_port}}</p>\n    <p>SP : {{msg.payload.sp}}</p>\n</div>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 760,
+        "y": 1020,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "540fc473431d7032",
+        "type": "ui_template",
+        "z": "bc35c1bae53a9503",
+        "group": "e82c15aec80ecb68",
+        "name": "JSON",
+        "order": 2,
+        "width": "10",
+        "height": "14",
+        "format": "<pre\n    style=\"white-space: pre-wrap; word-break: break-all; overflow-y: visible; height: auto;\">{{msg.payload | json}}</pre>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 750,
+        "y": 120,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "395f1a954cd83454",
+        "type": "function",
+        "z": "bc35c1bae53a9503",
+        "name": "temp_max",
+        "func": "msg.topic = \"tmax\";\nmsg.payload = msg.payload.status.temperatureMax;\nconsole.log(\"tmax : \" + String(msg.payload));\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 510,
+        "y": 180,
+        "wires": [
+            [
+                "ab7bd6d69febb634"
+            ]
+        ]
+    },
+    {
+        "id": "fcb7c29c3eaf7a98",
+        "type": "function",
+        "z": "bc35c1bae53a9503",
+        "name": "temp_min",
+        "func": "msg.topic = \"tmin\";\nmsg.payload = msg.payload.status.temperatureMin;\nconsole.log(\"tmin : \" + String(msg.payload));\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 500,
+        "y": 300,
+        "wires": [
+            [
+                "eca272293d675222"
+            ]
+        ]
+    },
+    {
+        "id": "2006362936cc5004",
+        "type": "ui_toast",
+        "z": "bc35c1bae53a9503",
+        "position": "top right",
+        "displayTime": "3",
+        "highlight": "",
+        "sendall": true,
+        "outputs": 0,
+        "ok": "OK",
+        "cancel": "",
+        "raw": false,
+        "className": "",
+        "topic": "Incendie ?",
+        "name": "Alerte feu",
+        "x": 760,
+        "y": 900,
+        "wires": []
+    },
+    {
+        "id": "f4ebb5d06feda205",
+        "type": "worldmap",
+        "z": "bc35c1bae53a9503",
+        "name": "Emplacement",
+        "lat": "",
+        "lon": "",
+        "zoom": "",
+        "layer": "EsriC",
+        "cluster": "",
+        "maxage": "",
+        "usermenu": "show",
+        "layers": "show",
+        "panit": "false",
+        "panlock": "false",
+        "zoomlock": "false",
+        "hiderightclick": "false",
+        "coords": "deg",
+        "showgrid": "false",
+        "showruler": "false",
+        "allowFileDrop": "false",
+        "path": "/worldmap",
+        "overlist": "DR,CO,RA,DN",
+        "maplist": "OSMG,OSMC,EsriC,EsriS,UKOS",
+        "mapname": "",
+        "mapurl": "http://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png",
+        "mapopt": "",
+        "mapwms": false,
+        "x": 660,
+        "y": 20,
+        "wires": []
+    },
+    {
+        "id": "55c61ce1b0adc8e2",
+        "type": "function",
+        "z": "bc35c1bae53a9503",
+        "name": "gps",
+        "func": "var lat = msg.payload.location.gps.lat; // Votre latitude\nvar lon = msg.payload.location.gps.lon; // Votre longitude\nvar room = msg.payload.location.room; // Numéro de la salle\nvar address = msg.payload.location.address; // Adresse\nvar name = room + \", \"+ address; // Nom comprenant l'adresse et le numéro de la salle\nvar ssid = msg.payload.net.ssid; // SSID du réseau\nvar mac = msg.payload.net.mac; // Adresse MAC\nvar ip = msg.payload.net.ip; // Adresse IP\n\n// Configuration du serveur de tuiles pour la carte en français\nvar tileServerConfig = {\n    command: \"config\",\n    map: {\n        tileLayer: \"http://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png\",\n        tileServer: \"http://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png\"\n    }\n};\n\n// Créer le message pour la carte avec les détails du réseau et de l'emplacement\nvar markerMessage = {\n  name: name, // Le nom de votre marqueur\n  lat: lat,   // La latitude\n  lon: lon,   // La longitude\n  layer: \"localisationLayer\",\n  infos: \"<h3>Adresse : \" + address + \"</h3>\" +\n        \"<p>Salle : \" + room + \"</p>\" +\n        \"<h3>Réseau :</h3>\" +\n        \"<p>SSID : \" + ssid + \"<br>\" +\n        \"MAC : \" + mac + \"<br>\" +\n        \"IP : \" + ip + \"</p>\"\n};\n\n// Envoyer le message de configuration du serveur de tuiles en premier\nnode.send({\n  payload: tileServerConfig\n});\n\n// Ensuite, envoyer le message avec le marqueur et les détails réseau\nmsg.payload = markerMessage;\n\nreturn msg; // Cela enverra le deuxième message\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 490,
+        "y": 60,
+        "wires": [
+            [
+                "f4ebb5d06feda205",
+                "7f477210f1002725"
+            ]
+        ]
+    },
+    {
+        "id": "a65255dca903163d",
+        "type": "function",
+        "z": "bc35c1bae53a9503",
+        "name": "regul",
+        "func": "msg.topic = \"regul\";\nmsg.payload = msg.payload.status.regul;\nconsole.log(\"regul : \" + String(msg.payload));\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 490,
+        "y": 660,
+        "wires": [
+            [
+                "827f07fdb3a890d9"
+            ]
+        ]
+    },
+    {
+        "id": "68cb84ed1853a9b1",
+        "type": "ui_toast",
+        "z": "bc35c1bae53a9503",
+        "position": "bottom right",
+        "displayTime": "3",
+        "highlight": "",
+        "sendall": false,
+        "outputs": 0,
+        "ok": "OK",
+        "cancel": "",
+        "raw": true,
+        "className": "",
+        "topic": "Régulateur ?",
+        "name": "Alerte regul",
+        "x": 770,
+        "y": 780,
+        "wires": [],
+        "info": "``"
+    },
+    {
+        "id": "f321b7804085d051",
+        "type": "function",
+        "z": "bc35c1bae53a9503",
+        "name": "regul2",
+        "func": "// Définir le sujet du message\nmsg.topic = \"regul2\";\n\n// Obtenir le statut de régulation\nvar regulStatus = msg.payload.status.regul;\n\n// Vérifier si regulStatus est une chaîne\nif (typeof regulStatus === \"string\") {\n    console.log(\"regul2 : \" + regulStatus);\n\n    // Vérifier si regul est WALK\n    if (regulStatus === \"WALK\") {\n        // Obtenir le temps actuel en timestamp\n        let now = new Date().getTime();\n\n        // Obtenir le temps du dernier envoi depuis le contexte du flow\n        let lastSentTime = flow.get(\"lastSentTime\") || 0;\n\n        // Calculer la différence en minutes\n        let diffMinutes = (now - lastSentTime) / 60000; // 60000 ms en 1 minute\n\n        // Vérifier si 1 minutes se sont écoulées\n        if (diffMinutes >= 1) {\n            // Mettre à jour le temps du dernier envoi\n            flow.set(\"lastSentTime\", now);\n\n            // Préparer le message pour l'envoi\n            msg.payload = regulStatus;\n\n            // Envoyer le message\n            return msg;\n        } else {\n            // Si moins de 5 minutes se sont écoulées, ne rien faire\n            console.log(\"Attente de 5 minutes nécessaire avant le prochain envoi.\");\n            return null;\n        }\n    }\n}\n\n// Si regul n'est pas WALK, ou si regulStatus n'est pas une chaîne, ne rien retourner\nconsole.log(\"regul2 n'est pas WALK ou regulStatus n'est pas une chaîne.\");\nreturn null;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 490,
+        "y": 780,
+        "wires": [
+            [
+                "68cb84ed1853a9b1"
+            ]
+        ]
+    },
+    {
+        "id": "3db1c9f26334e353",
+        "type": "function",
+        "z": "bc35c1bae53a9503",
+        "name": "feuDetecte2",
+        "func": "msg.topic = \"feu\";\nvar fireStatus = msg.payload.status.fire;\n\n// Vérifiez si fireStatus est bien un booléen et si c'est le cas, vérifiez s'il est vrai\nif (typeof fireStatus === \"boolean\" && fireStatus === true) {\n    console.log(\"feu : \" + fireStatus);\n    // Si fireStatus est true, retournez le message\n    msg.payload = fireStatus;\n    return msg;\n}\n\n// Si fireStatus n'est pas true, ne rien retourner\nreturn null;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 510,
+        "y": 900,
+        "wires": [
+            [
+                "2006362936cc5004"
+            ]
+        ]
+    },
+    {
+        "id": "3e0266b097abd433",
+        "type": "function",
+        "z": "bc35c1bae53a9503",
+        "name": "fanspeed",
+        "func": "msg.topic = \"fanspeed\";\nmsg.payload = msg.payload.status.fanspeed;\nconsole.log(\"fanspeed : \" + String(msg.payload));\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 500,
+        "y": 1140,
+        "wires": [
+            [
+                "0898cd47be9228d6"
+            ]
+        ]
+    },
+    {
+        "id": "0898cd47be9228d6",
+        "type": "ui_chart",
+        "z": "bc35c1bae53a9503",
+        "name": "Ventilateur par ms",
+        "group": "7387bee681bcee7d",
+        "order": 6,
+        "width": 0,
+        "height": 0,
+        "label": "Variation du ventilateur par ms",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "100",
+        "removeOlderUnit": "604800",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 790,
+        "y": 1140,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "94ee02259df73643",
+        "type": "ui_slider",
+        "z": "bc35c1bae53a9503",
+        "name": "Température d'alerte",
+        "label": "Température d'alerte",
+        "tooltip": "",
+        "group": "964393819945c32a",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "outs": "end",
+        "topic": "topic",
+        "topicType": "msg",
+        "min": 0,
+        "max": "100",
+        "step": "",
+        "className": "",
+        "x": 800,
+        "y": 1200,
+        "wires": [
+            [
+                "ad0149ce6a8521a5"
+            ]
+        ]
+    },
+    {
+        "id": "8ddfe3f2bc772151",
+        "type": "function",
+        "z": "bc35c1bae53a9503",
+        "name": "temp_alerte",
+        "func": "msg.topic = \"tempAlerte\";\nmsg.payload = msg.payload.regul.temperatureAlerte;\nconsole.log(\"tempAlerte : \" + String(msg.payload));\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 510,
+        "y": 1200,
+        "wires": [
+            [
+                "94ee02259df73643"
+            ]
+        ]
+    },
+    {
+        "id": "1c92d0556d304261",
+        "type": "function",
+        "z": "bc35c1bae53a9503",
+        "name": "lum_alerte",
+        "func": "msg.topic = \"lumAlerte\";\nmsg.payload = msg.payload.regul.lumiereAlerte;\nconsole.log(\"lumAlerte : \" + String(msg.payload));\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 510,
+        "y": 540,
+        "wires": [
+            [
+                "59078737ae0e9575"
+            ]
+        ]
+    },
+    {
+        "id": "694d59c5ecb928c9",
+        "type": "ui_led",
+        "z": "bc35c1bae53a9503",
+        "order": 4,
+        "group": "dd57374ab95ec8ce",
+        "width": 0,
+        "height": 0,
+        "label": "Chauffage",
+        "labelPlacement": "left",
+        "labelAlignment": "left",
+        "colorForValue": [
+            {
+                "color": "#047116",
+                "value": "ON",
+                "valueType": "str"
+            },
+            {
+                "color": "#f20202",
+                "value": "OFF",
+                "valueType": "str"
+            }
+        ],
+        "allowColorForValueInMessage": false,
+        "shape": "circle",
+        "showGlow": true,
+        "name": "Chaleur",
+        "x": 760,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "2637e09d01b1429d",
+        "type": "ui_led",
+        "z": "bc35c1bae53a9503",
+        "order": 4,
+        "group": "dd57374ab95ec8ce",
+        "width": 0,
+        "height": 0,
+        "label": "Incendie",
+        "labelPlacement": "left",
+        "labelAlignment": "left",
+        "colorForValue": [
+            {
+                "color": "#bfbbbb",
+                "value": "false",
+                "valueType": "bool"
+            },
+            {
+                "color": "#f20202",
+                "value": "true",
+                "valueType": "bool"
+            }
+        ],
+        "allowColorForValueInMessage": false,
+        "shape": "circle",
+        "showGlow": true,
+        "name": "feu",
+        "x": 750,
+        "y": 840,
+        "wires": []
+    },
+    {
+        "id": "827f07fdb3a890d9",
+        "type": "ui_led",
+        "z": "bc35c1bae53a9503",
+        "order": 4,
+        "group": "dd57374ab95ec8ce",
+        "width": 0,
+        "height": 0,
+        "label": "Regulateur",
+        "labelPlacement": "left",
+        "labelAlignment": "left",
+        "colorForValue": [
+            {
+                "color": "#ff0000",
+                "value": "HALT",
+                "valueType": "str"
+            },
+            {
+                "color": "#008000",
+                "value": "WALK",
+                "valueType": "str"
+            }
+        ],
+        "allowColorForValueInMessage": false,
+        "shape": "circle",
+        "showGlow": true,
+        "name": "Regulateur",
+        "x": 770,
+        "y": 660,
+        "wires": []
+    },
+    {
+        "id": "96317f68b6425521",
+        "type": "ui_led",
+        "z": "bc35c1bae53a9503",
+        "order": 4,
+        "group": "dd57374ab95ec8ce",
+        "width": 0,
+        "height": 0,
+        "label": "Climatisation",
+        "labelPlacement": "left",
+        "labelAlignment": "left",
+        "colorForValue": [
+            {
+                "color": "#ff0000",
+                "value": "OFF",
+                "valueType": "str"
+            },
+            {
+                "color": "#008000",
+                "value": "ON",
+                "valueType": "str"
+            }
+        ],
+        "allowColorForValueInMessage": false,
+        "shape": "circle",
+        "showGlow": true,
+        "name": "froid",
+        "x": 750,
+        "y": 720,
+        "wires": []
+    },
+    {
+        "id": "665ab7750205bc13",
+        "type": "ui_gauge",
+        "z": "bc35c1bae53a9503",
+        "name": "Température",
+        "group": "d21e2a924ea4a840",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Température",
+        "label": "units",
+        "format": "{{value}}",
+        "min": "-10",
+        "max": "50",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 770,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "c6643518dfbce1b2",
+        "type": "ui_gauge",
+        "z": "bc35c1bae53a9503",
+        "name": "Luminosité",
+        "group": "d21e2a924ea4a840",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Luminosité",
+        "label": "units",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "1000",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 770,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "ad0149ce6a8521a5",
+        "type": "function",
+        "z": "bc35c1bae53a9503",
+        "name": "send temp_alerte",
+        "func": "if (msg.topic === \"tempAlerte\") {\n    // Préparez votre message ici pour l'ESP\n    var newMsg = {\n        payload: msg.payload.toString() // Assurez-vous que c'est une chaîne si votre ESP s'attend à cela\n    };\n\n    console.log(\"Temp alerte : \" + newMsg.payload);\n    return newMsg;\n}\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1030,
+        "y": 1200,
+        "wires": [
+            [
+                "1801f899cb5a887f"
+            ]
+        ]
+    },
+    {
+        "id": "86acf55a369541df",
+        "type": "function",
+        "z": "bc35c1bae53a9503",
+        "name": "send sh",
+        "func": "if (msg.topic === \"sh\") {\n    // Préparez votre message ici pour l'ESP\n    var newMsg = {\n        payload: msg.payload.toString() // Assurez-vous que c'est une chaîne si votre ESP s'attend à cela\n    };\n\n    console.log(\"Seuil Haut (sh) : \" + newMsg.payload);\n    return newMsg;\n}\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1000,
+        "y": 360,
+        "wires": [
+            [
+                "1801f899cb5a887f"
+            ]
+        ]
+    },
+    {
+        "id": "0086e1b205a5419a",
+        "type": "function",
+        "z": "bc35c1bae53a9503",
+        "name": "send sb",
+        "func": "if (msg.topic === \"sb\") {\n    // Préparez votre message ici pour l'ESP\n    var newMsg = {\n        payload: msg.payload.toString() // Assurez-vous que c'est une chaîne si votre ESP s'attend à cela\n    };\n\n    console.log(\"Seuil Bas (sb) : \" + newMsg.payload);\n    return newMsg;\n}\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1000,
+        "y": 420,
+        "wires": [
+            [
+                "1801f899cb5a887f"
+            ]
+        ]
+    },
+    {
+        "id": "1801f899cb5a887f",
+        "type": "serial out",
+        "z": "bc35c1bae53a9503",
+        "name": "",
+        "serial": "5a43db9eb9158404",
+        "x": 1310,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "da4e431eed62820c",
+        "type": "function",
+        "z": "bc35c1bae53a9503",
+        "name": "regul3",
+        "func": "let etatRegul = msg.payload.status.regul; // État actuel du régulateur\nlet allume = flow.get(\"allume\") || 1; // Récupérer le compteur allumé du contexte de flux\nlet eteint = flow.get(\"eteint\") || 1; // Récupérer le compteur éteint du contexte de flux\n\n// Incrémenter le compteur basé sur l'état du régulateur\nif (etatRegul === \"WALK\") {\n    allume += 1; // Incrémenter le compteur allumé\n    flow.set(\"allume\", allume); // Mettre à jour le contexte de flux\n} else if (etatRegul === \"HALT\") {\n    eteint += 1; // Incrémenter le compteur éteint\n    flow.set(\"eteint\", eteint); // Mettre à jour le contexte de flux\n}\n\n// Préparer les données pour le graphique en secteurs si nécessaire\n// Note : Cette étape peut être réalisée dans un autre nœud de fonction si vous séparez la logique\n\nconsole.log(\"Régulateur allumé : \" + allume + \", éteint : \" + eteint);\n\n// Logique pour incrémenter les compteurs allume et eteint...\n\n// Préparer le msg.payload pour le graphique en secteurs\nmsg.payload = [\n    {\"label\": \"Allumé\", \"value\": allume},\n    {\"label\": \"Éteint\", \"value\": eteint}\n];\n\nconsole.log(\"msg: \" + JSON.stringify(msg));\n\nreturn msg; // Optionnel ici, dépend de votre flux\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 490,
+        "y": 1260,
+        "wires": [
+            [
+                "bf8a8712e1e189a2"
+            ]
+        ]
+    },
+    {
+        "id": "7f477210f1002725",
+        "type": "ui_worldmap",
+        "z": "bc35c1bae53a9503",
+        "group": "00376b8d98c01068",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "name": "Emplacement sur le dashbord",
+        "lat": "",
+        "lon": "",
+        "zoom": "",
+        "layer": "OSMG",
+        "cluster": "",
+        "maxage": "",
+        "usermenu": "hide",
+        "layers": "hide",
+        "panit": "false",
+        "panlock": "false",
+        "zoomlock": "false",
+        "hiderightclick": "true",
+        "coords": "none",
+        "showgrid": "false",
+        "showruler": "false",
+        "allowFileDrop": "false",
+        "path": "/worldmap",
+        "overlist": "DR,CO,RA,DN,HM",
+        "maplist": "OSMG,OSMC,EsriC,EsriS,EsriT,EsriDG,UKOS",
+        "mapname": "",
+        "mapurl": "",
+        "mapopt": "",
+        "mapwms": false,
+        "x": 830,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "bf8a8712e1e189a2",
+        "type": "ui_chart",
+        "z": "bc35c1bae53a9503",
+        "name": "Evalution du régulateur",
+        "group": "9a41170d10313c68",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "label": "Evalution du régulateur",
+        "chartType": "pie",
+        "legend": "true",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 810,
+        "y": 1260,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "ab7bd6d69febb634",
+        "type": "ui_text",
+        "z": "bc35c1bae53a9503",
+        "group": "964393819945c32a",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "name": "Température Max",
+        "label": "Température Max :",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 990,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "eca272293d675222",
+        "type": "ui_text",
+        "z": "bc35c1bae53a9503",
+        "group": "964393819945c32a",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "name": "Température Min",
+        "label": "Température Min :",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "className": "",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#000000",
+        "x": 990,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "b6c9d5085479e5ab",
+        "type": "function",
+        "z": "bc35c1bae53a9503",
+        "name": "temp_alerte",
+        "func": "msg.topic = \"tempAlerte\";\nmsg.payload = msg.payload.regul.temperatureAlerte;\nconsole.log(\"tempAlerte : \" + String(msg.payload));\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 290,
+        "y": 260,
+        "wires": [
+            [
+                "17d7ae14d9105a1f"
+            ]
+        ]
+    },
+    {
+        "id": "5a43db9eb9158404",
+        "type": "serial-port",
+        "name": "",
+        "serialport": "COM3",
+        "serialbaud": "9600",
+        "databits": "8",
+        "parity": "none",
+        "stopbits": "1",
+        "waitfor": "",
+        "dtr": "none",
+        "rts": "none",
+        "cts": "none",
+        "dsr": "none",
+        "newline": "\\n",
+        "bin": "false",
+        "out": "char",
+        "addchar": "",
+        "responsetimeout": "10000"
+    },
+    {
+        "id": "7387bee681bcee7d",
+        "type": "ui_group",
+        "name": "Suivi des variations",
+        "tab": "e77e4e973ca515a1",
+        "order": 1,
+        "disp": true,
+        "width": "10",
+        "collapse": true,
+        "className": ""
+    },
+    {
+        "id": "964393819945c32a",
+        "type": "ui_group",
+        "name": "Seuils&Alertes",
+        "tab": "e77e4e973ca515a1",
+        "order": 3,
+        "disp": true,
+        "width": "10",
+        "collapse": true,
+        "className": ""
+    },
+    {
+        "id": "a23d4295e04948a5",
+        "type": "ui_group",
+        "name": "Informations sur la performance",
+        "tab": "2c8a577278f4ecd5",
+        "order": 2,
+        "disp": true,
+        "width": "6",
+        "collapse": true,
+        "className": ""
+    },
+    {
+        "id": "cb8a0f06d4d77f74",
+        "type": "ui_group",
+        "name": "Informations sur l'appareil",
+        "tab": "2c8a577278f4ecd5",
+        "order": 2,
+        "disp": true,
+        "width": "10",
+        "collapse": true,
+        "className": ""
+    },
+    {
+        "id": "e82c15aec80ecb68",
+        "type": "ui_group",
+        "name": "Vérification du JSON",
+        "tab": "99de4d84afae8c09",
+        "order": 2,
+        "disp": true,
+        "width": "10",
+        "collapse": true,
+        "className": "break-line",
+        "info": "``.break-line {\r\n  white-space: pre-line; /* Cela permettra aux retours à la ligne d'être respectés */\r\n}"
+    },
+    {
+        "id": "dd57374ab95ec8ce",
+        "type": "ui_group",
+        "name": "Status",
+        "tab": "61371f569a96b5d5",
+        "order": 1,
+        "disp": true,
+        "width": "10",
+        "collapse": true,
+        "className": ""
+    },
+    {
+        "id": "d21e2a924ea4a840",
+        "type": "ui_group",
+        "name": "Capteurs",
+        "tab": "e77e4e973ca515a1",
+        "order": 3,
+        "disp": true,
+        "width": "10",
+        "collapse": true,
+        "className": ""
+    },
+    {
+        "id": "00376b8d98c01068",
+        "type": "ui_group",
+        "name": "Emplacement",
+        "tab": "e54d052a92ea69e3",
+        "order": 1,
+        "disp": true,
+        "width": "20",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "9a41170d10313c68",
+        "type": "ui_group",
+        "name": "Evolution du status du régulateur",
+        "tab": "61371f569a96b5d5",
+        "order": 2,
+        "disp": true,
+        "width": "10",
+        "collapse": true,
+        "className": ""
+    },
+    {
+        "id": "e77e4e973ca515a1",
+        "type": "ui_tab",
+        "name": "Température&luminosité",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "2c8a577278f4ecd5",
+        "type": "ui_tab",
+        "name": "Appareil&performance",
+        "icon": "dashboard",
+        "order": 3,
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "99de4d84afae8c09",
+        "type": "ui_tab",
+        "name": "JSON",
+        "icon": "dashboard",
+        "order": 4,
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "61371f569a96b5d5",
+        "type": "ui_tab",
+        "name": "Alertes",
+        "icon": "dashboard",
+        "order": 3,
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "e54d052a92ea69e3",
+        "type": "ui_tab",
+        "name": "Localisation",
+        "icon": "dashboard",
+        "order": 5,
+        "disabled": false,
+        "hidden": false
+    }
+]
