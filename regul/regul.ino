@@ -2,9 +2,19 @@
 #include "DallasTemperature.h"
 #include <Adafruit_NeoPixel.h>
 #include <ArduinoJson.h>
-#include "colors.h"
+#include <WiFi.h>
 
+#include "colors.h"
+#include "wifi_utils.h"
+
+//-------------------------------------------------------
+
+#define USE_SERIAL Serial
+
+// Pour régler les problèmes de compatibilités
 #define Old 0
+
+
 
 //-------------Structures---------------------    
 struct Information { 
@@ -26,6 +36,11 @@ struct Information {
 struct Information info = {0 , 0.0 , 0.0 , 0.0 , 100000.0 , 0, 0.0, 0.0, 0.0, 0 , 0};
 
 struct Parametre{
+  //----------------------------
+  String hostname = "Mon petit objet ESP32";
+  String ssid = String("Livebox-B870");
+  String passwd = String("MYCNcZqnvsWsiy7s52");
+  //----------------------------
   int temperatureSeuilHaut = 25;
   int temperatureSeuilBas = 24;
   const int lumiereAlerte = 3000;
@@ -49,6 +64,9 @@ struct Parametre{
 struct Parametre parametre = {};
 
 //----------------------------------
+
+//-------------------------------------------------------
+
 
 
 OneWire oneWire(parametre.brocheTermometre);
@@ -338,6 +356,8 @@ void setMinTemperature(){
 
 void setup(){
   Serial.begin(9600);
+  while(!Serial); //wait for a serial connection
+  functionWificonnect();
   initLed(parametre.ledPin);
   initCapteurChaleur();
   initVentilo();
