@@ -1,4 +1,6 @@
 
+#include <WiFi.h> // https://www.arduino.cc/en/Reference/WiFi
+#include <WiFiMulti.h>
 
 #define SaveDisconnectTime 1000 // Connection may need several tries 
                                                           // Time in ms for save disconnection, => delay between try

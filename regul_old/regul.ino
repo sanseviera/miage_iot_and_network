@@ -1,32 +1,15 @@
+#include "OneWire.h"
+#include "DallasTemperature.h"
+#include <Adafruit_NeoPixel.h>
+#include <ArduinoJson.h>
+#include <WiFi.h>
+#include "SPIFFS.h"
+#include "FS.h"
 
-/* 
- * Auteur 1 : S.Rawa
- * Auteur 1 : T.Borréani
- * Many sources :
- => https://raw.githubusercontent.com/RuiSantosdotme/ESP32-Course/master/code/WiFi_Web_Server_DHT/WiFi_Web_Server_DHT.ino
- => https://randomnerdtutorials.com/esp32-dht11-dht22-temperature-humidity-web-server-arduino-ide/
- => Kevin Levy 
- => G.Menez
-*/
-
-// Bibliothéque externe
-  #include "OneWire.h"
-  #include "DallasTemperature.h"
-  #include <Adafruit_NeoPixel.h>
-  #include <ArduinoJson.h>
-  #include <WiFi.h> // https://www.arduino.cc/en/Reference/WiFi
-  #include <WiFiMulti.h>
-  #include "SPIFFS.h"
-  #include "FS.h"
-  #include "ESPAsyncWebServer.h"
-  #include <ArduinoOTA.h>
-// Nos fichiers
-  #include "colors.h"
-  #include "wifi_utils.h"
-  #include "wifi_connect.h"
-  #include "file_manager.h"
-  #include "routes.h"
-
+#include "colors.h"
+#include "wifi_utils.h"
+#include "wifi_connect.h"
+#include "file_manager.h"
 
 
 //-------------------------------------------------------
@@ -93,9 +76,6 @@ DallasTemperature tempSensor(&oneWire);
 int numberKeyPresses = 0;
 Adafruit_NeoPixel strip(parametre.bandeLedPin, parametre.brocheBande, NEO_GRB + NEO_KHZ800);
 
-void setup_OTA(); // from ota.ino
-// Create AsyncWebServer object on port 80
-AsyncWebServer server(80);
 
 //--------------Fonction de base INITIALISATION--------------------
 
@@ -385,10 +365,6 @@ void setup(){
   initVentilo();
   setBandeLed();
   delay(2000);
-  // Setup routes of the ESP Web server
-  setup_http_routes(&server);
-  // Start ESP Web server
-  server.begin();
 }
 
 void loop() {
