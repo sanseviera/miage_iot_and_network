@@ -30,18 +30,21 @@ void  listDir(fs::FS &fs, const char * dirname, uint8_t levels){
     }
 }
 
-void readFile(fs::FS&fs, const char* path){
-  Serial.printf("Reading file: %s\r\n", path);
+ char* readFile(fs::FS&fs,const char* path){
+  char* tmp = (char*)malloc(sizeof(char) * 1024); 
   File file= fs.open(path);
   if(!file || file.isDirectory()){
       Serial.println("- failed to open file for reading");
-      return;
+      return (char*)"Erreur de lecture";
   }
   Serial.println("- read from file:");
+  int index = 0;
   while(file.available()){
-    Serial.write(file.read());
+    //Serial.write(file.read());
+    tmp[index++] = (char)file.read();
   }
   file.close();
+  return (char*)tmp;
 }
 
 void writeFile(fs::FS&fs, const char* path, const char* message){

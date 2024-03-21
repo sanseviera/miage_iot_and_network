@@ -17,28 +17,28 @@ String processor(const String& var){
 
 /*===================================================*/
 void setup_http_routes(AsyncWebServer* server) {
-  /* 
-   * Sets up AsyncWebServer and routes 
-   */
   
-  // doc => Serve files in directory "/" when request url starts with "/"
-  // Request to the root or none existing files will try to server the default
-  // file name "index.htm" if exists 
-  // => premier param la route et second param le repertoire servi (dans le SPIFFS) 
-  // Sert donc les fichiers css !  
-  server->serveStatic("/", SPIFFS, "/").setTemplateProcessor(processor);  
-  
-  // Declaring root handler, and action to be taken when root is requested
-  auto root_handler = server->on("/", HTTP_GET, [](AsyncWebServerRequest *request){
-      /* This handler will download index.html (stored as SPIFFS file) and will send it back */
+   server->serveStatic("/", SPIFFS, "/").setTemplateProcessor(processor);  
+   auto root_handler = server->on("/", HTTP_GET, [](AsyncWebServerRequest *request){
       request->send(SPIFFS, "/index.html", String(), false, processor); 
-      // cf "Respond with content coming from a File containing templates" section in manual !
-      // https://github.com/me-no-dev/ESPAsyncWebServer
-      // request->send_P(200, "text/html", page_html, processor); // if page_html was a string .   
-    });
-  
-  server->on("/temperature", HTTP_GET, [](AsyncWebServerRequest *request){
-    request->send_P(200, "text/plain", "eeee");
-    });
+      request->send_P(200, "text/html", "try", processor); // if page_html was a string .   
+   });
+   
+   server->on("/getHtml", HTTP_GET, [](AsyncWebServerRequest *request){
+    char* tmp = readFile(SPIFFS,"/html");
+    request->send_P(200, "text/html", tmp );
+   });
+   
+   server->on("/writeHtml", HTTP_POST, [](AsyncWebServerRequest *request){
+    Serial.println("Receive Request for a periodic report !"); 
+    if (request->hasArg("html")) {
+      const char* target_html = request->arg("html").c_str();
+      deleteFile(SPIFFS, "/html");
+      writeFile(SPIFFS, "/html", target_html);
+    }
+    request->send_P(200,"text/plain", "ok" );
+   });
+
+
 }
 /*===================================================*/

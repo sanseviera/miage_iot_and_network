@@ -408,9 +408,6 @@ void loop() {
     setAlerte();
     
     verifFile();
-    writeFile(SPIFFS, "/test", "eeeeeee");
-    listDir(SPIFFS, "/", 0 );
-    readFile(SPIFFS, "/test");
   }
   if(info.timerBandeLed == 0 || millis() - info.timerBandeLed > parametre.periodeTimerBandeLed){
     info.timerBandeLed=millis();
