@@ -25,7 +25,7 @@ void setup_http_routes(AsyncWebServer* server) {
    });
    
    server->on("/getHtml", HTTP_GET, [](AsyncWebServerRequest *request){
-    char* tmp = readFile(SPIFFS,"/html");
+    char* tmp = readFile(SPIFFS,"/index.html");
     request->send_P(200, "text/html", tmp );
    });
    
@@ -33,8 +33,7 @@ void setup_http_routes(AsyncWebServer* server) {
     Serial.println("Receive Request for a periodic report !"); 
     if (request->hasArg("html")) {
       const char* target_html = request->arg("html").c_str();
-      deleteFile(SPIFFS, "/html");
-      writeFile(SPIFFS, "/html", target_html);
+      writeFile(SPIFFS, "/index.html", target_html);
     }
     request->send_P(200,"text/plain", "ok" );
    });

@@ -1,4 +1,3 @@
-
 void  listDir(fs::FS &fs, const char * dirname, uint8_t levels){
   Serial.printf("Listing directory: %s\r\n", dirname);
   File root = fs.open(dirname);
@@ -47,6 +46,8 @@ void  listDir(fs::FS &fs, const char * dirname, uint8_t levels){
   return (char*)tmp;
 }
 
+
+
 void writeFile(fs::FS&fs, const char* path, const char* message){
   Serial.printf("Writing file: %s\r\n", path);
   File file = fs.open(path, FILE_WRITE);
@@ -61,6 +62,7 @@ void writeFile(fs::FS&fs, const char* path, const char* message){
   }
   file.close();
 }
+
 
 void appendFile(fs::FS&fs, const char* path, const char* message){
   Serial.printf("Appending to file: %s\r\n", path);
@@ -100,5 +102,6 @@ void verifFile()
 {
   if(!SPIFFS.begin(FORMAT_SPIFFS_IF_FAILED)){
     Serial.println("SPIFFS Mount Failed");
+    return;
 }  
 }

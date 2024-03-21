@@ -1,0 +1,110 @@
+<!DOCTYPE HTML><html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <link rel="stylesheet"
+	  href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+	  integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
+	  crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="esp.css">
+
+    <title>ESP32</title>
+  </head>
+  
+  <body>
+    <h1>ESP32</h1>
+    <h3>Object status :</h3>
+    Uptime      : %UPTIME% s<br/>
+    Where       : %WHERE% s<br/>
+
+    <h3>Network link status :</h3>
+    WiFi SSID   : %SSID%<br/>
+    MAC address : %MAC%<br/>
+    IP address  : %IP%<br/>
+
+    <h3>Sensors status :</h3>
+    Temperature : %TEMPERATURE% C<br/>
+    Light       : %LIGHT% Lumen<br/>
+    Cooler      : %COOLER%<br/>
+    Heater      : %HEATER%<br/>
+
+    <h3>Sensors status WITH GLYPHS :</h3>
+    <div class="grid-container">
+      <div class="grid-item">
+	<i class="fas fa-thermometer-half" style="color:#059e8a;"></i>
+      </div>
+      <div class="grid-item">      
+	<span class="sensors-labels">Temperature</span> 
+	<span id="temperature">%TEMPERATURE%</span>
+	<sup class="units">&deg;C</sup>
+      </div>
+      <div class="grid-item">
+	<i class="far fa-lightbulb" style="color:#00add6;"></i>
+      </div>
+      <div class="grid-item">
+	<span class="sensors-labels">Light</span>
+	<span id="light">%LIGHT%</span>
+	<sup class="units">Lumen</sup>
+      </div>
+    </div>
+    
+    <h3>Thresholds :</h3>
+    Day/Night Light   : %LT% Lumen<br/>
+    Day   - Low Temp  : %SBJ% C<br/>
+    Day   - High Temp : %SHJ% C<br/>
+    Night - Low Temp  : %SBN% C<br/>
+    Night - Low Temp  : %SHN% C<br/>
+
+    <h3> Periodic sensor data sent to :</h3>
+    <form action="/target" method="post">
+
+      <label for="ip">IP Address :</label>
+      <input type="text" name="ip" placeholder="%PRT_IP%"/><br/>
+
+      <label for="port">Port :</label>
+      <input type="text" name="port" placeholder="%PRT_PORT%"/><br/>
+
+      <label for="sp"> Sampling Period (in seconds) :</label>
+      <input type="text" name="sp" placeholder="%PRT_T%"/><br/>
+      
+      <input type="submit" value="Change reporting host !"/>
+    </form>
+    
+    <script>
+      // ===== Pour obtenir la temperature
+      setInterval(function ( ) {
+	  var xhr = new XMLHttpRequest(); // Constructor
+	  // XMLHttpRequest changes between states as it progresses
+	  xhr.onreadystatechange = function() { // Handler to track XMLHttp object state 
+	      // DONE = 4; when request complete and return OK (200)
+	      if (this.readyState == 4 && this.status == 200) {
+		  var r = this.response //renvoie le texte reçu d'un serveur suite à l'envoi d'une requête.
+		  //console.log(r);
+		  // .innerHTML method is used to change the html contents of a DOM object :
+		  // temperature declare dans le span id du grid item
+		  document.getElementById("temperature").innerHTML = r; 
+	      }
+	  };
+	  xhr.open("GET", "/temperature", false); 
+	  // Contrary to its name, does not open the connection.
+	  // It only configures the request, but the network activity only
+	  // starts with the call of send.
+	  // true => asynchrone open call.
+	  xhr.send(); //This method opens the connection and sends the request to server.
+      }, 1000 ) ;
+
+      // ===== Pour obtenir la lumiere
+      setInterval(function ( ) {
+	  var xhr = new XMLHttpRequest();
+	  xhr.onreadystatechange = function() {
+	      if (this.readyState == 4 && this.status == 200) {
+		  document.getElementById("light").innerHTML = this.responseText;
+	      }
+	  };
+	  xhr.open("GET", "/light", false);
+	  xhr.send();
+      }, 1000 ) ;
+    </script>
+
+  </body>
+</html>

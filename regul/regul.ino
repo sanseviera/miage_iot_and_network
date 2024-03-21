@@ -385,10 +385,17 @@ void setup(){
   initVentilo();
   setBandeLed();
   delay(2000);
+
+   verifFile();
+   delay(2000);
+   //writeFile(SPIFFS, "/index.html", readFile(SPIFFS,"/test.html"));
+
   // Setup routes of the ESP Web server
   setup_http_routes(&server);
   // Start ESP Web server
   server.begin();
+   
+
 }
 
 void loop() {
@@ -407,7 +414,6 @@ void loop() {
     setVentilo();
     setAlerte();
     
-    verifFile();
   }
   if(info.timerBandeLed == 0 || millis() - info.timerBandeLed > parametre.periodeTimerBandeLed){
     info.timerBandeLed=millis();
