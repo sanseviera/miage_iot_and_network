@@ -1,10 +1,42 @@
-#include "OneWire.h"
-#include "DallasTemperature.h"
-#include <Adafruit_NeoPixel.h>
-#include <ArduinoJson.h>
-#include "colors.h"
 
-#define Old 0
+/* 
+ * Auteur 1 : S.Rawa
+ * Auteur 1 : T.Borréani
+ * Many sources :
+ => https://raw.githubusercontent.com/RuiSantosdotme/ESP32-Course/master/code/WiFi_Web_Server_DHT/WiFi_Web_Server_DHT.ino
+ => https://randomnerdtutorials.com/esp32-dht11-dht22-temperature-humidity-web-server-arduino-ide/
+ => Kevin Levy 
+ => G.Menez
+*/
+
+// Bibliothéque externe
+  #include "OneWire.h"
+  #include "DallasTemperature.h"
+  #include <Adafruit_NeoPixel.h>
+  #include <ArduinoJson.h>
+  #include <WiFi.h> // https://www.arduino.cc/en/Reference/WiFi
+  #include <WiFiMulti.h>
+  #include "SPIFFS.h"
+  #include "FS.h"
+  #include "ESPAsyncWebServer.h"
+  #include <ArduinoOTA.h>
+// Nos fichiers
+  #include "colors.h"
+  #include "wifi_utils.h"
+  #include "wifi_connect.h"
+  #include "file_manager.h"
+  #include "routes.h"
+
+
+
+//-------------------------------------------------------
+#define FORMAT_SPIFFS_IF_FAILED true
+#define USE_SERIAL Serial
+
+// Pour régler les problèmes de compatibilités
+#define Old 1
+
+
 
 //-------------Structures---------------------    
 struct Information { 
@@ -26,10 +58,12 @@ struct Information {
 struct Information info = {0 , 0.0 , 0.0 , 0.0 , 100000.0 , 0, 0.0, 0.0, 0.0, 0 , 0};
 
 struct Parametre{
+
+  //----------------------------
   int temperatureSeuilHaut = 25;
   int temperatureSeuilBas = 24;
-  const int lumiereAlerte = 3000;
-  const float temperatureAlerte = 20;
+  int lumiereAlerte = 3000;
+  float temperatureAlerte = 20;
   const int pourcentageAvantAlerte = 80; // Pourcentage à atteindre pour déclencher l'alerte.
   //----------------------------
   const int ledPin = 19;
@@ -50,12 +84,18 @@ struct Parametre parametre = {};
 
 //----------------------------------
 
+//-------------------------------------------------------
+
+
 
 OneWire oneWire(parametre.brocheTermometre);
 DallasTemperature tempSensor(&oneWire);
 int numberKeyPresses = 0;
 Adafruit_NeoPixel strip(parametre.bandeLedPin, parametre.brocheBande, NEO_GRB + NEO_KHZ800);
 
+void setup_OTA(); // from ota.ino
+// Create AsyncWebServer object on port 80
+AsyncWebServer server(80);
 
 //--------------Fonction de base INITIALISATION--------------------
 
@@ -334,16 +374,178 @@ void setMinTemperature(){
     info.minEnregistre =  info.temperature;
   }
 }
+
+
+/*void updateFromReceivedJson(const char* json) {
+  StaticJsonDocument<1024> doc; // Assurez-vous que la taille est suffisante pour votre JSON
+  DeserializationError error = deserializeJson(doc, json);
+
+  if (error) { // Testez si l'analyse a réussi
+    Serial.print(F("deserializeJson() failed: "));
+    Serial.println(error.c_str());
+    return;
+  }
+
+  // Assurez-vous que le chemin dans le JSON est correct et que la valeur existe
+  if (doc.containsKey("regul") && doc["regul"].containsKey("temperatureAlerte")) {
+    float tempAlerte = doc["regul"]["temperatureAlerte"]; // Extrait la valeur
+    parametre.temperatureAlerte = tempAlerte; // Met à jour la structure parametre
+    Serial.println("Temperature d'alerte mise à jour : " + String(tempAlerte));
+  }
+}
+
+void updateFromReceivedJsonLum(const char* json) {
+  StaticJsonDocument<1024> doc; // Assurez-vous que la taille est suffisante pour votre JSON
+  DeserializationError error = deserializeJson(doc, json);
+
+  if (error) { // Testez si l'analyse a réussi
+    Serial.print(F("deserializeJson() failed: "));
+    Serial.println(error.c_str());
+    return;
+  }
+
+  // Assurez-vous que le chemin dans le JSON est correct et que la valeur existe
+  if (doc.containsKey("regul") && doc["regul"].containsKey("lumiereAlerte")) {
+    int lumAlerte = doc["regul"]["lumiereAlerte"]; // Extrait la valeur
+    parametre.lumiereAlerte = lumAlerte; // Met à jour la structure parametre
+    Serial.println("lumière d'alerte mise à jour : " + String(lumAlerte));
+  }
+}*/
+
+/*void updateFromReceivedJson(const char* json) {
+  StaticJsonDocument<1024> doc; // Assurez-vous que la taille est suffisante pour votre JSON
+  DeserializationError error = deserializeJson(doc, json);
+
+  if (error) { // Testez si l'analyse a réussi
+    Serial.print(F("deserializeJson() failed: "));
+    Serial.println(error.c_str());
+    return;
+  }
+
+  // Met à jour lt, ht, temperatureAlerte, et lumiereAlerte depuis regul
+  if (doc.containsKey("regul")) {
+    if (doc["regul"].containsKey("lt")) {
+      parametre.temperatureSeuilHaut = doc["regul"]["lt"].as<int>();
+    }
+    if (doc["regul"].containsKey("ht")) {
+      parametre.temperatureSeuilBas = doc["regul"]["ht"].as<int>();
+    }
+    if (doc["regul"].containsKey("temperatureAlerte")) {
+      parametre.temperatureAlerte = doc["regul"]["temperatureAlerte"].as<float>();
+      Serial.println("Temperature d'alerte mise à jour : " + String(parametre.temperatureAlerte));
+    }
+    // Ajout pour la mise à jour de lumiereAlerte
+    if (doc["regul"].containsKey("lumiereAlerte")) {
+      // Supposons que lumiereAlerte est une variable membre de la structure Parametre
+      // Changez cette partie selon la déclaration réelle de votre structure Parametre
+      parametre.lumiereAlerte = doc["regul"]["lumiereAlerte"].as<int>();
+      Serial.println("LumiereAlerte mise à jour : " + String(parametre.lumiereAlerte));
+    }
+  }
+
+  // Affichez des messages de mise à jour pour les autres valeurs
+  Serial.println("Temperature seuil haut (lt) mise à jour : " + String(parametre.temperatureSeuilHaut));
+  Serial.println("Temperature seuil bas (ht) mise à jour : " + String(parametre.temperatureSeuilBas));
+}*/
+
+
+/*void updateFromReceivedJson(const char* json) {
+  StaticJsonDocument<1024> doc;
+  DeserializationError error = deserializeJson(doc, json);
+
+  if (error) {
+    Serial.print(F("deserializeJson() failed: "));
+    Serial.println(error.c_str());
+    return;
+  }
+
+  if (doc.containsKey("regul")) {
+    JsonObject regul = doc["regul"].as<JsonObject>();
+
+    if (regul.containsKey("lt")) {
+      parametre.temperatureSeuilHaut = regul["lt"].as<int>();
+      Serial.println("Temperature seuil haut (lt) mise à jour : " + String(parametre.temperatureSeuilHaut));
+    }
+    
+    if (regul.containsKey("ht")) {
+      parametre.temperatureSeuilBas = regul["ht"].as<int>();
+      Serial.println("Temperature seuil bas (ht) mise à jour : " + String(parametre.temperatureSeuilBas));
+    }
+    
+    if (regul.containsKey("temperatureAlerte")) {
+      parametre.temperatureAlerte = regul["temperatureAlerte"].as<float>();
+      Serial.println("Temperature d'alerte mise à jour : " + String(parametre.temperatureAlerte));
+    }
+    
+    if (regul.containsKey("lumiereAlerte")) {
+      parametre.lumiereAlerte = regul["lumiereAlerte"].as<int>();
+      Serial.println("LumiereAlerte mise à jour : " + String(parametre.lumiereAlerte));
+    }
+  }
+}*/
+
+void updateFromReceivedJson(const char* json) {
+  // Augmentez la taille si votre JSON est plus grand
+  StaticJsonDocument<2048> doc; 
+  DeserializationError error = deserializeJson(doc, json);
+
+  if (error) {
+    Serial.print(F("deserializeJson() failed: "));
+    Serial.println(error.c_str());
+    return;
+  }
+
+  JsonObject regul = doc["regul"].as<JsonObject>();
+  if (!regul.isNull()) {
+    if (regul.containsKey("lt")) {
+      parametre.temperatureSeuilHaut = regul["lt"];
+      //Serial.println("Temperature seuil haut (lt) mise à jour : ");
+    }
+    if (regul.containsKey("ht")) {
+      parametre.temperatureSeuilBas = regul["ht"];
+      //Serial.println("Temperature seuil bas (ht) mise à jour : ");
+    }
+    if (regul.containsKey("temperatureAlerte")) {
+      parametre.temperatureAlerte = regul["temperatureAlerte"];
+      //Serial.println("Temperature d'alerte mise à jour : ");
+    }
+    if (regul.containsKey("lumiereAlerte")) {
+      parametre.lumiereAlerte = regul["lumiereAlerte"];
+      //Serial.println("LumiereAlerte mise à jour : ");
+    }
+  }
+}
+
+
+
+
+
 //-------------Fonction native---------------------
 
 void setup(){
   Serial.begin(9600);
+  while(!Serial); //wait for a serial connection
+  functionWificonnect();
   initLed(parametre.ledPin);
   initCapteurChaleur();
   initVentilo();
   setBandeLed();
   delay(2000);
+
+   verifFile();
+   delay(2000);
+   //writeFile(SPIFFS, "/index.html", readFile(SPIFFS,"/test.html"));
+
+  // Setup routes of the ESP Web server
+  setup_http_routes(&server);
+
+  //setup_http_routes(&server);
+  // Start ESP Web server
+  server.begin();
+   
+
 }
+
 
 void loop() {
   // Ce type de condition permet d'exécuter le contenu toutes les N millisecondes, ce qui évite d'avoir un programme trop linéaire.
@@ -360,6 +562,7 @@ void loop() {
     setChauffage();
     setVentilo();
     setAlerte();
+    
   }
   if(info.timerBandeLed == 0 || millis() - info.timerBandeLed > parametre.periodeTimerBandeLed){
     info.timerBandeLed=millis();
@@ -369,8 +572,14 @@ void loop() {
     info.timerCommunication=millis();
     //readData();
     makeJSON();
+  }
 
+ // Lecture des données JSON reçues sur la connexion série
+  if (Serial.available() > 0) {
+    String incomingJson = Serial.readStringUntil('\n'); // Lit la chaîne JSON terminée par un retour à la ligne
+    if (incomingJson.length() > 0) {
+      updateFromReceivedJson(incomingJson.c_str()); // Traite le JSON reçu
+    }
   }
   
-
 }
