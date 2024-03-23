@@ -29,7 +29,7 @@
 
 
 
-//-------------------------------------------------------
+//-------------Préprocesseur---------------------
 #define FORMAT_SPIFFS_IF_FAILED true
 #define USE_SERIAL Serial
 
@@ -39,14 +39,19 @@
 
 
 //-------------Structures---------------------    
+
+/* La structure Information contient l'ensemble des informations des capteurs, des variables déduites des capteurs
+ * et des variables spéciales permettant d'appeler les fonctions avec un timer différent entre elles
+ */
 struct Information { 
+  //-----Variable d'informations------
   int chanceFeu; // une valeur en pourcentage
   float lumiere;
   float temperature;
   float maxEnregistre;
   float minEnregistre;
   int etatRegulateurTemperature; //  0) refroidi , 1) est éteind , 2) chauffe
-  // Variable pour le TIMER
+  //-----Variables pour le TIMER-----
   float timerGeneral;
   float timerBandeLed;
   float timerCommunication;
@@ -57,6 +62,9 @@ struct Information {
 };
 struct Information info = {0 , 0.0 , 0.0 , 0.0 , 100000.0 , 0, 0.0, 0.0, 0.0, 0 , 0};
 
+/* La structure Parametre contient l'ensemble des paramètres par défaut réglables par l'utilisateur.
+ * À noter qu'ils sont désormais modifiables depuis Node-RED.
+ */
 struct Parametre{
 
   //----------------------------
@@ -65,24 +73,22 @@ struct Parametre{
   const int lumiereAlerte = 3000;
   const float temperatureAlerte = 20;
   const int pourcentageAvantAlerte = 80; // Pourcentage à atteindre pour déclencher l'alerte.
-  //----------------------------
+  //------------Gestion des broches----------------
   const int ledPin = 19;
   const int ledPinVerte = 16;
-  const int ledPinJaune = 2;
+  const int ledPinBleue = 2;
   const int bandeLedPin = 5;
   const int brocheVentilateur = 27;
   const int brocheBande = 13;
   const int brocheLightIntensity = A5;
   const int brocheTermometre = 23;
 
-  //----------------------------
+  //--------Parametres des TIMER-----------
   const double periodeTimerGeneral = 1000;
   const double periodeTimerBandeLed = 300;
   const double periodeTimerCommunication = 5000;
 };
 struct Parametre parametre = {};
-
-//----------------------------------
 
 //-------------------------------------------------------
 
@@ -99,11 +105,13 @@ AsyncWebServer server(80);
 
 //--------------Fonction de base INITIALISATION--------------------
 
+/*
+ * Configuration du mode de fonctionnement des broches utilisé pour les LED sur OUTPUT
+ */
 void initLed(int ledPin) {
   pinMode(parametre.ledPin, OUTPUT);
   pinMode(parametre.ledPinVerte, OUTPUT);
-  pinMode(parametre.ledPinJaune, OUTPUT);
-
+  pinMode(parametre.ledPinBleue, OUTPUT);
 }
 
 void initCapteurChaleur(){
@@ -159,10 +167,10 @@ void setVentilo(){
 void setAlerte(){
   if(info.chanceFeu >= parametre.pourcentageAvantAlerte ){
     info.feu = 1;
-    digitalWrite(parametre.ledPinJaune, HIGH);
+    digitalWrite(parametre.ledPinBleue, HIGH);
   } else{
     info.feu = 0;
-    digitalWrite(parametre.ledPinJaune, LOW);
+    digitalWrite(parametre.ledPinBleue, LOW);
   }
 }
 
@@ -293,7 +301,7 @@ void readData() {
   }
 }
   
-void makeJSON(){
+char* makeJSON(){
   char payload[2048]; 
 
   /* 1) Build the JSON object ... easily with API !*/
@@ -360,6 +368,8 @@ void makeJSON(){
 
   /* 3) Send the request to the network and Receive the answer */
   Serial.println(payload);
+  return payload;
+
 }
 
 void setMaxTemperature(){

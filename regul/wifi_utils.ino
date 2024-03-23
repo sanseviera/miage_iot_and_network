@@ -68,8 +68,8 @@ void wifi_connect_multi(String hostname){
   wm.addAP("HUAWEI-553A", "QTM06RTT");
   wm.addAP("GMAP", "vijx47050");
   wm.addAP("Livebox-B870","MYCNcZqnvsWsiy7s52");
-  wm.addAP("iPhone (2)","e7znotn89aaxu");
-  //wm.addAP("iPhone de Serigne Rawane","nouvelle");
+  wm.addAP("iPhone_jlqkse","e7znotn89aaxu");
+  wm.addAP("iPhone de Serigne Rawane","nouvelle");
 
 
   
