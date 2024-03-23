@@ -70,8 +70,8 @@ struct Parametre{
   //----------------------------
   int temperatureSeuilHaut = 25;
   int temperatureSeuilBas = 24;
-  const int lumiereAlerte = 3000;
-  const float temperatureAlerte = 20;
+  int lumiereAlerte = 3000;
+  float temperatureAlerte = 20;
   const int pourcentageAvantAlerte = 80; // Pourcentage à atteindre pour déclencher l'alerte.
   //------------Gestion des broches----------------
   const int ledPin = 19;
@@ -89,6 +89,9 @@ struct Parametre{
   const double periodeTimerCommunication = 5000;
 };
 struct Parametre parametre = {};
+
+//-------------------------------------------------------
+
 
 //-------------------------------------------------------
 
@@ -384,6 +387,43 @@ void setMinTemperature(){
     info.minEnregistre =  info.temperature;
   }
 }
+
+void updateFromReceivedJson(const char* json) {
+  // Augmentez la taille si votre JSON est plus grand
+  StaticJsonDocument<2048> doc; 
+  DeserializationError error = deserializeJson(doc, json);
+
+  if (error) {
+    Serial.print(F("deserializeJson() failed: "));
+    Serial.println(error.c_str());
+    return;
+  }
+
+  JsonObject regul = doc["regul"].as<JsonObject>();
+  if (!regul.isNull()) {
+    if (regul.containsKey("lt")) {
+      parametre.temperatureSeuilHaut = regul["lt"];
+      //Serial.println("Temperature seuil haut (lt) mise à jour : ");
+    }
+    if (regul.containsKey("ht")) {
+      parametre.temperatureSeuilBas = regul["ht"];
+      //Serial.println("Temperature seuil bas (ht) mise à jour : ");
+    }
+    if (regul.containsKey("temperatureAlerte")) {
+      parametre.temperatureAlerte = regul["temperatureAlerte"];
+      //Serial.println("Temperature d'alerte mise à jour : ");
+    }
+    if (regul.containsKey("lumiereAlerte")) {
+      parametre.lumiereAlerte = regul["lumiereAlerte"];
+      //Serial.println("LumiereAlerte mise à jour : ");
+    }
+  }
+}
+
+
+
+
+
 //-------------Fonction native---------------------
 
 void setup(){
@@ -402,11 +442,14 @@ void setup(){
 
   // Setup routes of the ESP Web server
   setup_http_routes(&server);
+
+  //setup_http_routes(&server);
   // Start ESP Web server
   server.begin();
    
 
 }
+
 
 void loop() {
   // Ce type de condition permet d'exécuter le contenu toutes les N millisecondes, ce qui évite d'avoir un programme trop linéaire.
@@ -433,8 +476,14 @@ void loop() {
     info.timerCommunication=millis();
     //readData();
     makeJSON();
+  }
 
+ // Lecture des données JSON reçues sur la connexion série
+  if (Serial.available() > 0) {
+    String incomingJson = Serial.readStringUntil('\n'); // Lit la chaîne JSON terminée par un retour à la ligne
+    if (incomingJson.length() > 0) {
+      updateFromReceivedJson(incomingJson.c_str()); // Traite le JSON reçu
+    }
   }
   
-
 }

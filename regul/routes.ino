@@ -24,10 +24,44 @@ String processor(const String& var){
 
 /*===================================================*/
 void setup_http_routes(AsyncWebServer* server) {
+
+  // Serveur de fichiers statiques. Notez qu'il utilise 'processor' pour traiter les fichiers
+  server->serveStatic("/", SPIFFS, "/").setDefaultFile("index.html").setTemplateProcessor(processor);
+
+  // Gestionnaire de racine simplifié
+  server->on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
+    request->send(SPIFFS, "/index.html", String(), false, processor);
+  });
+
+  // Gestionnaire pour recevoir des données HTML et les enregistrer dans un fichier sur SPIFFS
+  server->on("/writeHtml", HTTP_POST, [](AsyncWebServerRequest *request) {
+    USE_SERIAL.println("Receive Request for a periodic report!");
+    if (request->hasArg("html")) {
+      const char* target_html = request->arg("html").c_str();
+      // Assurez-vous d'implémenter la fonction 'writeFile' pour écrire dans SPIFFS
+      File file = SPIFFS.open("/index.html", FILE_WRITE);
+      if (file) {
+        file.print(target_html);
+        file.close();
+      }
+    }
+    request->send(200, "text/plain", "OK");
+  });
+
+  // Gestionnaire pour envoyer des données HTML stockées sur SPIFFS
+  server->on("/getHtml", HTTP_GET, [](AsyncWebServerRequest *request) {
+    File file = SPIFFS.open("/index.html", FILE_READ);
+    if (file) {
+      String fileContent = file.readString();
+      file.close();
+      request->send(200, "text/html", fileContent);
+    } else {
+      request->send(404, "text/plain", "File Not Found");
+    }
+  });
   
-   server->serveStatic("/", SPIFFS, "/").setTemplateProcessor(processor);  
+   /*server->serveStatic("/", SPIFFS, "/").setTemplateProcessor(processor);  
    auto root_handler = server->on("/", HTTP_GET, [](AsyncWebServerRequest *request){
-      int UPTIME = 1111;
       request->send(SPIFFS, "/index.html", String(), false, processor); 
       request->send_P(200, "text/html", "try", processor); // if page_html was a string .   
    });
@@ -40,32 +74,7 @@ void setup_http_routes(AsyncWebServer* server) {
       writeFile(SPIFFS, "/index.html", target_html);
     }
     request->send_P(200,"text/plain", "ok" );
-   });
-
-   server->on("/light", HTTP_GET, [](AsyncWebServerRequest *request){
-      /* The most simple route => hope a response with light value */ 
-      request->send_P(200, "text/plain", "ee");
-   });
-   
-   server->on("/temperature", HTTP_GET, [](AsyncWebServerRequest *request){
-      /* The most simple route => hope a response with temperature value */ 
-      USE_SERIAL.printf("GET /temperature request \n"); 
-      /* Exemple de ce qu'il ne faut surtout pas écrire car yield + async => core dump !*/
-      request->send_P(200, "text/plain", "fff");
-    });
-
-    server->on("/getJson", HTTP_GET, [](AsyncWebServerRequest *request){
-      static char jsonBuffer[2048];
-          char *json = makeJSON();
-      strncpy(jsonBuffer, json, sizeof(jsonBuffer));
-        free(json);
-
-        // Envoyer le JSON depuis le tableau de caractères statique
-        request->send(200, "application/json", jsonBuffer);
-
-    });
-    
-
+   });*/
 
 
 }
