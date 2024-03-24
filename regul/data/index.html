@@ -9,6 +9,7 @@
     <link rel="stylesheet" type="text/css" href="esp.css">
 
     <title>ESP32</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   </head>
   
   <body>
@@ -53,15 +54,14 @@
     High Temp : %HT% C<br/>
 
     <h3> Periodic status report to :</h3>
-    <form>
       <label for="ip">IP Address :</label>
-      <input id="1" type="text" name="ip" placeholder="%PRT_IP%"/><br/>
+      <input id="target_ip" type="text" name="ip" placeholder="%PRT_IP%"/><br/>
       <label for="port">Port :</label>
-      <input id="2" type="text" name="port" placeholder="%PRT_PORT%"/><br/>
+      <input id="target_port" type="text" name="port" placeholder="%PRT_PORT%"/><br/>
       <label for="sp"> Sampling Period (in seconds) :</label>
-      <input id="2" type="text" name="sp" placeholder="%PRT_T%"/><br/>
+      <input id="sp" type="text" name="sp" placeholder="%PRT_T%"/><br/>
       <input type="submit" value="Change reporting host !"/>
-    </form>
+      <button id="monBouton">Cliquez ici</button>
 
     <script>
       // The last version should use fetch API instead of XMLHttpRequest() 
@@ -69,7 +69,8 @@
       // https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Client-side_web_APIs/Fetching_data
       // https://rapidapi.com/guides/api-requests-intervals
       // https://medium.com/codingurukul/fetch-api-a-modern-replacement-for-xmlhttprequest-c24ced9ff8d3
-      
+
+      /*
       function startUpdate(sensor){
 	  setInterval(function () {
 	      fetch(sensor)
@@ -102,35 +103,46 @@
 	  startUpdate('temperature');
 	  startUpdate('light');
       });
+*/
 
     </script>
     <script>
-      document.getElementById('http://172.20.10.8/setNetwork').addEventListener('submit', function(event) {
-        event.preventDefault(); // Empêcher la soumission du formulaire par défaut
-        // Capturer les données du formulaire
-        const formData = new FormData(this);
-        // Envoyer une requête POST à l'aide de l'API fetch
-        fetch('/target', {
-          method: 'POST',
-          body: {
-            target_ip:document.getElementById("1").value,
-            target_port:document.getElementById("2").value,
-            sp:document.getElementById("3").value
-          }
-        })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Erreur HTTP, statut = ' + response.status);
-          }
-          return response.json();
-        })
-        .then(data => {
-          console.log('Réponse reçue:', data);
-        })
-        .catch(error => {
-          console.error('Erreur lors de la requête:', error);
+      var bouton = document.getElementById("monBouton");
+      // Ajoutez un gestionnaire d'événements pour le clic
+      bouton.addEventListener("click", function() {
+// Récupérer les valeurs des champs du formulaire
+var target_ip = document.getElementById("target_ip").value;
+    var target_port = document.getElementById("target_port").value;
+    var sp = document.getElementById("sp").value;
+    
+// Créer un objet avec les données à envoyer
+var data = {
+        target_ip: target_ip,
+        target_port: target_port,
+        sp: sp
+    };
+
+    // Envoyer les données au serveur en utilisant une requête AJAX
+    $.ajax({
+        type: "POST",
+        url: "http://172.20.10.8/setNetwork",
+        contentType: "application/json",
+        data: JSON.stringify(data),
+        success: function(response) {
+            console.log("Données envoyées avec succès !");
+            console.log(response);
+        },
+        error: function(error) {
+            console.error("Erreur lors de l'envoi des données au serveur : " + error);
+        }
     });
+
+
 });
+
+
+
+
     </script>
 
     
