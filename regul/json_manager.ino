@@ -42,13 +42,13 @@ char* makeJSON(){
   information["loc"] = "A biot";
 
   net["uptime"] = String(millis());
-  net["ssid"] = "Livebox-B870";
-  net["mac"] = "AC:67:B2:37:C9:48";
-  net["ip"] = "192.168.1.45";
+  net["ssid"] = strdup(WiFi.SSID().c_str());
+  net["mac"] = strdup(WiFi.macAddress().c_str());
+  net["ip"] = strdup(WiFi.localIP().toString().c_str());
 
-  reporthost["target_ip"] = "127.0.0.1" ;
-  reporthost["target_port"] = 1880 ;
-  reporthost["sp"] = 2 ;
+  reporthost["target_ip"] = parametre.target_ip ;
+  reporthost["target_port"] = parametre.target_port ;
+  reporthost["sp"] = parametre.sp ;
 
   /* 1.3) Etage 1 */
   

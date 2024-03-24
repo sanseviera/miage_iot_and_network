@@ -10,24 +10,8 @@
 extern String last_temp, last_light;
 
 /*===================================================*/
-/*
- Information { 
-  //-----Variable d'informations------
-  int chanceFeu; // une valeur en pourcentage
-  float lumiere;
-  float temperature;
-  float maxEnregistre;
-  float minEnregistre;
-  int etatRegulateurTemperature; //  0) refroidi , 1) est éteind , 2) chauffe
-  //-----Variables pour le TIMER-----
-  float timerGeneral;
-  float timerBandeLed;
-  float timerCommunication;
-  int vitesseVentilateur;
-  int feu; // 1 ou 0, il y a un feu ou non
-  int regulation; // 1 ou 0 on régul ou non
-*/
-// UPTIME WHERE SSID MAC IP TEMPERATURE LIGHT COOLER HEATER LT HT
+
+
 String processor(const String& var){
   char buffer[20];
   if (var.equals("UPTIME")) {
@@ -134,33 +118,24 @@ void setup_http_routes(AsyncWebServer* server) {
     request->send(200, "text/plain", "OK");
   });
 
+  server->on("/setNetwork", HTTP_POST, [](AsyncWebServerRequest *request) {
+    // Récupérer le corps JSON de la requête
+    String targetIpValue = request->arg("target_ip");
+    String targetPortValue = request->arg("target_port");
+    String spValue = request->arg("sp");
+
+    // Convertir les valeurs en entiers
+    char* target_ip = strdup(targetIpValue.c_str());
+    int target_port = targetPortValue.toInt();
+    int sp = spValue.toInt();
+
+    // Affecter les valeurs à vos variables
+    parametre.target_ip = target_ip;
+    parametre.target_port = target_port;
+    parametre.sp = sp;
+    
+    // Envoyer une réponse OK à la requête HTTP
+    request->send(200, "text/plain", "OK");
+  });
+
 }
-
-/*
- *if (regul.containsKey("lt")) {
-      parametre.temperatureSeuilHaut = regul["lt"];
-      //Serial.println("Temperature seuil haut (lt) mise à jour : ");
-    }
-    if (regul.containsKey("ht")) {
-      parametre.temperatureSeuilBas = regul["ht"];
-      //Serial.println("Temperature seuil bas (ht) mise à jour : ");
-    }
-    if (regul.containsKey("temperatureAlerte")) {
-      parametre.temperatureAlerte = regul["temperatureAlerte"];
-      //Serial.println("Temperature d'alerte mise à jour : ");
-    }
-    if (regul.containsKey("lumiereAlerte")) {
-      parametre.lumiereAlerte = regul["lumiereAlerte"];
-      //Serial.println("LumiereAlerte mise à jour : ");
-    }
-
-
-
-
-
-    parametre.temperatureSeuilHaut = request->arg("lt").c_str();
-    parametre.temperatureSeuilBas = request->arg("ht").c_str();
-    parametre.temperatureSeuilBas = request->arg("temperatureAlerte").c_str();
-    parametre.temperatureSeuilBas = request->arg("temperatureAlerte").c_str();
- */
-/*===================================================*/

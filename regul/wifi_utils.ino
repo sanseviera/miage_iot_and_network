@@ -83,6 +83,7 @@ void wifi_connect_multi(String hostname){
   
   // Define hostname  => in C str ! not C++
   WiFi.setHostname(hostname.c_str());
+
   
   while(wm.run() != WL_CONNECTED && (nbtry < WiFiMaxTry)) {
     USE_SERIAL.printf("\nAttempting %d to connect AP", nbtry);  

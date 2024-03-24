@@ -95,6 +95,10 @@ struct Parametre{
   const double periodeTimerGeneral = 1000;
   const double periodeTimerBandeLed = 300;
   const double periodeTimerCommunication = 5000;
+  //---------------------------------
+  char* target_ip = "127.0.0.1";
+  int target_port = 1880;
+  int sp = 2;
 };
 struct Parametre parametre = {};
 
