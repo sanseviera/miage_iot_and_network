@@ -6,15 +6,53 @@
 #include "ESPAsyncWebServer.h"
 #include "routes.h"
 #include "SPIFFS.h"
+#include <ArduinoJson.h>
 
-#define USE_SERIAL Serial
 extern String last_temp, last_light;
 
 /*===================================================*/
+
+
 String processor(const String& var){
-  // Exemple de traitement de variable, retournez var si aucune substitution n'est nécessaire
-  return String();
+  char buffer[20];
+  if (var.equals("UPTIME")) {
+    return "gg";
+  }
+  else if (var.equals("WHERE")) {
+    return "uu";
+  }
+  else if (var.equals("SSID")) {  
+    return WiFi.SSID();
+  }
+  else if (var.equals("MAC")) {
+    return WiFi.macAddress().c_str();
+  }
+  else if (var.equals("IP")) {
+    return  WiFi.localIP().toString().c_str();
+  }
+  else if (var.equals("TEMPERATURE")) {
+    return dtostrf(info.temperature, 10, 2, buffer); // Convertir le float en chaîne avec 10 chiffres maximum et 2 chiffres après la virgule
+  }
+  else if (var.equals("LIGHT")) {
+    return dtostrf(info.lumiere, 10, 2, buffer); 
+  }
+  else if (var.equals("LT")) {
+    return dtostrf(parametre.temperatureSeuilHaut, 10, 2, buffer); 
+  }
+  else if (var.equals("HT")) {
+    return  dtostrf(parametre.temperatureSeuilBas, 10, 2, buffer); 
+  }
+  else if (var.equals("COOLER")) {
+    return "uu";
+  }
+  else if (var.equals("HEATER")) {
+    return "uu";
+  }
+  else {
+    return String();
+  }
 }
+
 
 /*===================================================*/
 void setup_http_routes(AsyncWebServer* server) {
@@ -29,7 +67,6 @@ void setup_http_routes(AsyncWebServer* server) {
 
   // Gestionnaire pour recevoir des données HTML et les enregistrer dans un fichier sur SPIFFS
   server->on("/writeHtml", HTTP_POST, [](AsyncWebServerRequest *request) {
-    USE_SERIAL.println("Receive Request for a periodic report!");
     if (request->hasArg("html")) {
       const char* target_html = request->arg("html").c_str();
       // Assurez-vous d'implémenter la fonction 'writeFile' pour écrire dans SPIFFS
@@ -53,27 +90,46 @@ void setup_http_routes(AsyncWebServer* server) {
       request->send(404, "text/plain", "File Not Found");
     }
   });
-  
-   /*server->serveStatic("/", SPIFFS, "/").setTemplateProcessor(processor);  
-   auto root_handler = server->on("/", HTTP_GET, [](AsyncWebServerRequest *request){
-      request->send(SPIFFS, "/index.html", String(), false, processor); 
-      request->send_P(200, "text/html", "try", processor); // if page_html was a string .   
-   });
-   
-   server->on("/getHtml", HTTP_GET, [](AsyncWebServerRequest *request){
-    //char* tmp = readFile(SPIFFS,"/index.html");
-    request->send_P(200, "text/html", "oK" );
-   });
-   
-   server->on("/writeHtml", HTTP_POST, [](AsyncWebServerRequest *request){
-    Serial.println("Receive Request for a periodic report !"); 
-    if (request->hasArg("html")) {
-      const char* target_html = request->arg("html").c_str();
-      writeFile(SPIFFS, "/index.html", target_html);
-    }
-    request->send_P(200,"text/plain", "ok" );
-   });*/
 
+  server->on("/getJson", HTTP_GET, [](AsyncWebServerRequest *request) {
+    request->send(200, "application/json", makeJSON());
+  });
+
+  server->on("/setData", HTTP_POST, [](AsyncWebServerRequest *request) {
+    // Réponse initiale pour la requête HTTP POST.
+    request->send(200, "text/plain", "OK");
+  }, NULL, [](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {
+    // Convertit les données reçues en chaîne JSON.
+    String jsonData = String((char*)data);
+
+    if (jsonData.length() > 0) {
+        // Utilise la fonction `updateFromReceivedJson` pour traiter les données.
+        updateFromReceivedJson(jsonData.c_str());
+        Serial.println("Données JSON reçues et traitées via HTTP.");
+        request->send(200, "text/plain", "Données reçues et traitées");
+    } else {
+        request->send(400, "text/plain", "Bad Request - No Data");
+    }
+  });
+
+  server->on("/setNetwork", HTTP_POST, [](AsyncWebServerRequest *request) {
+    // Récupérer le corps JSON de la requête
+    String targetIpValue = request->arg("target_ip");
+    String targetPortValue = request->arg("target_port");
+    String spValue = request->arg("sp");
+
+    // Convertir les valeurs en entiers
+    char* target_ip = strdup(targetIpValue.c_str());
+    int target_port = targetPortValue.toInt();
+    int sp = spValue.toInt();
+
+    // Affecter les valeurs à vos variables
+    parametre.target_ip = target_ip;
+    parametre.target_port = target_port;
+    parametre.sp = sp;
+    
+    // Envoyer une réponse OK à la requête HTTP
+    request->send(200, "text/plain", "OK");
+  });
 
 }
-/*===================================================*/

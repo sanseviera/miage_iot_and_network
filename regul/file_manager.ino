@@ -29,23 +29,34 @@ void  listDir(fs::FS &fs, const char * dirname, uint8_t levels){
     }
 }
 
- char* readFile(fs::FS&fs,const char* path){
-  char* tmp = (char*)malloc(sizeof(char) * 1024); 
-  File file= fs.open(path);
-  if(!file || file.isDirectory()){
-      Serial.println("- failed to open file for reading");
-      return (char*)"Erreur de lecture";
-  }
-  Serial.println("- read from file:");
-  int index = 0;
-  while(file.available()){
-    //Serial.write(file.read());
-    tmp[index++] = (char)file.read();
-  }
-  file.close();
-  return (char*)tmp;
-}
+char* readFile(fs::FS& fs, const char* path) {
+    File file = fs.open(path);
+    if (!file || file.isDirectory()) {
+        Serial.println("- failed to open file for reading");
+        return NULL; // Retourne NULL pour indiquer une erreur
+    }
 
+    // Obtenir la taille du fichier
+    size_t fileSize = file.size();
+
+    // Allouer un tampon de la taille du fichier plus un caractère nul de terminaison
+    char* tmp = (char*)malloc(fileSize + 1);
+    if (!tmp) {
+        Serial.println("- failed to allocate memory");
+        file.close();
+        return NULL;
+    }
+
+    Serial.println("- reading from file:");
+    size_t index = 0;
+    while (file.available()) {
+        tmp[index++] = (char)file.read();
+    }
+    tmp[index] = '\0'; // Terminer la chaîne avec un caractère nul
+
+    file.close();
+    return tmp;
+}
 
 
 void writeFile(fs::FS&fs, const char* path, const char* message){

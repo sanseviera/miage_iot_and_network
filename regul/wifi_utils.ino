@@ -68,7 +68,7 @@ void wifi_connect_multi(String hostname){
   wm.addAP("HUAWEI-553A", "QTM06RTT");
   wm.addAP("GMAP", "vijx47050");
   wm.addAP("Livebox-B870","MYCNcZqnvsWsiy7s52");
-  wm.addAP("iPhone (2)","e7znotn89aaxu");
+  wm.addAP("iPhone_jlqkse","e7znotn89aaxu");
   wm.addAP("NUMERICABLE-D8BA","2MDEMNOKYL");
   wm.addAP("iPhone de Serigne Rawane","nouvelle");
 
@@ -83,6 +83,7 @@ void wifi_connect_multi(String hostname){
   
   // Define hostname  => in C str ! not C++
   WiFi.setHostname(hostname.c_str());
+
   
   while(wm.run() != WL_CONNECTED && (nbtry < WiFiMaxTry)) {
     USE_SERIAL.printf("\nAttempting %d to connect AP", nbtry);  
