@@ -10,14 +10,62 @@
 extern String last_temp, last_light;
 
 /*===================================================*/
+/*
+ Information { 
+  //-----Variable d'informations------
+  int chanceFeu; // une valeur en pourcentage
+  float lumiere;
+  float temperature;
+  float maxEnregistre;
+  float minEnregistre;
+  int etatRegulateurTemperature; //  0) refroidi , 1) est éteind , 2) chauffe
+  //-----Variables pour le TIMER-----
+  float timerGeneral;
+  float timerBandeLed;
+  float timerCommunication;
+  int vitesseVentilateur;
+  int feu; // 1 ou 0, il y a un feu ou non
+  int regulation; // 1 ou 0 on régul ou non
+*/
+// UPTIME WHERE SSID MAC IP TEMPERATURE LIGHT COOLER HEATER LT HT
 String processor(const String& var){
-  if(var == "TEMPERATURE"){
+  char buffer[20];
+  if (var.equals("UPTIME")) {
     return "gg";
   }
-  else if(var == "LIGHT"){
+  else if (var.equals("WHERE")) {
     return "uu";
   }
-  return String();
+  else if (var.equals("SSID")) {  
+    return WiFi.SSID();
+  }
+  else if (var.equals("MAC")) {
+    return WiFi.macAddress().c_str();
+  }
+  else if (var.equals("IP")) {
+    return  WiFi.localIP().toString().c_str();
+  }
+  else if (var.equals("TEMPERATURE")) {
+    return dtostrf(info.temperature, 10, 2, buffer); // Convertir le float en chaîne avec 10 chiffres maximum et 2 chiffres après la virgule
+  }
+  else if (var.equals("LIGHT")) {
+    return dtostrf(info.lumiere, 10, 2, buffer); 
+  }
+  else if (var.equals("LT")) {
+    return dtostrf(parametre.temperatureSeuilHaut, 10, 2, buffer); 
+  }
+  else if (var.equals("HT")) {
+    return  dtostrf(parametre.temperatureSeuilBas, 10, 2, buffer); 
+  }
+  else if (var.equals("COOLER")) {
+    return "uu";
+  }
+  else if (var.equals("HEATER")) {
+    return "uu";
+  }
+  else {
+    return String();
+  }
 }
 
 

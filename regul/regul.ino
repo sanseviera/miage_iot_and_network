@@ -51,7 +51,7 @@ struct Information {
   float temperature;
   float maxEnregistre;
   float minEnregistre;
-  int etatRegulateurTemperature; //  0) refroidi , 1) est éteind , 2) chauffe
+  int etatRegulateurTemperature; //  0) refroidi , 1) est éteind , 2) chauffe 
   //-----Variables pour le TIMER-----
   float timerGeneral;
   float timerBandeLed;
