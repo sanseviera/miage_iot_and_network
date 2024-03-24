@@ -6,6 +6,7 @@
 #include "ESPAsyncWebServer.h"
 #include "routes.h"
 #include "SPIFFS.h"
+#include <ArduinoJson.h>
 
 extern String last_temp, last_light;
 
@@ -95,27 +96,20 @@ void setup_http_routes(AsyncWebServer* server) {
   });
 
   server->on("/setData", HTTP_POST, [](AsyncWebServerRequest *request) {
-    // Récupérer le corps JSON de la requête
-    String ltValue = request->arg("lt");
-    String htValue = request->arg("ht");
-    String lumiereAlertValue = request->arg("lumiereAlert");
-    String temperatureAlerteValue = request->arg("temperatureAlerte");
-
-    // Convertir les valeurs en entiers
-    int lt = ltValue.toInt();
-    int ht = htValue.toInt();
-    int lumiereAlert = lumiereAlertValue.toInt();
-    float temperatureAlerte = temperatureAlerteValue.toFloat();
-
-    // Affecter les valeurs à vos variables
-    parametre.temperatureSeuilHaut = lt;
-    parametre.temperatureSeuilBas = ht;
-    parametre.lumiereAlerte = lumiereAlert;
-    parametre.temperatureAlerte = temperatureAlerte;
-
-
-    // Envoyer une réponse OK à la requête HTTP
+    // Réponse initiale pour la requête HTTP POST.
     request->send(200, "text/plain", "OK");
+  }, NULL, [](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {
+    // Convertit les données reçues en chaîne JSON.
+    String jsonData = String((char*)data);
+
+    if (jsonData.length() > 0) {
+        // Utilise la fonction `updateFromReceivedJson` pour traiter les données.
+        updateFromReceivedJson(jsonData.c_str());
+        Serial.println("Données JSON reçues et traitées via HTTP.");
+        request->send(200, "text/plain", "Données reçues et traitées");
+    } else {
+        request->send(400, "text/plain", "Bad Request - No Data");
+    }
   });
 
   server->on("/setNetwork", HTTP_POST, [](AsyncWebServerRequest *request) {
