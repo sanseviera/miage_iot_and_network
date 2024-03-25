@@ -16,10 +16,15 @@ extern String last_temp, last_light;
 String processor(const String& var){
   char buffer[20];
   if (var.equals("UPTIME")) {
-    return "gg";
+
+    char buffer[100];
+    sprintf(buffer, "%f ms",  parametre.periodeTimerCommunication);
+    return buffer ;
   }
   else if (var.equals("WHERE")) {
-    return "uu";
+    char buffer[100];
+    sprintf(buffer, "Salle:%s Latitude:%s Longitude:%s Adresse:%s",  parametre.room, parametre.lat ,  parametre.lon , parametre.address);
+    return buffer ;
   }
   else if (var.equals("SSID")) {  
     return WiFi.SSID();
@@ -43,10 +48,10 @@ String processor(const String& var){
     return  dtostrf(parametre.temperatureSeuilBas, 10, 2, buffer); 
   }
   else if (var.equals("COOLER")) {
-    return "uu";
+    return info.etatRegulateurTemperature==0 ? "true" : "false"; 
   }
   else if (var.equals("HEATER")) {
-    return "uu";
+    return info.etatRegulateurTemperature==2 ? "true" : "false";
   }
   else {
     return String();
@@ -113,23 +118,66 @@ void setup_http_routes(AsyncWebServer* server) {
   });
 
   server->on("/setNetwork", HTTP_POST, [](AsyncWebServerRequest *request) {
-    // Récupérer le corps JSON de la requête
-    String targetIpValue = request->arg("target_ip");
-    String targetPortValue = request->arg("target_port");
-    String spValue = request->arg("sp");
+    if (request->hasArg("box")) {
+      const char* content = request->arg("box").c_str();
+      Serial.println(content);
+      setNetworkInfos(content);
 
-    // Convertir les valeurs en entiers
-    char* target_ip = strdup(targetIpValue.c_str());
-    int target_port = targetPortValue.toInt();
-    int sp = spValue.toInt();
-
-    // Affecter les valeurs à vos variables
-    parametre.target_ip = target_ip;
-    parametre.target_port = target_port;
-    parametre.sp = sp;
-    
-    // Envoyer une réponse OK à la requête HTTP
-    request->send(200, "text/plain", "OK");
+    }
+   
+  
+    request->send(200, "text/plain", "Données reçues et traitées");
+  
   });
+  
+   server->on("/target", HTTP_POST, [](AsyncWebServerRequest *request){
+      /* A route receiving a POST request with Internet coordinates 
+       * of the reporting target host.
+       */
+      Serial.println("Receive Request for a periodic report !"); 
+      if (request->hasArg("ip") && request->hasArg("port") && request->hasArg("sp")) {
+          parametre.target_ip = strdup(request->arg("ip").c_str());
+          parametre.target_port = request->arg("port").toInt();
+          parametre.sp = request->arg("sp").toInt();
+                   request->send(200, "text/plain", "essaie");
+
+         }
+         request->send(SPIFFS, "/index.html", String(), false, processor);
+        });
+  
+  // If request doesn't match any route, returns 404.
+  server->onNotFound([](AsyncWebServerRequest *request){
+      request->send(404);
+    });
+
+     server->on("/temperature", HTTP_GET, [](AsyncWebServerRequest *request){
+    USE_SERIAL.printf("GET /temperature request\n");
+    
+    // Convertir la valeur de température en une chaîne de caractères
+    char temperatureString[10]; // Supposons que la température ne dépasse pas 10 caractères
+    snprintf(temperatureString, sizeof(temperatureString), "%.2f", info.temperature); // "%.2f" pour afficher 2 décimales
+    
+    // Envoyer la température en tant que réponse
+    request->send(200, "text/plain", temperatureString);
+});
+
+  server->on("/light", HTTP_GET, [](AsyncWebServerRequest *request){
+    char lumiereString[10]; // Supposons que la température ne dépasse pas 10 caractères
+    snprintf(lumiereString, sizeof(lumiereString), "%.2f", info.lumiere); // "%.2f" pour afficher 2 décimales
+      request->send_P(200, "text/plain", lumiereString);
+    });
+
+      server->on("/cooler", HTTP_GET, [](AsyncWebServerRequest *request){
+    char tmp[10]; // Supposons que la température ne dépasse pas 10 caractères
+    snprintf(tmp, 100, "%s",info.etatRegulateurTemperature==0 ? "true" : "false"); // "%.2f" pour afficher 2 décimales
+      request->send_P(200, "text/plain", tmp);
+    });
+
+    server->on("/heater", HTTP_GET, [](AsyncWebServerRequest *request){
+    char tmp[10]; // Supposons que la température ne dépasse pas 10 caractères
+    snprintf(tmp, 100, "%s", info.etatRegulateurTemperature==2 ? "true" : "false"); // "%.2f" pour afficher 2 décimales
+      request->send_P(200, "text/plain", tmp);
+    });
+ 
 
 }

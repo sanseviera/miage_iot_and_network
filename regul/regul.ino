@@ -95,10 +95,16 @@ struct Parametre{
   const double periodeTimerGeneral = 1000;
   const double periodeTimerBandeLed = 300;
   const double periodeTimerCommunication = 5000;
-  //---------------------------------
+  //--------------Cible-------------------
   char* target_ip = "127.0.0.1";
   int target_port = 1880;
   int sp = 2;
+  //--------------Lieu------------------
+  char* room = "312";
+  char* lat = "43.62453842";
+  char* lon = "43.62453842";
+  char* address = "Les lucioles";
+
 };
 struct Parametre parametre = {};
 
