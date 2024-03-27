@@ -106,6 +106,7 @@ void setup_http_routes(AsyncWebServer* server) {
     }
   });
 
+
   server->on("/getJson", HTTP_GET, [](AsyncWebServerRequest *request) {
     request->send(200, "application/json", makeJSON());
   });

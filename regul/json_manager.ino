@@ -103,37 +103,6 @@ void updateFromReceivedJson(const char* json) {
   }
 }
 
-void setNetworkInfos(const char* json) {
-  // Créez un document JSON statique
-  StaticJsonDocument<2048> doc; 
-
-  // Désérialisez le JSON
-  DeserializationError error = deserializeJson(doc, json);
-
-  // Vérifiez s'il y a une erreur lors de la désérialisation
-  if (error) {
-    Serial.print(F("deserializeJson() failed: "));
-    Serial.println(error.c_str());
-    return;
-  }
-
-  // Vérifiez si le document JSON n'est pas vide
-  if (!doc.isNull()) {
-    // Vérifiez si la clé "target_ip" existe dans le JSON et mettez à jour si oui
-    //if (doc.containsKey("target_ip") && doc["target_ip"].is<const char*>()) {
-    //  parametre.target_ip = doc["target_ip"].as<const char*>();
-    //}
-    // Vérifiez si la clé "target_port" existe dans le JSON et mettez à jour si oui
-    if (doc.containsKey("target_port") && doc["target_port"].is<int>()) {
-      parametre.target_port = doc["target_port"].as<int>();
-    }
-    // Vérifiez si la clé "sp" existe dans le JSON et mettez à jour si oui
-    if (doc.containsKey("sp") && doc["sp"].is<int>()) {
-      parametre.sp  = doc["sp"].as<int>();
-    }
-  }
-}
-
 
 
 void setNetworkInfos(const char* json) {

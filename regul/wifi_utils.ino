@@ -70,7 +70,7 @@ void wifi_connect_multi(String hostname){
   wm.addAP("Livebox-B870","MYCNcZqnvsWsiy7s52");
   wm.addAP("iPhone_jlqkse","e7znotn89aaxu");
   wm.addAP("NUMERICABLE-D8BA","2MDEMNOKYL");
-  wm.addAP("iPhone de Serigne Rawane","nouvelle");
+  //wm.addAP("iPhone de Serigne Rawane","nouvelle");
 
   
   WiFi.mode(WIFI_OFF);   

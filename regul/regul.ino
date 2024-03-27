@@ -20,6 +20,8 @@
   #include "FS.h"
   #include "ESPAsyncWebServer.h"
   #include <ArduinoOTA.h>
+  #include <HTTPClient.h>
+
 // Nos fichiers
   #include "json_manager.h"
   #include "colors.h"
@@ -91,7 +93,7 @@ struct Parametre{
   const double periodeTimerBandeLed = 300;
   const double periodeTimerCommunication = 5000;
   //--------------Cible-------------------
-  char* target_ip = "127.0.0.1";
+  char* target_ip = "172.20.10.3";
   int target_port = 1880;
   int sp = 2;
   //--------------Lieu------------------
@@ -356,6 +358,7 @@ void setup(){
    //setup_http_routes(&server);
    // Start ESP Web server
    server.begin();
+
 }
 
 
@@ -384,6 +387,20 @@ void loop() {
     info.timerCommunication=millis();
     //readData();
     makeJSON();
+    
+  HTTPClient http;
+  char* url = (char*)malloc(1000 * sizeof(char)); // Allouer de la mémoire pour l'URL
+  snprintf(url, 1000, "http://%s:%d/target", parametre.target_ip, parametre.target_port);
+  http.begin(url);
+  /*
+  char* target_ip = "127.0.0.1";
+  int target_port = 1880;
+  int sp = 2;
+   */
+  String requestBody = makeJSON();
+  int httpCode = http.POST(requestBody);
+
+  Serial.printf("[HTTP] POST... code: %d\n", httpCode);
   }
 
   
@@ -402,6 +419,6 @@ void loop() {
     }
   }
 
-  
+ 
   
 }
