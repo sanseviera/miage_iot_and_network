@@ -72,7 +72,6 @@ void wifi_connect_multi(String hostname){
   wm.addAP("NUMERICABLE-D8BA","2MDEMNOKYL");
   wm.addAP("iPhone de Serigne Rawane","nouvelle");
 
-
   
   WiFi.mode(WIFI_OFF);   
   WiFi.mode(WIFI_STA); // Set WiFi to station mode 
