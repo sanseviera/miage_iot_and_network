@@ -7,23 +7,33 @@
 #include "routes.h"
 #include "SPIFFS.h"
 #include <ArduinoJson.h>
+#include <HTTPClient.h>
 
-extern String last_temp, last_light;
 
 /*===================================================*/
 
 
 String processor(const String& var){
-  char buffer[20];
+  /*char buffer[20];
+  
   if (var.equals("UPTIME")) {
 
     char buffer[100];
-    sprintf(buffer, "%f ms",  parametre.periodeTimerCommunication);
+    sprintf(buffer, "%f ms",  String(millis()));
     return buffer ;
+  }*/
+  char buffer[20];
+  if (var.equals("UPTIME")) {
+    // Get uptime in milliseconds
+    unsigned long currentMillis = millis();
+    // Convert milliseconds to seconds with two decimal places
+    float uptime = currentMillis / 1000.0;
+    sprintf(buffer, "%.2f s", uptime);
+    return buffer;
   }
   else if (var.equals("WHERE")) {
     char buffer[100];
-    sprintf(buffer, "Salle:%s Latitude:%s Longitude:%s Adresse:%s",  parametre.room, parametre.lat ,  parametre.lon , parametre.address);
+    sprintf(buffer, "Salle : %s, Latitude : %s, Longitude : %s, Adresse : %s.",  parametre.room, parametre.lat ,  parametre.lon , parametre.address);
     return buffer ;
   }
   else if (var.equals("SSID")) {  
@@ -122,62 +132,179 @@ void setup_http_routes(AsyncWebServer* server) {
       const char* content = request->arg("box").c_str();
       Serial.println(content);
       setNetworkInfos(content);
-
     }
-   
-  
+ 
     request->send(200, "text/plain", "Données reçues et traitées");
-  
   });
   
-   server->on("/target", HTTP_POST, [](AsyncWebServerRequest *request){
-      /* A route receiving a POST request with Internet coordinates 
-       * of the reporting target host.
-       */
-      Serial.println("Receive Request for a periodic report !"); 
-      if (request->hasArg("ip") && request->hasArg("port") && request->hasArg("sp")) {
-          parametre.target_ip = strdup(request->arg("ip").c_str());
-          parametre.target_port = request->arg("port").toInt();
-          parametre.sp = request->arg("sp").toInt();
-                   request->send(200, "text/plain", "essaie");
-
-         }
-         request->send(SPIFFS, "/index.html", String(), false, processor);
-        });
+   /*server->on("/target", HTTP_POST, [](AsyncWebServerRequest *request){
+    
+    // Traitement lorsque la route "/target" reçoit une requête POST.
+    Serial.println("Receiving reporting configuration"); 
+    if (request->hasParam("ip", true) && request->hasParam("port", true) && request->hasParam("sp", true)) {
+      AsyncWebParameter* p_ip = request->getParam("ip", true);
+      AsyncWebParameter* p_port = request->getParam("port", true);
+      AsyncWebParameter* p_sp = request->getParam("sp", true);
   
-  // If request doesn't match any route, returns 404.
-  server->onNotFound([](AsyncWebServerRequest *request){
-      request->send(404);
-    });
+      // Supposons que 'parametre' est une structure globale accessible
+      if(parametre.target_ip != nullptr) {
+      free(parametre.target_ip); // Libérer la mémoire précédente si elle était utilisée
+      }
+      parametre.target_ip = strdup(p_ip->value().c_str());
+  
+      parametre.target_port = atoi(p_port->value().c_str());
+      parametre.sp = atoi(p_sp->value().c_str());
+  
+      Serial.print("IP: ");
+      Serial.println(parametre.target_ip);
+      Serial.print("Port: ");
+      Serial.println(parametre.target_port);
+      Serial.print("Sampling period: ");
+      Serial.println(parametre.sp);
+  
+      // Ici, vous pourriez rediriger ou simplement répondre que les données ont été reçues.
+      // request->send(200, "text/plain", "Essaie valide. Redirecting...");
+      request->send(200, "application/json", makeJSON2());
+    } else {
+      request->send(400, "text/plain", "Missing parameters");
+    }
+  });*/
+  /*server->on("/target", HTTP_POST, [](AsyncWebServerRequest *request) {}, NULL, 
+  [](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {
+    // Cette fonction est appelée une fois que le corps de la requête POST est entièrement reçu
+    String receivedData = String((char*)data);
+    Serial.println("Données reçues via POST sur /target: " + receivedData);
 
-     server->on("/temperature", HTTP_GET, [](AsyncWebServerRequest *request){
-    USE_SERIAL.printf("GET /temperature request\n");
+    // Traitez ici les données reçues si nécessaire. Exemple :
+    // updateConfiguration(receivedData); // Une fonction hypothétique pour mettre à jour la configuration
     
-    // Convertir la valeur de température en une chaîne de caractères
-    char temperatureString[10]; // Supposons que la température ne dépasse pas 10 caractères
-    snprintf(temperatureString, sizeof(temperatureString), "%.2f", info.temperature); // "%.2f" pour afficher 2 décimales
-    
-    // Envoyer la température en tant que réponse
-    request->send(200, "text/plain", temperatureString);
-});
+    // Envoie le dernier JSON à Node-RED
+    String targetUrl = "http://" + String(parametre.target_ip) + ":" + String(parametre.target_port) + "/target";
+    HTTPClient http;
+    http.begin(targetUrl);
+    http.addHeader("Content-Type", "application/json");
+    int httpResponseCode = http.POST(tampon.payload); // tampon.payload contient votre dernier JSON
 
-  server->on("/light", HTTP_GET, [](AsyncWebServerRequest *request){
-    char lumiereString[10]; // Supposons que la température ne dépasse pas 10 caractères
-    snprintf(lumiereString, sizeof(lumiereString), "%.2f", info.lumiere); // "%.2f" pour afficher 2 décimales
+    if (httpResponseCode > 0) {
+      Serial.print("Réponse HTTP : ");
+      Serial.println(httpResponseCode);
+      request->send(200, "text/plain", "JSON envoyé avec succès à Node-RED");
+    } else {
+      Serial.print("Erreur lors de l'envoi du POST : ");
+      Serial.println(httpResponseCode);
+      request->send(500, "text/plain", "Erreur lors de l'envoi du JSON à Node-RED");
+    }
+    http.end();
+});*/
+
+server->on("/target", HTTP_POST, [](AsyncWebServerRequest *request) {}, 
+    NULL, 
+    [](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {
+
+        // Préparation de l'envoi des données vers Node-RED
+        if (parametre.target_ip != nullptr && parametre.target_port > 0) {
+            HTTPClient http;
+            String targetUrl = "http://" + String(parametre.target_ip) + ":" + String(parametre.target_port) + "/target";
+
+            http.begin(targetUrl);
+            http.addHeader("Content-Type", "application/json");
+            
+            // Envoyer `latestJSON` à Node-RED
+            int httpResponseCode = http.POST(latestJSON);
+
+            if (httpResponseCode > 0) {
+                Serial.println("HTTP Response code: " + String(httpResponseCode));
+
+                // Construction de la réponse JSON à envoyer au client
+                DynamicJsonDocument doc(1024);
+                doc["success"] = true;
+                doc["message"] = "JSON sent to Node-RED successfully";
+                doc["httpResponseCode"] = httpResponseCode;
+                doc["sentJson"] = latestJSON; // Inclure le JSON envoyé dans la réponse
+                
+                String response;
+                serializeJson(doc, response);
+
+                // Envoyer la réponse JSON au client
+                request->send(200, "text/plain", "Essai réussi");
+                //request->send(200, "application/json", response);
+            } else {
+                Serial.println("Error on sending POST: " + String(httpResponseCode));
+                request->send(500, "text/plain", "Failed to send JSON to Node-RED");
+            }
+
+            http.end();
+        } else {
+            request->send(500, "text/plain", "Node-RED server IP or Port not set correctly.");
+        }
+    }
+);
+
+
+
+    // If request doesn't match any route, returns 404.
+    server->onNotFound([](AsyncWebServerRequest *request){
+        request->send(404);
+      });
+
+    server->on("/temperature", HTTP_GET, [](AsyncWebServerRequest *request){
+
+      USE_SERIAL.printf("GET /temperature request\n");
+    
+      // Convertir la valeur de température en une chaîne de caractères
+      char temperatureString[10]; // Supposons que la température ne dépasse pas 10 caractères
+      snprintf(temperatureString, sizeof(temperatureString), "%.2f", info.temperature); // "%.2f" pour afficher 2 décimales
+      
+      // Envoyer la température en tant que réponse
+      request->send(200, "text/plain", temperatureString);
+      });
+
+    server->on("/light", HTTP_GET, [](AsyncWebServerRequest *request){
+      char lumiereString[10]; // Supposons que la température ne dépasse pas 10 caractères
+      snprintf(lumiereString, sizeof(lumiereString), "%.2f", info.lumiere); // "%.2f" pour afficher 2 décimales
       request->send_P(200, "text/plain", lumiereString);
-    });
+      });
 
-      server->on("/cooler", HTTP_GET, [](AsyncWebServerRequest *request){
-    char tmp[10]; // Supposons que la température ne dépasse pas 10 caractères
-    snprintf(tmp, 100, "%s",info.etatRegulateurTemperature==0 ? "true" : "false"); // "%.2f" pour afficher 2 décimales
+    server->on("/cooler", HTTP_GET, [](AsyncWebServerRequest *request){
+      char tmp[10]; // Supposons que la température ne dépasse pas 10 caractères
+      snprintf(tmp, 100, "%s",info.etatRegulateurTemperature==0 ? "true" : "false"); // "%.2f" pour afficher 2 décimales
       request->send_P(200, "text/plain", tmp);
-    });
+      });
 
     server->on("/heater", HTTP_GET, [](AsyncWebServerRequest *request){
-    char tmp[10]; // Supposons que la température ne dépasse pas 10 caractères
-    snprintf(tmp, 100, "%s", info.etatRegulateurTemperature==2 ? "true" : "false"); // "%.2f" pour afficher 2 décimales
+      char tmp[10]; // Supposons que la température ne dépasse pas 10 caractères
+      snprintf(tmp, 100, "%s", info.etatRegulateurTemperature==2 ? "true" : "false"); // "%.2f" pour afficher 2 décimales
       request->send_P(200, "text/plain", tmp);
     });
- 
 
+    server->on("/uptime", HTTP_GET, [](AsyncWebServerRequest *request) {
+      char uptimeString[20];
+      unsigned long uptime = millis();
+      snprintf(uptimeString, sizeof(uptimeString), "%lu", uptime / 1000);
+      request->send(200, "text/plain", uptimeString);
+    });
+
+}
+
+void sendJsonToNodeRed() {
+  if (parametre.target_ip != nullptr && parametre.target_port > 0) {
+    HTTPClient http;
+    String targetUrl = String("http://") + String(parametre.target_ip) + ":" + String(parametre.target_port) + "/target";
+    
+    http.begin(targetUrl);
+    http.addHeader("Content-Type", "application/json");
+    
+    String jsonPayload = makeJSON2(); // Assurez-vous que cette fonction génère votre JSON correctement.
+    int httpResponseCode = http.POST(jsonPayload);
+    
+    if (httpResponseCode > 0) {
+      Serial.println("HTTP Response code: " + String(httpResponseCode));
+    } else {
+      Serial.print("Error on sending POST: ");
+      Serial.println(httpResponseCode);
+    }
+    http.end();
+  } else {
+    Serial.println("Target IP or Port not set correctly.");
+  }
 }

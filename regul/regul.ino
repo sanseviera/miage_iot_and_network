@@ -28,15 +28,12 @@
   #include "file_manager.h"
   #include "routes.h"
 
-
-
 //-------------Préprocesseur---------------------
 #define FORMAT_SPIFFS_IF_FAILED true
 #define USE_SERIAL Serial
 
 // Pour régler les problèmes de compatibilités
 #define Old 0
-
 
 
 //-------------Structures---------------------    
@@ -60,10 +57,8 @@ struct Information {
   int feu; // 1 ou 0, il y a un feu ou non
   int regulation; // 1 ou 0 on régul ou non
   //-----
-  
 };
 struct Information info = {0 , 0.0 , 0.0 , 0.0 , 100000.0 , 0, 0.0, 0.0, 0.0, 0 , 0};
-
 
 struct Tampon{
   char payload[2048]; 
@@ -139,7 +134,6 @@ void initCapteurChaleur(){
     tempSensor.begin();
 }
 
-
 void initVentilo() {
   #if Old
     ledcAttach(27, 25000, 8); // Associe le canal PWM 0 à la broche GPIO 27
@@ -183,7 +177,6 @@ void setVentilo(){
     digitalWrite(parametre.ledPinVerte, LOW);
     ledcWrite(0, 0);  }
 }
-
 
 void setAlerte(){
   if(info.chanceFeu >= parametre.pourcentageAvantAlerte ){
@@ -231,12 +224,11 @@ float lireCapteurChaleur(){
 void setBandeLed(){
   strip.begin();
   delay(1);
- for(int i=0; i<1; i++) {
- //turn color to red
- strip.setPixelColor(i, strip.Color(rgball[3][0] , rgball[3][1], rgball[3][2]));
- }
-
- strip.show();
+  for(int i=0; i<1; i++) {
+   //turn color to red
+   strip.setPixelColor(i, strip.Color(rgball[3][0] , rgball[3][1], rgball[3][2]));
+  }
+  strip.show();
 }
 
 void setLed(){
@@ -262,7 +254,6 @@ void setLed(){
   for(int i=0; i<5; i++) {
     strip.setPixelColor(i, strip.Color(colorA, colorB, colorC));
   }
-
     strip.show();
 }
 
@@ -295,16 +286,21 @@ void informationPrint(){
 
 const char* makeText(int i){
   if(i){
-    return "WALK";}
-  else{return "HALT";}
+    return "WALK";
+  }
+  else{
+    return "HALT";
+  }
 }
 
 const char* makeText2(int i){
   if(i){
-    return "ON";}
-  else{return "OFF";}
+    return "ON";
+    }
+  else{
+    return "OFF";
+    }
 }
-
 
 void readData() {
   if (Serial.available()) {
@@ -329,18 +325,14 @@ void setMaxTemperature(){
   }
 }
 
-
 void setMinTemperature(){
   if (info.minEnregistre >= info.temperature){
     info.minEnregistre =  info.temperature;
   }
 }
 
-
-
-
-
-
+/////
+unsigned long lastTime = 0;
 
 //-------------Fonction native---------------------
 
@@ -358,14 +350,12 @@ void setup(){
    delay(2000);
    //writeFile(SPIFFS, "/index.html", readFile(SPIFFS,"/test.html"));
 
-  // Setup routes of the ESP Web server
-  setup_http_routes(&server);
+   // Setup routes of the ESP Web server
+   setup_http_routes(&server);
 
-  //setup_http_routes(&server);
-  // Start ESP Web server
-  server.begin();
-   
-
+   //setup_http_routes(&server);
+   // Start ESP Web server
+   server.begin();
 }
 
 
@@ -396,12 +386,22 @@ void loop() {
     makeJSON();
   }
 
- // Lecture des données JSON reçues sur la connexion série
+  
+  // À l'intérieur de votre fonction loop()
+  if (millis() - lastTime > parametre.sp * 1000) { // 'sp' est en secondes
+    sendJsonToNodeRed();
+    lastTime = millis();
+  }
+
+
+  // Lecture des données JSON reçues sur la connexion série
   if (Serial.available() > 0) {
     String incomingJson = Serial.readStringUntil('\n'); // Lit la chaîne JSON terminée par un retour à la ligne
     if (incomingJson.length() > 0) {
       updateFromReceivedJson(incomingJson.c_str()); // Traite le JSON reçu
     }
   }
+
+  
   
 }

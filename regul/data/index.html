@@ -31,6 +31,13 @@
     <h3>Sensors status WITH GLYPHS :</h3>
     <div class="grid-container">
       <div class="grid-item">
+        <i class="fas fa-clock" style="color:#007bff;"></i>  </div>
+      <div class="grid-item">
+        <span class="sensors-labels">Uptime</span>
+        <span id="uptime">%UPTIME%</span>
+        <sup class="units">s</sup>
+      </div>
+      <div class="grid-item">
 	      <i class="fas fa-thermometer-half" style="color:#059e8a;"></i>
       </div>
       <div class="grid-item">      
@@ -47,7 +54,7 @@
 	      <sup class="units">Lumen</sup>
       </div>
       <div class="grid-item">
-	      <i class="far fa-lightbulb" style="color:#00add6;"></i>
+	      <i class="fas fa-snowflake" style="color:#007bff;"></i>
       </div>
       <div class="grid-item">
 	      <span class="sensors-labels">Cooler</span>
@@ -55,7 +62,7 @@
 	      <sup class="units">Boolean</sup>
       </div>
       <div class="grid-item">
-	      <i class="far fa-lightbulb" style="color:#00add6;"></i>
+	      <i class="fas fa-fire" style="color:#ff4500;"></i>
       </div>
       <div class="grid-item">
 	      <span class="sensors-labels">Heater</span>
@@ -69,7 +76,7 @@
     High Temp : %HT% C<br/>
 
     <h3> Periodic status report to :</h3>
-    <form action="/target" method="post">
+    <!--<form id="reportingForm" action="/target" method="post">
       <label for="ip">IP Address :</label>
       <input type="text" name="ip" placeholder="%PRT_IP%"/><br/>
       <label for="port">Port :</label>
@@ -77,7 +84,59 @@
       <label for="sp"> Sampling Period (in seconds) :</label>
       <input type="text" name="sp" placeholder="%PRT_T%"/><br/>
       <input type="submit" value="Change reporting host !"/>
+    </form>-->
+    <form id="reportingForm" action="/target" method="post">
+      <label for="ip">IP Address :</label>
+      <input type="text" id="ip" name="ip" placeholder="Enter IP Address"/><br/>
+      <label for="port">Port :</label>
+      <input type="text" id="port" name="port" placeholder="Enter Port"/><br/>
+      <label for="sp"> Sampling Period (in seconds) :</label>
+      <input type="text" id="sp" name="sp" placeholder="Enter Sampling Period"/><br/>
+      <input type="submit" value="Change reporting host !"/>
     </form>
+    
+    
+
+    <script>
+      document.getElementById('reportingForm').onsubmit = function(event) {
+        // Empêcher la soumission standard du formulaire
+        event.preventDefault();
+        
+        // Récupérer les valeurs du formulaire
+        var ip = document.getElementById('ip').value;
+        var port = document.getElementById('port').value;
+        var sp = document.getElementById('sp').value;
+      
+        // Construire l'URL de redirection (si nécessaire)
+        // Note: Cette partie est optionnelle et dépend de votre logique d'application
+        var targetUrl = 'http://' + ip + ':' + port + '/target';
+
+        // Redirection après l'envoi des données
+        window.location.href = targetUrl;
+        
+        // Exemple d'envoi des données du formulaire via Fetch API à /target
+        // Envoyer les données du formulaire à votre serveur ESP via fetch API
+        fetch('/target', {
+          method: 'POST',
+          body: formData
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.text();
+        })
+        .then(result => {
+          console.log('Success:', result);
+          // Optionnel : gérer le succès, comme afficher un message ou rediriger
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+      };
+
+
+      </script>
 
     <script>
       // The last version should use fetch API instead of XMLHttpRequest() 
@@ -87,40 +146,39 @@
       // https://medium.com/codingurukul/fetch-api-a-modern-replacement-for-xmlhttprequest-c24ced9ff8d3
       
       function startUpdate(sensor){
-	  setInterval(function () {
+	      setInterval(function () {
 	      fetch(sensor)
-	      // fetch() returns a promise. When we have received a response from the server,
-	      // the promise's `then()` handler is called with the response.
-		  .then( function (response) {
-		      // Our handler throws an error if the request did not succeed.
-		      if (!response.ok) {
-			  throw new Error(`HTTP error: ${response.status}`);
-		      }
-		      // Otherwise (if the response succeeded), our handler fetches the response
-		      // as text by calling response.text(), and immediately returns the promise
-		      // returned by `response.text()`.
-		      return response.text();
-		  })
-	      // When response.text() has succeeded, the `then()` handler is called with
-	      // the text, and we copy it into the `temperature' id.
-		  .then(function (text){
-		      document.getElementById(sensor).innerHTML = text;
-		  })
-	      // Catch any errors that might happen, and display a message
-	      // in the navigator console.
-		  .catch(function (error){
-		      console.log(error);		
-		  });
-	  }, 2000);
+          // fetch() returns a promise. When we have received a response from the server,
+          // the promise's `then()` handler is called with the response.
+          .then( function (response) {
+            // Our handler throws an error if the request did not succeed.
+            if (!response.ok) {
+              throw new Error(`HTTP error: ${response.status}`);
+            }
+            // Otherwise (if the response succeeded), our handler fetches the response
+            // as text by calling response.text(), and immediately returns the promise
+            // returned by `response.text()`.
+            return response.text();
+          })
+          // When response.text() has succeeded, the `then()` handler is called with
+          // the text, and we copy it into the `temperature' id.
+          .then(function (text){
+            document.getElementById(sensor).innerHTML = text;
+          })
+            // Catch any errors that might happen, and display a message
+            // in the navigator console.
+          .catch(function (error){
+            console.log(error);		
+          });
+        }, 2000);
       }
       
       document.addEventListener('DOMContentLoaded', function() {
-	  startUpdate('temperature');
-	  startUpdate('light');
-    startUpdate('cooler');
-    startUpdate('heater');
-
-
+        startUpdate('temperature');
+        startUpdate('light');
+        startUpdate('cooler');
+        startUpdate('heater');
+        startUpdate('uptime');
       });
     </script>
 
