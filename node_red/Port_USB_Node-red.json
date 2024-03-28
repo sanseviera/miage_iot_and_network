@@ -8,33 +8,19 @@
         "env": []
     },
     {
-        "id": "e3ada3dbd8ea84c1",
-        "type": "serial in",
-        "z": "bc35c1bae53a9503",
-        "name": "",
-        "serial": "5a43db9eb9158404",
-        "x": 70,
-        "y": 480,
-        "wires": [
-            [
-                "0686e832b25e4791",
-                "bff64b08ea4e75ef"
-            ]
-        ]
-    },
-    {
         "id": "0686e832b25e4791",
         "type": "debug",
         "z": "bc35c1bae53a9503",
         "name": "debug 2",
-        "active": true,
+        "active": false,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "false",
+        "complete": "true",
+        "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 240,
+        "x": 280,
         "y": 100,
         "wires": []
     },
@@ -46,7 +32,7 @@
         "property": "payload",
         "action": "",
         "pretty": true,
-        "x": 260,
+        "x": 300,
         "y": 480,
         "wires": [
             [
@@ -71,7 +57,15 @@
                 "8ddfe3f2bc772151",
                 "1c92d0556d304261",
                 "da4e431eed62820c",
-                "b6c9d5085479e5ab"
+                "b6c9d5085479e5ab",
+                "13f1843e1a419008",
+                "0686e832b25e4791",
+                "b472dc71dd59f8d4",
+                "1cac88e3c80e04b2",
+                "4d442573b7337cd0",
+                "0b48d6a5a3e0780b",
+                "39aa8c86f531ad0d",
+                "a39117019cb096e1"
             ]
         ]
     },
@@ -351,7 +345,7 @@
         "y": 360,
         "wires": [
             [
-                "86acf55a369541df"
+                "d2495a92e28e7168"
             ]
         ]
     },
@@ -379,7 +373,7 @@
         "y": 420,
         "wires": [
             [
-                "0086e1b205a5419a"
+                "d2495a92e28e7168"
             ]
         ]
     },
@@ -517,7 +511,7 @@
         "id": "540fc473431d7032",
         "type": "ui_template",
         "z": "bc35c1bae53a9503",
-        "group": "e82c15aec80ecb68",
+        "group": "ba96e6f0a2e35bc0",
         "name": "JSON",
         "order": 2,
         "width": "10",
@@ -813,7 +807,7 @@
         "y": 1200,
         "wires": [
             [
-                "ad0149ce6a8521a5"
+                "d2495a92e28e7168"
             ]
         ]
     },
@@ -853,7 +847,8 @@
         "y": 540,
         "wires": [
             [
-                "59078737ae0e9575"
+                "59078737ae0e9575",
+                "f6b6ef88c285dbda"
             ]
         ]
     },
@@ -861,7 +856,7 @@
         "id": "694d59c5ecb928c9",
         "type": "ui_led",
         "z": "bc35c1bae53a9503",
-        "order": 4,
+        "order": 2,
         "group": "dd57374ab95ec8ce",
         "width": 0,
         "height": 0,
@@ -892,7 +887,7 @@
         "id": "2637e09d01b1429d",
         "type": "ui_led",
         "z": "bc35c1bae53a9503",
-        "order": 4,
+        "order": 3,
         "group": "dd57374ab95ec8ce",
         "width": 0,
         "height": 0,
@@ -954,7 +949,7 @@
         "id": "96317f68b6425521",
         "type": "ui_led",
         "z": "bc35c1bae53a9503",
-        "order": 4,
+        "order": 5,
         "group": "dd57374ab95ec8ce",
         "width": 0,
         "height": 0,
@@ -1023,7 +1018,7 @@
         "label": "units",
         "format": "{{value}}",
         "min": 0,
-        "max": "1000",
+        "max": "2000",
         "colors": [
             "#00b500",
             "#e6e600",
@@ -1038,81 +1033,11 @@
         "wires": []
     },
     {
-        "id": "ad0149ce6a8521a5",
-        "type": "function",
-        "z": "bc35c1bae53a9503",
-        "name": "send temp_alerte",
-        "func": "if (msg.topic === \"tempAlerte\") {\n    // Préparez votre message ici pour l'ESP\n    var newMsg = {\n        payload: msg.payload.toString() // Assurez-vous que c'est une chaîne si votre ESP s'attend à cela\n    };\n\n    console.log(\"Temp alerte : \" + newMsg.payload);\n    return newMsg;\n}\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1030,
-        "y": 1200,
-        "wires": [
-            [
-                "1801f899cb5a887f"
-            ]
-        ]
-    },
-    {
-        "id": "86acf55a369541df",
-        "type": "function",
-        "z": "bc35c1bae53a9503",
-        "name": "send sh",
-        "func": "if (msg.topic === \"sh\") {\n    // Préparez votre message ici pour l'ESP\n    var newMsg = {\n        payload: msg.payload.toString() // Assurez-vous que c'est une chaîne si votre ESP s'attend à cela\n    };\n\n    console.log(\"Seuil Haut (sh) : \" + newMsg.payload);\n    return newMsg;\n}\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1000,
-        "y": 360,
-        "wires": [
-            [
-                "1801f899cb5a887f"
-            ]
-        ]
-    },
-    {
-        "id": "0086e1b205a5419a",
-        "type": "function",
-        "z": "bc35c1bae53a9503",
-        "name": "send sb",
-        "func": "if (msg.topic === \"sb\") {\n    // Préparez votre message ici pour l'ESP\n    var newMsg = {\n        payload: msg.payload.toString() // Assurez-vous que c'est une chaîne si votre ESP s'attend à cela\n    };\n\n    console.log(\"Seuil Bas (sb) : \" + newMsg.payload);\n    return newMsg;\n}\n",
-        "outputs": 1,
-        "timeout": 0,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1000,
-        "y": 420,
-        "wires": [
-            [
-                "1801f899cb5a887f"
-            ]
-        ]
-    },
-    {
-        "id": "1801f899cb5a887f",
-        "type": "serial out",
-        "z": "bc35c1bae53a9503",
-        "name": "",
-        "serial": "5a43db9eb9158404",
-        "x": 1310,
-        "y": 400,
-        "wires": []
-    },
-    {
         "id": "da4e431eed62820c",
         "type": "function",
         "z": "bc35c1bae53a9503",
         "name": "regul3",
-        "func": "let etatRegul = msg.payload.status.regul; // État actuel du régulateur\nlet allume = flow.get(\"allume\") || 1; // Récupérer le compteur allumé du contexte de flux\nlet eteint = flow.get(\"eteint\") || 1; // Récupérer le compteur éteint du contexte de flux\n\n// Incrémenter le compteur basé sur l'état du régulateur\nif (etatRegul === \"WALK\") {\n    allume += 1; // Incrémenter le compteur allumé\n    flow.set(\"allume\", allume); // Mettre à jour le contexte de flux\n} else if (etatRegul === \"HALT\") {\n    eteint += 1; // Incrémenter le compteur éteint\n    flow.set(\"eteint\", eteint); // Mettre à jour le contexte de flux\n}\n\n// Préparer les données pour le graphique en secteurs si nécessaire\n// Note : Cette étape peut être réalisée dans un autre nœud de fonction si vous séparez la logique\n\nconsole.log(\"Régulateur allumé : \" + allume + \", éteint : \" + eteint);\n\n// Logique pour incrémenter les compteurs allume et eteint...\n\n// Préparer le msg.payload pour le graphique en secteurs\nmsg.payload = [\n    {\"label\": \"Allumé\", \"value\": allume},\n    {\"label\": \"Éteint\", \"value\": eteint}\n];\n\nconsole.log(\"msg: \" + JSON.stringify(msg));\n\nreturn msg; // Optionnel ici, dépend de votre flux\n",
+        "func": "// Récupération de l'état du régulateur à partir du payload entrant\nlet etatRegul = msg.payload.status.regul;\n\n// Initialisation ou récupération des compteurs depuis le contexte de flux\nlet allume = flow.get(\"AllumeR\") || 0;\n\n// Mise à jour du compteur basée sur l'état du régulateur\nif (etatRegul === \"WALK\") {\n    allume += 1; // Incrémenter le compteur pour \"allumé\"\n    flow.set(\"AllumeR\", allume); // Mise à jour du compteur dans le contexte de flux\n}\n\n// Préparation du message à envoyer au noeud ui_chart pour le graphique\n// ou à tout autre noeud suivant qui nécessite cette information.\nmsg.payload = allume;\nmsg.topic = \"AllumeR\";\n\n// Log pour vérifier la valeur de \"allume\" dans la console de debug Node-RED\nconsole.log(\"Allumé: \" + allume);\n\nreturn msg;\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -1123,7 +1048,7 @@
         "y": 1260,
         "wires": [
             [
-                "bf8a8712e1e189a2"
+                "16c69ab72137b0ec"
             ]
         ]
     },
@@ -1131,7 +1056,7 @@
         "id": "7f477210f1002725",
         "type": "ui_worldmap",
         "z": "bc35c1bae53a9503",
-        "group": "00376b8d98c01068",
+        "group": "75754c907f5cfb78",
         "order": 3,
         "width": 0,
         "height": 0,
@@ -1162,50 +1087,6 @@
         "x": 830,
         "y": 60,
         "wires": []
-    },
-    {
-        "id": "bf8a8712e1e189a2",
-        "type": "ui_chart",
-        "z": "bc35c1bae53a9503",
-        "name": "Evalution du régulateur",
-        "group": "9a41170d10313c68",
-        "order": 1,
-        "width": 0,
-        "height": 0,
-        "label": "Evalution du régulateur",
-        "chartType": "pie",
-        "legend": "true",
-        "xformat": "HH:mm:ss",
-        "interpolate": "linear",
-        "nodata": "",
-        "dot": false,
-        "ymin": "",
-        "ymax": "",
-        "removeOlder": 1,
-        "removeOlderPoints": "",
-        "removeOlderUnit": "3600",
-        "cutout": 0,
-        "useOneColor": false,
-        "useUTC": false,
-        "colors": [
-            "#1f77b4",
-            "#aec7e8",
-            "#ff7f0e",
-            "#2ca02c",
-            "#98df8a",
-            "#d62728",
-            "#ff9896",
-            "#9467bd",
-            "#c5b0d5"
-        ],
-        "outputs": 1,
-        "useDifferentColor": false,
-        "className": "",
-        "x": 810,
-        "y": 1260,
-        "wires": [
-            []
-        ]
     },
     {
         "id": "ab7bd6d69febb634",
@@ -1270,31 +1151,462 @@
         ]
     },
     {
-        "id": "5a43db9eb9158404",
-        "type": "serial-port",
+        "id": "16c69ab72137b0ec",
+        "type": "ui_chart",
+        "z": "bc35c1bae53a9503",
+        "name": "Evalution du régulateur",
+        "group": "9a41170d10313c68",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "label": "Evalution du régulateur",
+        "chartType": "pie",
+        "legend": "true",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": "50",
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 810,
+        "y": 1280,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "13f1843e1a419008",
+        "type": "function",
+        "z": "bc35c1bae53a9503",
+        "name": "regul3",
+        "func": "// Récupération de l'état du régulateur à partir du payload entrant\nlet etatRegul = msg.payload.status.regul;\n\n// Initialisation ou récupération des compteurs depuis le contexte de flux\nlet eteint = flow.get(\"EteintR\") || 0;\n\n// Mise à jour du compteur basée sur l'état du régulateur\nif (etatRegul === \"HALT\") {\n    eteint += 1; // Incrémenter le compteur pour \"éteint\"\n    flow.set(\"EteintR\", eteint); // Mise à jour du compteur dans le contexte de flux\n}\n\n// Préparation du message à envoyer au noeud ui_chart pour le graphique\n// ou à tout autre noeud suivant qui nécessite cette information.\nmsg.payload = eteint;\nmsg.topic = \"EteintR\";\n\n// Log pour vérifier la valeur de \"eteint\" dans la console de debug Node-RED\nconsole.log(\"Éteint: \" + eteint);\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 490,
+        "y": 1320,
+        "wires": [
+            [
+                "16c69ab72137b0ec",
+                "a135f2266d2ebd13"
+            ]
+        ]
+    },
+    {
+        "id": "a135f2266d2ebd13",
+        "type": "ui_template",
+        "z": "bc35c1bae53a9503",
+        "group": "dd57374ab95ec8ce",
         "name": "",
-        "serialport": "COM3",
-        "serialbaud": "9600",
-        "databits": "8",
-        "parity": "none",
-        "stopbits": "1",
-        "waitfor": "",
-        "dtr": "none",
-        "rts": "none",
-        "cts": "none",
-        "dsr": "none",
-        "newline": "\\n",
-        "bin": "false",
-        "out": "char",
-        "addchar": "",
-        "responsetimeout": "10000"
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "format": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<title>Colorful Icons</title>\n<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css\">\n<style>\n  .icon-container {\n    display: flex;\n    justify-content: space-around;\n    align-items: center; /* Align icons vertically */\n    height: 100px; /* Set a fixed height for the container */\n    background: #f4f4f4; /* Light background for the icons */\n    border-radius: 10px; /* Rounded corners */\n    padding: 10px 0; /* Some padding top and bottom */\n  }\n  .icon {\n    flex: 1; /* Distribute space evenly */\n    text-align: center; /* Center icons horizontally */\n    color: #fff; /* White color text for icons */\n    font-size: 40px; /* Larger size icons */\n    transition: transform 0.3s ease; /* Smooth transformation on hover */\n  }\n  .icon:hover {\n    transform: scale(1.1); /* Slightly scale icons on hover */\n  }\n  .fire { color: #E25822; } /* Fire icon color */\n  .shoe { color: #555; } /* Shoe icon color */\n  .cogs { color: #f0ad4e; } /* Regulator icon color */\n  .snowflake { color: #5bc0de; } /* Air conditioning icon color */\n</style>\n</head>\n<body>\n\n<div class=\"icon-container\">\n  <!-- Fire Icon -->\n  <i class=\"icon fire fas fa-fire\"></i>\n\n  <!-- Shoe Icon (assuming chaussage means footwear) -->\n  <i class=\"icon shoe fas fa-shoe-prints\"></i>\n\n  <!-- Cogs Icon for Regulator -->\n  <i class=\"icon cogs fas fa-cogs\"></i>\n\n  <!-- Snowflake Icon for Air Conditioning -->\n  <i class=\"icon snowflake fas fa-snowflake\"></i>\n</div>\n\n</body>\n</html>\n",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 760,
+        "y": 1340,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "074986b4b2fe4f33",
+        "type": "ui_template",
+        "z": "bc35c1bae53a9503",
+        "group": "b52fd2b1fb7da787",
+        "name": "",
+        "order": 1,
+        "width": "16",
+        "height": "3",
+        "format": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<title>Device Info Icons</title>\n<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css\">\n<style>\n  .icon-container {\n    display: flex;\n    justify-content: space-around;\n    align-items: center; /* Align icons vertically */\n    background: #f4f4f4; /* Light background for the icons */\n    border-radius: 10px; /* Rounded corners */\n    padding: 20px 0; /* Some padding top and bottom */\n    margin-top: 20px; /* Some margin to the top */\n  }\n  .icon {\n    text-align: center; /* Center icons horizontally */\n    color: #333; /* Dark grey color */\n    font-size: 40px; /* Larger size icons */\n    padding: 0 15px; /* Padding around icons */\n    transition: transform 0.3s ease; /* Smooth transformation on hover */\n  }\n  .icon:hover {\n    transform: scale(1.1); /* Slightly scale icons on hover */\n    color: #0056b3; /* Change color on hover */\n  }\n  .performance { color: #28a745; } /* Performance icon color */\n  .gps { color: #17a2b8; } /* GPS icon color */\n  .ip { color: #ffc107; } /* IP icon color */\n  .port { color: #dc3545; } /* Port icon color */\n  .loc { color: #6c757d; } /* Loc icon color */\n</style>\n</head>\n<body>\n\n<div class=\"icon-container\">\n  <!-- Performance Icon -->\n  <i class=\"icon performance fas fa-tachometer-alt\"></i>\n\n  <!-- GPS Icon -->\n  <i class=\"icon gps fas fa-map-marker-alt\"></i>\n\n  <!-- IP Icon -->\n  <i class=\"icon ip fas fa-network-wired\"></i>\n\n  <!-- Port Icon -->\n  <i class=\"icon port fas fa-plug\"></i>\n\n  <!-- Loc Icon -->\n  <i class=\"icon loc fas fa-street-view\"></i>\n</div>\n\n</body>\n</html>\n",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 1020,
+        "y": 1220,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "ce66916be615a970",
+        "type": "ui_template",
+        "z": "bc35c1bae53a9503",
+        "group": "55a3d326b25f4b41",
+        "name": "",
+        "order": 1,
+        "width": "20",
+        "height": "3",
+        "format": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<title>Sensor Info Icons</title>\n<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css\">\n<style>\n  .icon-container {\n    display: flex;\n    justify-content: space-around;\n    align-items: center;\n    background: #f4f4f4;\n    border-radius: 10px;\n    padding: 20px 0;\n    margin-top: 20px;\n  }\n  .icon {\n    text-align: center;\n    color: #333;\n    font-size: 40px;\n    padding: 0 15px;\n    transition: transform 0.3s ease;\n  }\n  .icon:hover {\n    transform: scale(1.1);\n    color: #0056b3;\n  }\n  .temperature { color: #ff8c00; }\n  .brightness { color: #fdd835; }\n  .wind { color: #1e90ff; }\n  .threshold { color: #dc3545; }\n</style>\n</head>\n<body>\n\n<div class=\"icon-container\">\n  <!-- Temperature Icon -->\n  <i class=\"icon temperature fas fa-thermometer-half\"></i>\n  \n  <!-- Brightness Icon -->\n  <i class=\"icon brightness fas fa-sun\"></i>\n  \n  <!-- Wind Icon -->\n  <i class=\"icon wind fas fa-wind\"></i>\n  \n  <!-- Threshold Icon -->\n  <i class=\"icon threshold fas fa-tachometer-alt\"></i>\n</div>\n\n</body>\n</html>\n",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": true,
+        "templateScope": "local",
+        "className": "",
+        "x": 1020,
+        "y": 1280,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f6b6ef88c285dbda",
+        "type": "ui_slider",
+        "z": "bc35c1bae53a9503",
+        "name": "Lumière d'alerte",
+        "label": "Lumière d'alerte",
+        "tooltip": "",
+        "group": "964393819945c32a",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "outs": "end",
+        "topic": "topic",
+        "topicType": "msg",
+        "min": 0,
+        "max": "5000",
+        "step": "",
+        "className": "",
+        "x": 960,
+        "y": 580,
+        "wires": [
+            [
+                "d2495a92e28e7168"
+            ]
+        ]
+    },
+    {
+        "id": "d2495a92e28e7168",
+        "type": "function",
+        "z": "bc35c1bae53a9503",
+        "name": "send ESP",
+        "func": "// Supposons que context.global.regul contienne les valeurs actuelles pour lt, ht, temperatureAlerte et lumiereAlerte\nvar regulCurrent = context.global.regul || { lt: null, ht: null, temperatureAlerte: null, lumiereAlerte: null };\n\n// Mettez à jour le champ spécifique basé sur le sujet du message et conservez les valeurs actuelles pour les autres champs\nvar payloadObj = {\n    status: {\n        temperature: null,\n        temperatureMax: null,\n        temperatureMin: null,\n        light: null,\n        regul: null,\n        fire: null,\n        heat: null,\n        cold: null,\n        fanspeed: null\n    },\n    location: {\n        room: null,\n        gps: {\n            lat: null,\n            lon: null\n        },\n        address: null\n    },\n    regul: {\n        lt: regulCurrent.lt, // Conserve la valeur actuelle de lt\n        ht: regulCurrent.ht, // Conserve la valeur actuelle de ht\n        lumiereAlerte: regulCurrent.lumiereAlerte, // Conserve la valeur actuelle de lumiereAlerte\n        temperatureAlerte: regulCurrent.temperatureAlerte, // Conserve la valeur actuelle de temperatureAlerte\n        pourcentageAvantAlerte: null\n    },\n    information: {\n        ident: null,\n        user: null,\n        loc: null\n    },\n    net: {\n        uptime: null,\n        ssid: null,\n        mac: null,\n        ip: null\n    },\n    reporthost: {\n        target_ip: null,\n        target_port: null,\n        sp: null\n    }\n};\n\n// Déterminez quel paramètre mettre à jour en fonction du sujet du message\nswitch (msg.topic) {\n    case \"tempAlerte\":\n        payloadObj.regul.temperatureAlerte = parseFloat(msg.payload); // Met à jour temperatureAlerte\n        regulCurrent.temperatureAlerte = parseFloat(msg.payload); // Met à jour la valeur dans context\n        break;\n    case \"lumAlerte\":\n        payloadObj.regul.lumiereAlerte = parseFloat(msg.payload); // Met à jour lumiereAlerte\n        regulCurrent.lumiereAlerte = parseFloat(msg.payload); // Met à jour la valeur dans context\n        break;\n    case \"sb\":\n        payloadObj.regul.ht = parseFloat(msg.payload); // Met à jour ht\n        regulCurrent.ht = parseFloat(msg.payload); // Met à jour la valeur dans context\n        break;\n    case \"sh\":\n        payloadObj.regul.lt = parseFloat(msg.payload); // Met à jour lt\n        regulCurrent.lt = parseFloat(msg.payload); // Met à jour la valeur dans context\n        break;\n}\n\n// Mise à jour de context.global.regul avec les nouvelles valeurs\ncontext.global.regul = regulCurrent;\n\n// Convertissez l'objet en chaîne JSON\nvar newMsg = {\n    payload: JSON.stringify(payloadObj)\n};\n\n// Log le JSON complet pour la vérification\nconsole.log(msg.topic + \" envoyé vers l'ESP : \", newMsg.payload);\n\nreturn newMsg; // Envoyez le message\n\n\n/*\n// Supposons que context.global.regul contienne les valeurs actuelles pour lt, ht, temperatureAlerte et lumiereAlerte\nvar regulCurrent = context.global.regul || { lt: null, ht: null, temperatureAlerte: null, lumiereAlerte: null };\n\n// Créez un objet pour stocker les données à envoyer\nvar payloadObj = {\n    regul: {\n        lt: regulCurrent.lt,\n        ht: regulCurrent.ht,\n        lumiereAlerte: regulCurrent.lumiereAlerte,\n        temperatureAlerte: regulCurrent.temperatureAlerte,\n        pourcentageAvantAlerte: 0\n    }\n};\n\n// Déterminez quel paramètre mettre à jour en fonction du sujet du message\nswitch (msg.topic) {\n    case \"tempAlerte\":\n        payloadObj.regul.temperatureAlerte = parseFloat(msg.payload); // Met à jour temperatureAlerte\n        regulCurrent.temperatureAlerte = parseFloat(msg.payload); // Met à jour la valeur dans context\n        break;\n    case \"lumAlerte\":\n        payloadObj.regul.lumiereAlerte = parseFloat(msg.payload); // Met à jour lumiereAlerte\n        regulCurrent.lumiereAlerte = parseFloat(msg.payload); // Met à jour la valeur dans context\n        break;\n    case \"sb\":\n        payloadObj.regul.ht = parseFloat(msg.payload); // Met à jour ht\n        regulCurrent.ht = parseFloat(msg.payload); // Met à jour la valeur dans context\n        break;\n    case \"sh\":\n        payloadObj.regul.lt = parseFloat(msg.payload); // Met à jour lt\n        regulCurrent.lt = parseFloat(msg.payload); // Met à jour la valeur dans context\n        break;\n}\n\n// Mise à jour de context.global.regul avec les nouvelles valeurs\ncontext.global.regul = regulCurrent;\n\n// Convertissez l'objet en chaîne JSON\nvar jsonString = JSON.stringify(payloadObj);\n\n// Log le JSON complet pour la vérification\nconsole.log(msg.topic + \" envoyé vers l'ESP : \", jsonString);\n\n// Préparez le message pour le nœud HTTP request\nmsg.headers = {\n    \"Content-Type\": \"application/json\"\n};\nmsg.payload = payloadObj;\n\nreturn msg; // Envoyez le message\n*/",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1200,
+        "y": 580,
+        "wires": [
+            [
+                "efe23ff558fea66d"
+            ]
+        ]
+    },
+    {
+        "id": "b472dc71dd59f8d4",
+        "type": "function",
+        "z": "bc35c1bae53a9503",
+        "name": "chaufage1",
+        "func": "// Récupération de l'état de la climatisation à partir du payload entrant\nlet etatChauffage = msg.payload.status.heat;\n\n// Initialisation ou récupération des compteurs depuis le contexte de flux\nlet chauffageAllumee = flow.get(\"AllumeeC\") || 0;\n\n// Mise à jour du compteur basée sur l'état de la climatisation\nif (etatChauffage === \"ON\") {\n    chauffageAllumee += 1; // Incrémenter le compteur pour \"climatisation allumée\"\n    flow.set(\"AllumeeC\", chauffageAllumee); // Mise à jour du compteur dans le contexte de flux\n}\n\n// Préparation du message à envoyer\nmsg.payload = chauffageAllumee;\nmsg.topic = \"AllumeeC\";\n\n// Log pour vérifier la valeur de \"climatisationAllumee\" dans la console de debug Node-RED\nconsole.log(\"Chauffage Allumé: \" + chauffageAllumee);\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 510,
+        "y": 1380,
+        "wires": [
+            [
+                "729fbcf3bb53ce04"
+            ]
+        ]
+    },
+    {
+        "id": "1cac88e3c80e04b2",
+        "type": "function",
+        "z": "bc35c1bae53a9503",
+        "name": "chaufage2",
+        "func": "// Récupération de l'état de la climatisation à partir du payload entrant\nlet etatChauffage = msg.payload.status.heat;\n\n// Initialisation ou récupération des compteurs depuis le contexte de flux\nlet chauffageEteinte = flow.get(\"EteinteC\") || 0;\n\n// Mise à jour du compteur basée sur l'état de la climatisation\nif (etatChauffage === \"OFF\") {\n    chauffageEteinte += 1; // Incrémenter le compteur pour \"climatisation éteinte\"\n    flow.set(\"EteinteC\", chauffageEteinte); // Mise à jour du compteur dans le contexte de flux\n}\n\n// Préparation du message à envoyer\nmsg.payload = chauffageEteinte;\nmsg.topic = \"EteinteC\";\n\n// Log pour vérifier la valeur de \"climatisationEteinte\" dans la console de debug Node-RED\nconsole.log(\"Chauffage Éteinte: \" + chauffageEteinte);\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 510,
+        "y": 1440,
+        "wires": [
+            [
+                "729fbcf3bb53ce04"
+            ]
+        ]
+    },
+    {
+        "id": "729fbcf3bb53ce04",
+        "type": "ui_chart",
+        "z": "bc35c1bae53a9503",
+        "name": "Evalution du chauffage",
+        "group": "9a41170d10313c68",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "label": "Evalution du chauffage",
+        "chartType": "pie",
+        "legend": "true",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": "50",
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 800,
+        "y": 1420,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "4d442573b7337cd0",
+        "type": "function",
+        "z": "bc35c1bae53a9503",
+        "name": "clim1",
+        "func": "// Récupération de l'état de la climatisation à partir du payload entrant\nlet etatClimatisation = msg.payload.status.cold;\n\n// Initialisation ou récupération des compteurs depuis le contexte de flux\nlet climatisationAllumee = flow.get(\"AllumeeCl\") || 0;\n\n// Mise à jour du compteur basée sur l'état de la climatisation\nif (etatClimatisation === \"ON\") {\n    climatisationAllumee += 1; // Incrémenter le compteur pour \"climatisation allumée\"\n    flow.set(\"AllumeeCl\", climatisationAllumee); // Mise à jour du compteur dans le contexte de flux\n}\n\n// Préparation du message à envoyer\nmsg.payload = climatisationAllumee;\nmsg.topic = \"AllumeeCl\";\n\n// Log pour vérifier la valeur de \"climatisationAllumee\" dans la console de debug Node-RED\nconsole.log(\"Climatisation Allumée: \" + climatisationAllumee);\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 490,
+        "y": 1500,
+        "wires": [
+            [
+                "9cc8ab3b8f310df4"
+            ]
+        ]
+    },
+    {
+        "id": "0b48d6a5a3e0780b",
+        "type": "function",
+        "z": "bc35c1bae53a9503",
+        "name": "clim2",
+        "func": "// Récupération de l'état de la climatisation à partir du payload entrant\nlet etatClimatisation = msg.payload.status.cold;\n\n// Initialisation ou récupération des compteurs depuis le contexte de flux\nlet climatisationEteinte = flow.get(\"EteinteCl\") || 0;\n\n// Mise à jour du compteur basée sur l'état de la climatisation\nif (etatClimatisation === \"OFF\") {\n    climatisationEteinte += 1; // Incrémenter le compteur pour \"climatisation éteinte\"\n    flow.set(\"EteinteCl\", climatisationEteinte); // Mise à jour du compteur dans le contexte de flux\n}\n\n// Préparation du message à envoyer\nmsg.payload = climatisationEteinte;\nmsg.topic = \"EteinteCl\";\n\n// Log pour vérifier la valeur de \"climatisationEteinte\" dans la console de debug Node-RED\nconsole.log(\"Climatisation Éteinte: \" + climatisationEteinte);\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 490,
+        "y": 1560,
+        "wires": [
+            [
+                "9cc8ab3b8f310df4"
+            ]
+        ]
+    },
+    {
+        "id": "9cc8ab3b8f310df4",
+        "type": "ui_chart",
+        "z": "bc35c1bae53a9503",
+        "name": "Evalution de la climatiation",
+        "group": "9a41170d10313c68",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "label": "Evalution de la climatiation",
+        "chartType": "pie",
+        "legend": "true",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": "50",
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 820,
+        "y": 1540,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "39aa8c86f531ad0d",
+        "type": "function",
+        "z": "bc35c1bae53a9503",
+        "name": "feu1",
+        "func": "// Récupération de l'état de l'incendie à partir du payload entrant\nlet etatIncendie = msg.payload.status.fire;\n\n// Initialisation ou récupération des compteurs depuis le contexte de flux\nlet incendieDetecte = flow.get(\"Detecte\") || 0;\n\n// Mise à jour du compteur basée sur l'état de l'incendie\nif (etatIncendie === true) {\n    incendieDetecte += 1; // Incrémenter le compteur pour \"incendie détecté\"\n    flow.set(\"Detecte\", incendieDetecte); // Mise à jour du compteur dans le contexte de flux\n}\n\n// Préparation du message à envoyer\nmsg.payload = incendieDetecte;\nmsg.topic = \"Detecte\";\n\n// Log pour vérifier la valeur de \"incendieDetecte\" dans la console de debug Node-RED\nconsole.log(\"Incendie Détecté: \" + incendieDetecte);\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 490,
+        "y": 1620,
+        "wires": [
+            [
+                "75887e1698843ca8"
+            ]
+        ]
+    },
+    {
+        "id": "a39117019cb096e1",
+        "type": "function",
+        "z": "bc35c1bae53a9503",
+        "name": "feu2",
+        "func": "// Récupération de l'état de l'incendie à partir du payload entrant\nlet etatIncendie = msg.payload.status.fire;\n\n// Initialisation ou récupération des compteurs depuis le contexte de flux\nlet incendieNonDetecte = flow.get(\"NonDetecte\") || 0;\n\n// Mise à jour du compteur basée sur l'absence d'état d'incendie\nif (etatIncendie === false) {\n    incendieNonDetecte += 1; // Incrémenter le compteur pour \"incendie non détecté\"\n    flow.set(\"NonDetecte\", incendieNonDetecte); // Mise à jour du compteur dans le contexte de flux\n}\n\n// Préparation du message à envoyer\nmsg.payload = incendieNonDetecte;\nmsg.topic = \"NonDetecte\";\n\n// Log pour vérifier la valeur de \"incendieNonDetecte\" dans la console de debug Node-RED\nconsole.log(\"Incendie Non Détecté: \" + incendieNonDetecte);\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 490,
+        "y": 1680,
+        "wires": [
+            [
+                "75887e1698843ca8"
+            ]
+        ]
+    },
+    {
+        "id": "75887e1698843ca8",
+        "type": "ui_chart",
+        "z": "bc35c1bae53a9503",
+        "name": "Evalution du feu",
+        "group": "9a41170d10313c68",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "label": "Evalution du feu",
+        "chartType": "pie",
+        "legend": "true",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": "50",
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 780,
+        "y": 1660,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "cb3e2da96a9c655d",
+        "type": "serial in",
+        "z": "bc35c1bae53a9503",
+        "name": "",
+        "serial": "5a43db9eb9158404",
+        "x": 90,
+        "y": 480,
+        "wires": [
+            [
+                "bff64b08ea4e75ef"
+            ]
+        ]
+    },
+    {
+        "id": "efe23ff558fea66d",
+        "type": "serial out",
+        "z": "bc35c1bae53a9503",
+        "name": "",
+        "serial": "5a43db9eb9158404",
+        "x": 1390,
+        "y": 580,
+        "wires": []
     },
     {
         "id": "7387bee681bcee7d",
         "type": "ui_group",
         "name": "Suivi des variations",
         "tab": "e77e4e973ca515a1",
-        "order": 1,
+        "order": 2,
         "disp": true,
         "width": "10",
         "collapse": true,
@@ -1305,7 +1617,7 @@
         "type": "ui_group",
         "name": "Seuils&Alertes",
         "tab": "e77e4e973ca515a1",
-        "order": 3,
+        "order": 4,
         "disp": true,
         "width": "10",
         "collapse": true,
@@ -1316,7 +1628,7 @@
         "type": "ui_group",
         "name": "Informations sur la performance",
         "tab": "2c8a577278f4ecd5",
-        "order": 2,
+        "order": 3,
         "disp": true,
         "width": "6",
         "collapse": true,
@@ -1334,16 +1646,15 @@
         "className": ""
     },
     {
-        "id": "e82c15aec80ecb68",
+        "id": "ba96e6f0a2e35bc0",
         "type": "ui_group",
-        "name": "Vérification du JSON",
-        "tab": "99de4d84afae8c09",
-        "order": 2,
+        "name": "JSON",
+        "tab": "61371f569a96b5d5",
+        "order": 3,
         "disp": true,
         "width": "10",
         "collapse": true,
-        "className": "break-line",
-        "info": "``.break-line {\r\n  white-space: pre-line; /* Cela permettra aux retours à la ligne d'être respectés */\r\n}"
+        "className": ""
     },
     {
         "id": "dd57374ab95ec8ce",
@@ -1368,26 +1679,68 @@
         "className": ""
     },
     {
-        "id": "00376b8d98c01068",
+        "id": "75754c907f5cfb78",
         "type": "ui_group",
-        "name": "Emplacement",
-        "tab": "e54d052a92ea69e3",
-        "order": 1,
+        "name": "Localisation",
+        "tab": "2c8a577278f4ecd5",
+        "order": 4,
         "disp": true,
-        "width": "20",
-        "collapse": false,
+        "width": "16",
+        "collapse": true,
         "className": ""
     },
     {
         "id": "9a41170d10313c68",
         "type": "ui_group",
-        "name": "Evolution du status du régulateur",
+        "name": "Evolution des status (Nombre de fois qu'ils sont allumés et le nombre de fois qu'ils sont éteints)",
         "tab": "61371f569a96b5d5",
         "order": 2,
         "disp": true,
         "width": "10",
         "collapse": true,
         "className": ""
+    },
+    {
+        "id": "b52fd2b1fb7da787",
+        "type": "ui_group",
+        "name": "",
+        "tab": "2c8a577278f4ecd5",
+        "order": 1,
+        "disp": true,
+        "width": "16",
+        "collapse": true,
+        "className": ""
+    },
+    {
+        "id": "55a3d326b25f4b41",
+        "type": "ui_group",
+        "name": "",
+        "tab": "e77e4e973ca515a1",
+        "order": 1,
+        "disp": true,
+        "width": "20",
+        "collapse": true,
+        "className": ""
+    },
+    {
+        "id": "5a43db9eb9158404",
+        "type": "serial-port",
+        "name": "",
+        "serialport": "COM3",
+        "serialbaud": "9600",
+        "databits": "8",
+        "parity": "none",
+        "stopbits": "1",
+        "waitfor": "",
+        "dtr": "none",
+        "rts": "none",
+        "cts": "none",
+        "dsr": "none",
+        "newline": "\\n",
+        "bin": "false",
+        "out": "char",
+        "addchar": "",
+        "responsetimeout": "10000"
     },
     {
         "id": "e77e4e973ca515a1",
@@ -1407,29 +1760,11 @@
         "hidden": false
     },
     {
-        "id": "99de4d84afae8c09",
-        "type": "ui_tab",
-        "name": "JSON",
-        "icon": "dashboard",
-        "order": 4,
-        "disabled": false,
-        "hidden": false
-    },
-    {
         "id": "61371f569a96b5d5",
         "type": "ui_tab",
         "name": "Alertes",
         "icon": "dashboard",
         "order": 3,
-        "disabled": false,
-        "hidden": false
-    },
-    {
-        "id": "e54d052a92ea69e3",
-        "type": "ui_tab",
-        "name": "Localisation",
-        "icon": "dashboard",
-        "order": 5,
         "disabled": false,
         "hidden": false
     }

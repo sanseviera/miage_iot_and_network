@@ -35,7 +35,7 @@
 #define USE_SERIAL Serial
 
 // Pour régler les problèmes de compatibilités
-#define Old 0
+#define Old 1
 
 
 //-------------Structures---------------------    
@@ -93,9 +93,9 @@ struct Parametre{
   const double periodeTimerBandeLed = 300;
   const double periodeTimerCommunication = 5000;
   //--------------Cible-------------------
-  char* target_ip = "172.20.10.3";
+  char* target_ip = "172.20.10.2";
   int target_port = 1880;
-  int sp = 2;
+  int sp = 5;
   //--------------Lieu------------------
   char* room = "312";
   char* lat = "43.62453842";
@@ -333,9 +333,6 @@ void setMinTemperature(){
   }
 }
 
-/////
-unsigned long lastTime = 0;
-
 //-------------Fonction native---------------------
 
 void setup(){
@@ -387,29 +384,28 @@ void loop() {
     info.timerCommunication=millis();
     //readData();
     makeJSON();
+  }
+
+  unsigned long previousMillis = 0; // Dernier moment où la requête a été envoyée
+  unsigned long currentMillis = millis(); // Intervalle entre les requêtes (en millisecondes, 10000ms = 10s)
+
+  if (currentMillis - previousMillis >= parametre.sp*10000) {
+    // Sauvegardez le moment de l'envoi
+    previousMillis = currentMillis;
     
-  HTTPClient http;
-  char* url = (char*)malloc(1000 * sizeof(char)); // Allouer de la mémoire pour l'URL
-  snprintf(url, 1000, "http://%s:%d/target", parametre.target_ip, parametre.target_port);
-  http.begin(url);
-  /*
-  char* target_ip = "127.0.0.1";
-  int target_port = 1880;
-  int sp = 2;
-   */
-  String requestBody = makeJSON();
-  int httpCode = http.POST(requestBody);
-
-  Serial.printf("[HTTP] POST... code: %d\n", httpCode);
-  }
-
+    HTTPClient http;
+    char* url = (char*)malloc(5000 * sizeof(char)); // Allouer de la mémoire pour l'URL
+    snprintf(url, 1000, "http://%s:%d/target", parametre.target_ip, parametre.target_port);
+    http.begin(url);
+    String requestBody = makeJSON();
+    int httpCode = http.POST(requestBody);
   
-  // À l'intérieur de votre fonction loop()
-  if (millis() - lastTime > parametre.sp * 1000) { // 'sp' est en secondes
-    sendJsonToNodeRed();
-    lastTime = millis();
+    Serial.printf("[HTTP] POST... code: %d\n", httpCode);
+    // N'oubliez pas de libérer la mémoire allouée pour l'URL
+    free(url);
+    // Fermez la connexion après l'envoi
+    http.end();
   }
-
 
   // Lecture des données JSON reçues sur la connexion série
   if (Serial.available() > 0) {
@@ -418,7 +414,5 @@ void loop() {
       updateFromReceivedJson(incomingJson.c_str()); // Traite le JSON reçu
     }
   }
-
- 
   
 }

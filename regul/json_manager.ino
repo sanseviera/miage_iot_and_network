@@ -104,7 +104,6 @@ void updateFromReceivedJson(const char* json) {
 }
 
 
-
 void setNetworkInfos(const char* json) {
   // Créez un document JSON statique
   StaticJsonDocument<2048> doc; 
