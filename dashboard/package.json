@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "node-red-node-arduino": "^1.0.0",
+    "node-red-node-serialport": "~2.0.2"
+  }
+}
