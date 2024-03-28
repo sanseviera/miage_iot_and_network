@@ -1,9 +1,17 @@
 # miage_iot_and_network
-Lors de notre master MIAGE, Serigne Rawane et moi-même avons réalisé un projet dans le cadre du cours "IoT & réseaux" de M. MENEZ Gilles. Le projet consiste en la réalisation d'un régulateur de température avec un ESP32 et les langages C et Python.
+Lors de notre master MIAGE, DIOP Serigne Rawane et BORREANI Théo avons réalisé un projet dans le cadre du cours "IoT & réseaux" de M. MENEZ Gilles. Le projet consiste en la réalisation d'un régulateur de température connecté avec un ESP32 et les langages C et Python.
 
 ## Collaborateurs 
 * DIOP Serigne Rawane
 * BORREANI Théo
+
+## Améliorations du TP1
+* Réduction d nombre d'onglets en passant de 5 à 3
+* Correction du canal "Serial"
+* Retour vers l'ESP : OKAY, on peut modifier la température d'alerte, la lumière d'alerte, le seuil haut et le seuil bas
+* Ajout d'icones
+* Ajout de graphiques d'évaluations des status
+
 
 ## Outils utilisés 
 
@@ -13,6 +21,9 @@ Lors de notre master MIAGE, Serigne Rawane et moi-même avons réalisé un proje
 * Python 3
 * GitHub
 * Node-RED
+* HTML
+* CSS 
+* cURL
 
 ### Matériels 
 * Une carte ESP32
@@ -24,7 +35,6 @@ Lors de notre master MIAGE, Serigne Rawane et moi-même avons réalisé un proje
 
 ## Documentation utilisateur
 
-
 ### Utilisation 
 
 #### Arduino
@@ -34,9 +44,17 @@ Lors de notre master MIAGE, Serigne Rawane et moi-même avons réalisé un proje
     * DallasTemperature.h
     * Adafruit_NeoPixel.h
     * ArduinoJson.h
-1. Dans le code C principal, une structure appelée Parametre est disponible. Vous pouvez modifier les variables et constantes si nécessaire..
+    * WiFi.h
+    * WiFiMulti.h
+    * SPIFFS.h
+    * FS.h
+    * ESPAsyncWebServer.h
+    * ArduinoOTA.h
+    * HTTPClient.h
+1. Dans le code C principal "regul.ino", une structure appelée Parametre est disponible. Vous pouvez modifier les variables et constantes, __notament target_ip et target_port avec votre adresse IP local et le port sur lequel est lancé Node-RED__.
+1. Dans le menu outil, téleverser les fichiers grâce à __ESP32 Sketch Data Upload__.
 1. Téléverser le code sur l'ESP32 depuis l'IDE Arduino.
-1. (Optionnel) Si vous avez une erreur de compilation, recommencez en changeant la variable de préprocesseur à 1.
+1. (Optionnel) Si vous rencontrez une erreur de compilation, recommencez en changeant la variable de préprocesseur "__Old__" à 1.
 
 #### Validateur
 1. Modifier le fichier exemple_1.json à votre guise
@@ -45,7 +63,23 @@ Lors de notre master MIAGE, Serigne Rawane et moi-même avons réalisé un proje
 python3 val.py
 ```
 
+#### Tableau de bord
+L'ESP32 sert également de serveur web. En recherchant dans un navigateur web l'adresse IP de l'ESP32, vous aurez accès à un tableau de bord qui charge périodiquement les données de l'ESP32. Vous aurez également accès à un formulaire permettant de changer les informations de connexion à Node-RED.
+Pour que les donnéess soient accessible sur node-red, il faut entrer dans le formulaire votre adresse ip local de `Adresse IPv4` et non l'adresse ip du node-red.
+De même l'ESP32 doit être ouvert ver l'ip du wifi (client) avec lequel vous vous connectez.
+
+#### Script bash 
+
+Un script shell est disponible pour tester les routes du serveur hébergés sur l'ESP32 via des commandes curl, vous pouvez modifier la variable ip avec l'IP qu'affichera votre ESP32 après la connexion.
+
+
 #### Flux Node-RED
+Nous vous avons fourni 3 flux node-red :
+* ##### `Port_USB_Node-red.JSON` : qui contient les corrections et améliorations du rendu 1.
+* ##### `Horodatage&http-request_Node-red.JSON` : qui représente une modélisation avec les noeuds http request qui récupère et/ou envoie les données du JSON grâce aux requêtes HTTP `getJson`et `setJson` et horodatage qui permet d'obtenir la requête `getJson` toutes les secondes et intervalles définies. Il fauut changer l'adresse IP des noeuds http request d'entrée et de sortie en celle de votre ESP.
+* ##### `Http-in_http-response.JSON` : Le dashbord du rendu qui est configuré avec les noeuds `http in` et `http response` grâce à la requête http `/target` avec une connexion dynamique des adresses ip client et cible.
+
+
 ##### Vue d'ensemble
 Ce flux Node-RED fournit un système complet pour la surveillance de divers paramètres environnementaux tels que la température, l'intensité lumineuse et la présence de feu. Il inclut également des fonctionnalités pour le rapport d'informations sur les appareils et le statut de connectivité.
 
@@ -93,17 +127,25 @@ Note : Vous avez besoin des bibliothèques suivantes sur Node-RED :
 - node-red-dashboard
 - node-red-node-serialport
 
+## Autres
 
-#### Détaille de la gestion des incendies
+
+## Détaille de la gestion des incendies
 
 L'ESP32 détecte si la valeur des variables lumière et chaleur atteint chacune un seuil haut particulier. Si c'est le cas, une variable représentant un pourcentage est augmentée ; sinon, cette variable est réduite. Si la probabilité de feu dépasse 80%, une alerte est déclenchée. Ce système a l'avantage de pouvoir évoluer au fil du temps.
 
-#### Les plus apporté
+## Correctifs par rapport au premier rendu 
+* Ajout d'avantage de commentaires.
+* Esthetique de l'interface Node-red amelioré.
+
+## Les plus apporté
 * Aucun délai n'est utilisé dans le code C. Au lieu de cela, nous utilisons des conditions et des variables qui nous permettent d'appeler des fonctions en choisissant indépendamment l'intervalle associé à chacune d'elles.
 * Une carte intéractive disponible pour consulter la position théorique de l'ESP32.
-* Une grande variété de indicateurs.
+* Une grande variété d'indicateurs.
 
+<span style="color:#FFD700">
 MERCI ET BONNE LECTURE !
+</span>
 
 
 

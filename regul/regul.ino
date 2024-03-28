@@ -34,8 +34,8 @@
 #define FORMAT_SPIFFS_IF_FAILED true
 #define USE_SERIAL Serial
 
-// Pour régler les problèmes de compatibilités
-#define Old 1
+// Pour régler les problèmes de compatibilités la passer si besoin de 1 à 0 et inverse
+#define Old 0
 
 
 //-------------Structures---------------------    
@@ -72,7 +72,7 @@ struct Tampon tampon = {""};
  */
 struct Parametre{
 
-  //----------------------------
+  //-----------Parametres du régulateur--------------
   int temperatureSeuilHaut = 25;
   int temperatureSeuilBas = 24;
   int lumiereAlerte = 3000;
@@ -93,7 +93,7 @@ struct Parametre{
   const double periodeTimerBandeLed = 300;
   const double periodeTimerCommunication = 5000;
   //--------------Cible-------------------
-  char* target_ip = "172.20.10.2";
+  char* target_ip = "192.168.1.144";
   int target_port = 1880;
   int sp = 5;
   //--------------Lieu------------------
@@ -131,16 +131,22 @@ void initLed(int ledPin) {
   pinMode(parametre.ledPinVerte, OUTPUT);
   pinMode(parametre.ledPinBleue, OUTPUT);
 }
-
+/*
+ * Initialisation du capteur de chaleur
+ */
 void initCapteurChaleur(){
     tempSensor.begin();
 }
-
+/*
+ * Initialisation du ventilateur
+ */
 void initVentilo() {
+  // Si ancienne version
   #if Old
     ledcAttach(27, 25000, 8); // Associe le canal PWM 0 à la broche GPIO 27
     ledcWrite(27, 255); 
     // pinMode(parametre.brocheVentilateur, OUTPUT); // Décommentez et utilisez si nécessaire
+  // Si nouvelle version
   #else
     ledcAttachPin(27, 0); 
     ledcSetup(0, 25000, 8);  
@@ -149,6 +155,9 @@ void initVentilo() {
 
 //--------------Fonction de base--------------------
 
+/*
+ * Pemet de gérer l'état de la led rouge représentant le chauffage
+ */
 void setChauffage(){
   if(info.etatRegulateurTemperature == 2){
     digitalWrite(parametre.ledPin, HIGH);
@@ -157,7 +166,11 @@ void setChauffage(){
   }
 }
 
+/*
+ * Pemet de gérer l'état de la led verte représentant le ventillo ainsi que le réel ventilateur (ventilateur à plusieurs vitesses)
+ */
 void setVentilo(){
+  // Si on est dans l'état correspondant au refroidissement 
   if(info.etatRegulateurTemperature == 0){
     int tmp = 0;
     if(info.temperature >= parametre.temperatureSeuilHaut && info.temperature < parametre.temperatureSeuilHaut+1){
@@ -175,11 +188,16 @@ void setVentilo(){
     }
     digitalWrite(parametre.ledPinVerte, HIGH);
     ledcWrite(0, tmp);
-  } else{
+  } 
+  // Si on est dans un autre état
+  else{
     digitalWrite(parametre.ledPinVerte, LOW);
     ledcWrite(0, 0);  }
 }
 
+/*
+ * Si le pourcentage de chance de feu a passé un certain  seuil, on active l'alerte (l'alerte est la led bleu) sinon on la désactive
+ */
 void setAlerte(){
   if(info.chanceFeu >= parametre.pourcentageAvantAlerte ){
     info.feu = 1;
@@ -190,6 +208,14 @@ void setAlerte(){
   }
 }
 
+/*
+ * Cette fonction permet de gérer l'état du régulateur de température et nottament de couper le système en cas de risque incendie
+ * 3 valeurs possible :
+ *    - 0 si l'ont chauffe
+ *    - 1 si rien n'est activé
+ *    - 2 si l'ont refroidi
+ *    
+ */
 void setEtatRegulateurTemperature(){
   if(info.chanceFeu  > parametre.pourcentageAvantAlerte) // Si le risque de feu est trop grand on arrête tout
   {
@@ -210,12 +236,18 @@ void setEtatRegulateurTemperature(){
   }
 }
 
+/*
+ * renvois la valeur que retourne le capteur de lumière
+ */
 int lireCapteurLumiere(){
   int sensorValue;
   sensorValue = analogRead(parametre.brocheLightIntensity); // Read analog input on ADC1_CHANNEL_5 (GPIO 33)
   return sensorValue;
 }
 
+/*
+ * renvois la valeur que retourne le capteur de chaleur
+ */
 float lireCapteurChaleur(){
   float t;
   tempSensor.requestTemperaturesByIndex(0); 
@@ -223,6 +255,9 @@ float lireCapteurChaleur(){
   return t;
 }
 
+/*
+ * Permet de gérer la bande led en switchant entre trois couleur différente
+ */
 void setBandeLed(){
   strip.begin();
   delay(1);
@@ -237,22 +272,26 @@ void setLed(){
   int colorA = 0; 
   int colorB = 0; 
   int colorC = 0; 
-  
+
+  // si on est a une température entre les deux seuils
   if(info.temperature > parametre.temperatureSeuilBas && info.temperature < parametre.temperatureSeuilHaut){
     colorA = rgball[0][0] ;
     colorB = rgball[0][1] ;
     colorC = rgball[0][2] ;
   }
+  // si on est a une température en dessous du seuil bas
   else if(info.temperature < parametre.temperatureSeuilBas ){
     colorA = rgball[1][0] ;
     colorB = rgball[1][1] ;
     colorC = rgball[1][2] ;
   }
+   // si on est a une température au dessus du seuil haut
   else if (info.temperature > parametre.temperatureSeuilHaut ){
     colorA = rgball[2][0] ;
     colorB = rgball[2][1] ;
     colorC = rgball[2][2] ;
   }
+  // parcours les 5 leds pour les régler
   for(int i=0; i<5; i++) {
     strip.setPixelColor(i, strip.Color(colorA, colorB, colorC));
   }
@@ -279,6 +318,9 @@ void setDetectorFire(){
   }
 }
 
+/*
+ * Permet d'afficher sur le port serie des informations pour le debugage
+*/
 void informationPrint(){
   Serial.printf("Température : %f°\n",info.temperature);
   Serial.printf("Lumière : %i\n",info.lumiere);
@@ -286,6 +328,7 @@ void informationPrint(){
   Serial.print("-----------------------\n");
 }
 
+// permet de transformer un boolean en chaîne
 const char* makeText(int i){
   if(i){
     return "WALK";
@@ -295,6 +338,7 @@ const char* makeText(int i){
   }
 }
 
+// permet de transformer un boolean en chaîne
 const char* makeText2(int i){
   if(i){
     return "ON";
@@ -304,6 +348,9 @@ const char* makeText2(int i){
     }
 }
 
+/*
+ * permet de lire de la donnée
+ */
 void readData() {
   if (Serial.available()) {
     String data_received = Serial.readStringUntil('\n');
@@ -319,14 +366,19 @@ void readData() {
     }
   }
 }
-  
 
+/*
+ * permet de mettre a jours la temperature maximal enregistré
+ */
 void setMaxTemperature(){
   if (info.maxEnregistre <= info.temperature){
     info.maxEnregistre =  info.temperature;
   }
 }
 
+/*
+ * permet de mettre a jours la temperature minimal enregistré
+ */
 void setMinTemperature(){
   if (info.minEnregistre >= info.temperature){
     info.minEnregistre =  info.temperature;
@@ -347,7 +399,6 @@ void setup(){
 
    verifFile();
    delay(2000);
-   //writeFile(SPIFFS, "/index.html", readFile(SPIFFS,"/test.html"));
 
    // Setup routes of the ESP Web server
    setup_http_routes(&server);

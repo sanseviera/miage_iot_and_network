@@ -1,3 +1,6 @@
+/*
+ * Permet de construire le JSON qui sera renvoyé vers Node-RED
+ */
 char* makeJSON(){
 
   /* 1) Build the JSON object ... easily with API !*/
@@ -71,6 +74,9 @@ char* makeJSON(){
   return tampon.payload;
 }
 
+/*
+ * Permet de mettre a jour l'ESP avec le JSON recu 
+ */
 void updateFromReceivedJson(const char* json) {
   // Augmentez la taille si votre JSON est plus grand
   StaticJsonDocument<2048> doc; 
@@ -104,6 +110,9 @@ void updateFromReceivedJson(const char* json) {
 }
 
 
+/*
+ * Permet de mettre à jours l'ESP avec les informations du formulaire du tableau de bord 
+ */
 void setNetworkInfos(const char* json) {
   // Créez un document JSON statique
   StaticJsonDocument<2048> doc; 
@@ -120,11 +129,6 @@ void setNetworkInfos(const char* json) {
 
   // Vérifiez si le document JSON n'est pas vide
   if (!doc.isNull()) {
-    // Vérifiez si la clé "target_ip" existe dans le JSON et mettez à jour si oui
-    //if (doc.containsKey("target_ip") && doc["target_ip"].is<const char*>()) {
-    //  parametre.target_ip = doc["target_ip"].as<const char*>();
-    //}
-    // Vérifiez si la clé "target_port" existe dans le JSON et mettez à jour si oui
     if (doc.containsKey("target_port") && doc["target_port"].is<int>()) {
       parametre.target_port = doc["target_port"].as<int>();
     }

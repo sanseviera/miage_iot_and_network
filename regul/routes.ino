@@ -12,16 +12,11 @@
 
 /*===================================================*/
 
-
+/*
+ * Cette fonction permet de donner une valeur au variables processeur du HTML
+ */
 String processor(const String& var){
-  /*char buffer[20];
   
-  if (var.equals("UPTIME")) {
-
-    char buffer[100];
-    sprintf(buffer, "%f ms",  String(millis()));
-    return buffer ;
-  }*/
   char buffer[20];
   if (var.equals("UPTIME")) {
     // Get uptime in milliseconds
@@ -106,11 +101,16 @@ void setup_http_routes(AsyncWebServer* server) {
     }
   });
 
-
+  /*
+   * Permet de recevoir le JSON de l'ESP32
+   */
   server->on("/getJson", HTTP_GET, [](AsyncWebServerRequest *request) {
     request->send(200, "application/json", makeJSON());
   });
 
+  /*
+   * permet de mettre à jours certaine variable de l'ESP
+   */
   server->on("/setData", HTTP_POST, [](AsyncWebServerRequest *request) {
     // Réponse initiale pour la requête HTTP POST.
     request->send(200, "text/plain", "OK");
@@ -128,6 +128,9 @@ void setup_http_routes(AsyncWebServer* server) {
     }
   });
 
+  /*
+   * Permet de régler les variables du serveur Node  RED
+   */
   server->on("/setNetwork", HTTP_POST, [](AsyncWebServerRequest *request) {
     if (request->hasArg("box")) {
       const char* content = request->arg("box").c_str();
@@ -138,6 +141,9 @@ void setup_http_routes(AsyncWebServer* server) {
     request->send(200, "text/plain", "Données reçues et traitées");
   });
 
+  /*
+   * Permet de soummettre les formulaires du HTML à l ESP
+   */
   server->on("/target", HTTP_POST, [](AsyncWebServerRequest *request) {
     // Récupérer le corps JSON de la requête
     String targetIpValue = request->arg("ip");
@@ -169,6 +175,9 @@ void setup_http_routes(AsyncWebServer* server) {
       request->send(404);
     });
 
+   /*
+    * Permet de recharger la variable température automatiquement dans le HTML
+    */
   server->on("/temperature", HTTP_GET, [](AsyncWebServerRequest *request){
 
     USE_SERIAL.printf("GET /temperature request\n");
@@ -180,25 +189,33 @@ void setup_http_routes(AsyncWebServer* server) {
     // Envoyer la température en tant que réponse
     request->send(200, "text/plain", temperatureString);
     });
-
+   /*
+   * Permet de recharger la variable light automatiquement dans le HTML
+   */
   server->on("/light", HTTP_GET, [](AsyncWebServerRequest *request){
     char lumiereString[10]; // Supposons que la température ne dépasse pas 10 caractères
     snprintf(lumiereString, sizeof(lumiereString), "%.2f", info.lumiere); // "%.2f" pour afficher 2 décimales
     request->send_P(200, "text/plain", lumiereString);
     });
-
+    /*
+    * Permet de recharger la variable cooler automatiquement dans le HTML
+    */
   server->on("/cooler", HTTP_GET, [](AsyncWebServerRequest *request){
     char tmp[10]; // Supposons que la température ne dépasse pas 10 caractères
     snprintf(tmp, 100, "%s",info.etatRegulateurTemperature==0 ? "true" : "false"); // "%.2f" pour afficher 2 décimales
     request->send_P(200, "text/plain", tmp);
     });
-
+    /*
+    * Permet de recharger la variable heater automatiquement dans le HTML
+    */
   server->on("/heater", HTTP_GET, [](AsyncWebServerRequest *request){
     char tmp[10]; // Supposons que la température ne dépasse pas 10 caractères
     snprintf(tmp, 100, "%s", info.etatRegulateurTemperature==2 ? "true" : "false"); // "%.2f" pour afficher 2 décimales
     request->send_P(200, "text/plain", tmp);
   });
-
+    /*
+    * Permet de recharger la variable uptime automatiquement dans le HTML
+    */
   server->on("/uptime", HTTP_GET, [](AsyncWebServerRequest *request) {
     char uptimeString[20];
     unsigned long uptime = millis();

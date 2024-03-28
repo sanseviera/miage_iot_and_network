@@ -1,3 +1,6 @@
+/*
+ * Permet d'afficher sur le port serie la liste des fichier d'un dossier spécifié à l aide d un chemin
+ */
 void  listDir(fs::FS &fs, const char * dirname, uint8_t levels){
   Serial.printf("Listing directory: %s\r\n", dirname);
   File root = fs.open(dirname);
@@ -29,6 +32,9 @@ void  listDir(fs::FS &fs, const char * dirname, uint8_t levels){
     }
 }
 
+/*
+ * Permet d'afficher sur le port serie le contenu d'un fichier  spécifié à l aide d un chemin
+ */
 char* readFile(fs::FS& fs, const char* path) {
     File file = fs.open(path);
     if (!file || file.isDirectory()) {
@@ -58,7 +64,9 @@ char* readFile(fs::FS& fs, const char* path) {
     return tmp;
 }
 
-
+/*
+ * Permet d'écrir un fichier spécifié à l aide d un chemin spécifié et du contenu
+ */
 void writeFile(fs::FS&fs, const char* path, const char* message){
   Serial.printf("Writing file: %s\r\n", path);
   File file = fs.open(path, FILE_WRITE);
@@ -74,7 +82,9 @@ void writeFile(fs::FS&fs, const char* path, const char* message){
   file.close();
 }
 
-
+/*
+ * Permet d'd'ajouter dans un fichier spécifié à l aide d un chemin spécifié et du contenu
+ */
 void appendFile(fs::FS&fs, const char* path, const char* message){
   Serial.printf("Appending to file: %s\r\n", path);
   File file = fs.open(path, FILE_APPEND);
@@ -90,6 +100,9 @@ void appendFile(fs::FS&fs, const char* path, const char* message){
   file.close();
 }
 
+/*
+ * Permet de renomer un fichier spécifié avec un chemin
+ */
 void renameFile(fs::FS&fs, const char* path1, const char* path2){
   Serial.printf("Renaming file %s to %s\r\n", path1, path2);
   if (fs.rename(path1, path2))
@@ -99,7 +112,9 @@ void renameFile(fs::FS&fs, const char* path1, const char* path2){
   Serial.println("- rename failed");
   }
 }
-
+/*
+ * Permet de supprimer un fichier spécifié avec un chemin
+ */
 void deleteFile(fs::FS&fs, const char* path){
   Serial.printf("Deleting file: %s\r\n", path);
   if(fs.remove(path)){
