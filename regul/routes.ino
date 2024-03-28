@@ -138,65 +138,6 @@ void setup_http_routes(AsyncWebServer* server) {
     request->send(200, "text/plain", "Données reçues et traitées");
   });
   
-   /*server->on("/target", HTTP_POST, [](AsyncWebServerRequest *request){
-    
-    // Traitement lorsque la route "/target" reçoit une requête POST.
-    Serial.println("Receiving reporting configuration"); 
-    if (request->hasParam("ip", true) && request->hasParam("port", true) && request->hasParam("sp", true)) {
-      AsyncWebParameter* p_ip = request->getParam("ip", true);
-      AsyncWebParameter* p_port = request->getParam("port", true);
-      AsyncWebParameter* p_sp = request->getParam("sp", true);
-  
-      // Supposons que 'parametre' est une structure globale accessible
-      if(parametre.target_ip != nullptr) {
-      free(parametre.target_ip); // Libérer la mémoire précédente si elle était utilisée
-      }
-      parametre.target_ip = strdup(p_ip->value().c_str());
-  
-      parametre.target_port = atoi(p_port->value().c_str());
-      parametre.sp = atoi(p_sp->value().c_str());
-  
-      Serial.print("IP: ");
-      Serial.println(parametre.target_ip);
-      Serial.print("Port: ");
-      Serial.println(parametre.target_port);
-      Serial.print("Sampling period: ");
-      Serial.println(parametre.sp);
-  
-      // Ici, vous pourriez rediriger ou simplement répondre que les données ont été reçues.
-      // request->send(200, "text/plain", "Essaie valide. Redirecting...");
-      request->send(200, "application/json", makeJSON2());
-    } else {
-      request->send(400, "text/plain", "Missing parameters");
-    }
-  });*/
-  /*server->on("/target", HTTP_POST, [](AsyncWebServerRequest *request) {}, NULL, 
-  [](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {
-    // Cette fonction est appelée une fois que le corps de la requête POST est entièrement reçu
-    String receivedData = String((char*)data);
-    Serial.println("Données reçues via POST sur /target: " + receivedData);
-
-    // Traitez ici les données reçues si nécessaire. Exemple :
-    // updateConfiguration(receivedData); // Une fonction hypothétique pour mettre à jour la configuration
-    
-    // Envoie le dernier JSON à Node-RED
-    String targetUrl = "http://" + String(parametre.target_ip) + ":" + String(parametre.target_port) + "/target";
-    HTTPClient http;
-    http.begin(targetUrl);
-    http.addHeader("Content-Type", "application/json");
-    int httpResponseCode = http.POST(tampon.payload); // tampon.payload contient votre dernier JSON
-
-    if (httpResponseCode > 0) {
-      Serial.print("Réponse HTTP : ");
-      Serial.println(httpResponseCode);
-      request->send(200, "text/plain", "JSON envoyé avec succès à Node-RED");
-    } else {
-      Serial.print("Erreur lors de l'envoi du POST : ");
-      Serial.println(httpResponseCode);
-      request->send(500, "text/plain", "Erreur lors de l'envoi du JSON à Node-RED");
-    }
-    http.end();
-});*/
 
 server->on("/target", HTTP_POST, [](AsyncWebServerRequest *request) {}, 
     NULL, 
@@ -247,6 +188,36 @@ server->on("/target", HTTP_POST, [](AsyncWebServerRequest *request) {},
     server->onNotFound([](AsyncWebServerRequest *request){
         request->send(404);
       });
+
+server->on("/target", HTTP_POST, [](AsyncWebServerRequest *request) {}, NULL, 
+  [](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {
+    // Cette fonction est appelée une fois que le corps de la requête POST est entièrement reçu
+    String receivedData = String((char*)data);
+    Serial.println("Données reçues via POST sur /target: " + receivedData);
+
+    // Traitez ici les données reçues si nécessaire. Exemple :
+    // updateConfiguration(receivedData); // Une fonction hypothétique pour mettre à jour la configuration
+    
+    // Envoie le dernier JSON à Node-RED
+    String targetUrl = "http://" + String(parametre.target_ip) + ":" + String(parametre.target_port) + "/target";
+    HTTPClient http;
+    http.begin(targetUrl);
+    http.addHeader("Content-Type", "application/json");
+    int httpResponseCode = http.POST(tampon.payload); // tampon.payload contient votre dernier JSON
+
+    if (httpResponseCode > 0) {
+      Serial.print("Réponse HTTP : ");
+      Serial.println(httpResponseCode);
+      request->send(200, "text/plain", "JSON envoyé avec succès à Node-RED");
+    } else {
+      Serial.print("Erreur lors de l'envoi du POST : ");
+      Serial.println(httpResponseCode);
+      request->send(500, "text/plain", "Erreur lors de l'envoi du JSON à Node-RED");
+    }
+    http.end();
+});
+
+      
 
     server->on("/temperature", HTTP_GET, [](AsyncWebServerRequest *request){
 

@@ -1,5 +1,5 @@
 # miage_iot_and_network
-Lors de notre master MIAGE, Serigne Rawane et moi-même avons réalisé un projet dans le cadre du cours "IoT & réseaux" de M. MENEZ Gilles. Le projet consiste en la réalisation d'un régulateur de température avec un ESP32 et les langages C et Python.
+Lors de notre master MIAGE, DIOP Serigne Rawane et BORREANI Théo avons réalisé un projet dans le cadre du cours "IoT & réseaux" de M. MENEZ Gilles. Le projet consiste en la réalisation d'un régulateur de température connecté avec un ESP32 et les langages C et Python.
 
 ## Collaborateurs 
 * DIOP Serigne Rawane
@@ -13,6 +13,9 @@ Lors de notre master MIAGE, Serigne Rawane et moi-même avons réalisé un proje
 * Python 3
 * GitHub
 * Node-RED
+* HTML
+* CSS 
+* cURL
 
 ### Matériels 
 * Une carte ESP32
@@ -24,7 +27,6 @@ Lors de notre master MIAGE, Serigne Rawane et moi-même avons réalisé un proje
 
 ## Documentation utilisateur
 
-
 ### Utilisation 
 
 #### Arduino
@@ -34,9 +36,17 @@ Lors de notre master MIAGE, Serigne Rawane et moi-même avons réalisé un proje
     * DallasTemperature.h
     * Adafruit_NeoPixel.h
     * ArduinoJson.h
-1. Dans le code C principal, une structure appelée Parametre est disponible. Vous pouvez modifier les variables et constantes si nécessaire..
+    * WiFi.h
+    * WiFiMulti.h
+    * SPIFFS.h
+    * FS.h
+    * ESPAsyncWebServer.h
+    * ArduinoOTA.h
+    * HTTPClient.h
+1. Dans le code C principal "regul.ino", une structure appelée Parametre est disponible. Vous pouvez modifier les variables et constantes, __notament target_ip et target_port avec votre adresse IP local et le port sur lequel est lancé Node-RED__.
+1. Dans le menu outil, téleverser les fichiers grâce à __ESP32 Sketch Data Upload__.
 1. Téléverser le code sur l'ESP32 depuis l'IDE Arduino.
-1. (Optionnel) Si vous avez une erreur de compilation, recommencez en changeant la variable de préprocesseur à 1.
+1. (Optionnel) Si vous rencontrez une erreur de compilation, recommencez en changeant la variable de préprocesseur "__Old__" à 1.
 
 #### Validateur
 1. Modifier le fichier exemple_1.json à votre guise
@@ -44,6 +54,12 @@ Lors de notre master MIAGE, Serigne Rawane et moi-même avons réalisé un proje
 ```
 python3 val.py
 ```
+
+#### Tableau de bord
+L'ESP32 sert également de serveur web. En recherchant dans un navigateur web l'adresse IP de l'ESP32, vous aurez accès à un tableau de bord qui charge périodiquement les données de l'ESP32. Vous aurez également accès à un formulaire permettant de changer les informations de connexion à Node-RED.
+
+#### Script bash 
+Un script shell est disponible pour tester les routes du serveur hébergé sur l'ESP32 via des commandes curl, vous pouvez modifier la variable ip avec l'IP qu'affichera votre ESP32 après la connexion.
 
 #### Flux Node-RED
 ##### Vue d'ensemble
@@ -93,17 +109,25 @@ Note : Vous avez besoin des bibliothèques suivantes sur Node-RED :
 - node-red-dashboard
 - node-red-node-serialport
 
+## Autres
 
-#### Détaille de la gestion des incendies
+
+## Détaille de la gestion des incendies
 
 L'ESP32 détecte si la valeur des variables lumière et chaleur atteint chacune un seuil haut particulier. Si c'est le cas, une variable représentant un pourcentage est augmentée ; sinon, cette variable est réduite. Si la probabilité de feu dépasse 80%, une alerte est déclenchée. Ce système a l'avantage de pouvoir évoluer au fil du temps.
 
-#### Les plus apporté
+## Correctifs par rapport au premier rendu 
+* Ajout d'avantage de commentaires.
+* Esthetique de l'interface Node-red amelioré.
+
+## Les plus apporté
 * Aucun délai n'est utilisé dans le code C. Au lieu de cela, nous utilisons des conditions et des variables qui nous permettent d'appeler des fonctions en choisissant indépendamment l'intervalle associé à chacune d'elles.
 * Une carte intéractive disponible pour consulter la position théorique de l'ESP32.
-* Une grande variété de indicateurs.
+* Une grande variété d'indicateurs.
 
+<span style="color:#FFD700">
 MERCI ET BONNE LECTURE !
+</span>
 
 
 
