@@ -180,7 +180,7 @@ void setup_http_routes(AsyncWebServer* server) {
     */
   server->on("/temperature", HTTP_GET, [](AsyncWebServerRequest *request){
 
-    USE_SERIAL.printf("GET /temperature request\n");
+    //USE_SERIAL.printf("GET /temperature request\n");
   
     // Convertir la valeur de température en une chaîne de caractères
     char temperatureString[10]; // Supposons que la température ne dépasse pas 10 caractères

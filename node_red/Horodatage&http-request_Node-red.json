@@ -1,6 +1,6 @@
 [
     {
-        "id": "c6109c9bf399154d",
+        "id": "a9a33379edbd1e0a",
         "type": "tab",
         "label": "Flux 1",
         "disabled": false,
@@ -8,9 +8,9 @@
         "env": []
     },
     {
-        "id": "41068d43049d9ab0",
+        "id": "da5ebc24ab7a50df",
         "type": "debug",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "name": "debug 2",
         "active": false,
         "tosidebar": true,
@@ -25,9 +25,9 @@
         "wires": []
     },
     {
-        "id": "8b0a2673e57d6214",
+        "id": "e26b72f2b063f594",
         "type": "json",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "name": "JSON 1",
         "property": "payload",
         "action": "",
@@ -36,44 +36,44 @@
         "y": 480,
         "wires": [
             [
-                "890e21d7c7a80dc2",
-                "cc74abc8d74af5d4",
-                "5baa28e502a166de",
-                "2bd23e47f507b48c",
-                "6702181289a52f0a",
-                "e1a44aebeb12a4c3",
-                "ddab85f2db3f4033",
-                "0963e5faeffe0bc3",
-                "d47e9f2595399436",
-                "7b2d0a26821a7591",
-                "2d55c4acf6a6f9e5",
-                "163dcb7f2cc7d7f5",
-                "92491e1e366e783c",
-                "606710f0e8e4fcf7",
-                "fbbb222312db3e27",
-                "bafc7746467cd243",
-                "076b54412a1ad004",
-                "9997ea4481e6acfb",
-                "eea3e1238847136b",
-                "2651bdf8ed9f8079",
-                "2fb584516a889044",
-                "55df2a1214ad9515",
-                "b91419379b03dd13",
-                "41068d43049d9ab0",
-                "3c905cdc1c3b2b05",
-                "cf718d118b5e3d27",
-                "534d1930c1402b86",
-                "c40e70072ec9fec8",
-                "e7b8912131a6eb49",
-                "bc64c4f5bd76607a",
-                "8364214334b1f6d8"
+                "d6b6b602c382f28d",
+                "9f9f18de07bf89a2",
+                "83679d7762b74ef1",
+                "ecf8ef87b8728fdd",
+                "3cd4457e785e4842",
+                "0a3ef536c9fe6484",
+                "874d8429a849a554",
+                "3bedd8aacd0e3f6a",
+                "0b5d6c3bd6c24a12",
+                "ecbb2b5306d2bf01",
+                "42e6424d4975dbd9",
+                "8867944c4bb38e40",
+                "09620285f9847a0f",
+                "52b21f25789ad77e",
+                "d880e997bc952ea9",
+                "58fd21a4f17ee31b",
+                "835b4a2637a1a7dd",
+                "b5c7f4eb6650e596",
+                "f45c1f389d604d4a",
+                "c3f473bd7da636dd",
+                "dfacdddc8cb2e5c9",
+                "909d46d07ccb1d0c",
+                "8e9844f20a2bed14",
+                "da5ebc24ab7a50df",
+                "1f3fb91d4d6ced2f",
+                "cc2e7e1b51a70c41",
+                "1fa8e2003f3534d6",
+                "af6a060b1e1b7956",
+                "b8065ead57998994",
+                "e3c297d19b92dd91",
+                "a6855022b0fd662e"
             ]
         ]
     },
     {
-        "id": "890e21d7c7a80dc2",
+        "id": "d6b6b602c382f28d",
         "type": "function",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "name": "temperature",
         "func": "msg.topic = \"temperature\";\nmsg.payload = msg.payload.status.temperature;\nconsole.log(\"temperature : \" + String(msg.payload));\nreturn msg;\n",
         "outputs": 1,
@@ -86,15 +86,15 @@
         "y": 240,
         "wires": [
             [
-                "84138fbfee0a4bb4",
-                "f71a93341f5b3dce"
+                "f3ce63428cbfe560",
+                "743a5c9d222e9b04"
             ]
         ]
     },
     {
-        "id": "cc74abc8d74af5d4",
+        "id": "9f9f18de07bf89a2",
         "type": "function",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "name": "luminosité",
         "func": "msg.topic = \"light\";\nmsg.payload = msg.payload.status.light;\nconsole.log(\"light : \" + String(msg.payload));\nreturn msg;\n",
         "outputs": 1,
@@ -107,15 +107,15 @@
         "y": 480,
         "wires": [
             [
-                "bc381b75c5648694",
-                "7ea149fe79435d3c"
+                "27b6e5831a9bce25",
+                "8889e56f348f115d"
             ]
         ]
     },
     {
-        "id": "bc381b75c5648694",
+        "id": "27b6e5831a9bce25",
         "type": "ui_chart",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "name": "Luminosité par ms",
         "group": "7387bee681bcee7d",
         "order": 5,
@@ -157,9 +157,9 @@
         ]
     },
     {
-        "id": "2bd23e47f507b48c",
+        "id": "ecf8ef87b8728fdd",
         "type": "function",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "name": "feuDetecte",
         "func": "msg.topic = \"feu\";\nmsg.payload = msg.payload.status.fire;\nconsole.log(\"feu : \" + String(msg.payload));\nreturn msg;\n",
         "outputs": 1,
@@ -172,14 +172,14 @@
         "y": 840,
         "wires": [
             [
-                "a7f455e6c3045f72"
+                "51e552dfde8c1b91"
             ]
         ]
     },
     {
-        "id": "6702181289a52f0a",
+        "id": "3cd4457e785e4842",
         "type": "function",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "name": "chaleur",
         "func": "msg.topic = \"chaleur\";\nmsg.payload = msg.payload.status.heat;\nconsole.log(\"chaleur : \" + String(msg.payload));\nreturn msg;",
         "outputs": 1,
@@ -192,14 +192,14 @@
         "y": 600,
         "wires": [
             [
-                "65a472656315dd89"
+                "bc95b1350493506b"
             ]
         ]
     },
     {
-        "id": "e1a44aebeb12a4c3",
+        "id": "0a3ef536c9fe6484",
         "type": "function",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "name": "froid",
         "func": "msg.topic = \"froid\";\nmsg.payload = msg.payload.status.cold;\nconsole.log(\"froid : \" + String(msg.payload));\nreturn msg;",
         "outputs": 1,
@@ -212,14 +212,14 @@
         "y": 720,
         "wires": [
             [
-                "eac1af41a99e3918"
+                "e6778ac54d3e18f5"
             ]
         ]
     },
     {
-        "id": "ddab85f2db3f4033",
+        "id": "874d8429a849a554",
         "type": "function",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "name": "SH",
         "func": "msg.topic = \"sh\";\nmsg.payload = msg.payload.regul.lt;\nconsole.log(\"sh : \" + String(msg.payload));\nreturn msg;\n",
         "outputs": 1,
@@ -232,15 +232,15 @@
         "y": 360,
         "wires": [
             [
-                "84138fbfee0a4bb4",
-                "6c419bba844124a6"
+                "f3ce63428cbfe560",
+                "c5b26bc97f794164"
             ]
         ]
     },
     {
-        "id": "0963e5faeffe0bc3",
+        "id": "3bedd8aacd0e3f6a",
         "type": "function",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "name": "SB",
         "func": "msg.topic = \"sb\";\nmsg.payload = msg.payload.regul.ht;\nconsole.log(\"sb : \" + String(msg.payload));\nreturn msg;\n",
         "outputs": 1,
@@ -253,15 +253,15 @@
         "y": 420,
         "wires": [
             [
-                "84138fbfee0a4bb4",
-                "61ec693e0a8f0cc3"
+                "f3ce63428cbfe560",
+                "7516301648f4b5a1"
             ]
         ]
     },
     {
-        "id": "5baa28e502a166de",
+        "id": "83679d7762b74ef1",
         "type": "function",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "name": "verifieJSON",
         "func": "console.log(\"JSON : \" + JSON.stringify(msg));\nreturn msg;",
         "outputs": 1,
@@ -274,14 +274,14 @@
         "y": 120,
         "wires": [
             [
-                "f201f6f4cbf94145"
+                "dfc499aede30f430"
             ]
         ]
     },
     {
-        "id": "84138fbfee0a4bb4",
+        "id": "f3ce63428cbfe560",
         "type": "ui_chart",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "name": "Temperature par ms",
         "group": "7387bee681bcee7d",
         "order": 4,
@@ -323,9 +323,9 @@
         ]
     },
     {
-        "id": "6c419bba844124a6",
+        "id": "c5b26bc97f794164",
         "type": "ui_numeric",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "name": "Seuil Haut",
         "label": "Seuil Haut",
         "tooltip": "",
@@ -346,14 +346,14 @@
         "y": 360,
         "wires": [
             [
-                "dcf4b08e33e53232"
+                "8985ada607e93570"
             ]
         ]
     },
     {
-        "id": "61ec693e0a8f0cc3",
+        "id": "7516301648f4b5a1",
         "type": "ui_numeric",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "name": "Seuil Bas",
         "label": "Seuil Bas",
         "tooltip": "",
@@ -374,14 +374,14 @@
         "y": 420,
         "wires": [
             [
-                "dcf4b08e33e53232"
+                "8985ada607e93570"
             ]
         ]
     },
     {
-        "id": "d47e9f2595399436",
+        "id": "0b5d6c3bd6c24a12",
         "type": "function",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "name": "uptime",
         "func": "msg.topic = \"uptime\";\nmsg.payload = Math.round(msg.payload.net.uptime / 1000);\nconsole.log(\"uptime : \" + String(msg.payload));\nreturn msg;",
         "outputs": 1,
@@ -394,14 +394,14 @@
         "y": 960,
         "wires": [
             [
-                "e6ff187a9af2296d"
+                "7fc88b1c87aa675d"
             ]
         ]
     },
     {
-        "id": "7b2d0a26821a7591",
+        "id": "ecbb2b5306d2bf01",
         "type": "function",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "name": "reporthost",
         "func": "msg.topic = \"reporthost\";\nmsg.payload = msg.payload.reporthost;\nconsole.log(\"JSON : \" + JSON.stringify(msg));\nreturn msg;",
         "outputs": 1,
@@ -414,14 +414,14 @@
         "y": 1020,
         "wires": [
             [
-                "55d3407ef325c4a6"
+                "e69b3f1086949050"
             ]
         ]
     },
     {
-        "id": "2d55c4acf6a6f9e5",
+        "id": "42e6424d4975dbd9",
         "type": "function",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "name": "information",
         "func": "msg.topic = \"informations\";\nmsg.payload = msg.payload.information;\nconsole.log(\"JSON : \" + JSON.stringify(msg));\nreturn msg;",
         "outputs": 1,
@@ -434,14 +434,14 @@
         "y": 1080,
         "wires": [
             [
-                "3a4334623af9a45d"
+                "d39a404bc7335b64"
             ]
         ]
     },
     {
-        "id": "e6ff187a9af2296d",
+        "id": "7fc88b1c87aa675d",
         "type": "ui_gauge",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "name": "Temps de fonctionnement",
         "group": "a23d4295e04948a5",
         "order": 0,
@@ -467,9 +467,9 @@
         "wires": []
     },
     {
-        "id": "3a4334623af9a45d",
+        "id": "d39a404bc7335b64",
         "type": "ui_template",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "group": "cb8a0f06d4d77f74",
         "name": "Infos",
         "order": 4,
@@ -488,9 +488,9 @@
         ]
     },
     {
-        "id": "55d3407ef325c4a6",
+        "id": "e69b3f1086949050",
         "type": "ui_template",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "group": "cb8a0f06d4d77f74",
         "name": "reporthost",
         "order": 2,
@@ -509,9 +509,9 @@
         ]
     },
     {
-        "id": "f201f6f4cbf94145",
+        "id": "dfc499aede30f430",
         "type": "ui_template",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "group": "ba96e6f0a2e35bc0",
         "name": "JSON",
         "order": 2,
@@ -530,9 +530,9 @@
         ]
     },
     {
-        "id": "163dcb7f2cc7d7f5",
+        "id": "8867944c4bb38e40",
         "type": "function",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "name": "temp_max",
         "func": "msg.topic = \"tmax\";\nmsg.payload = msg.payload.status.temperatureMax;\nconsole.log(\"tmax : \" + String(msg.payload));\nreturn msg;\n",
         "outputs": 1,
@@ -545,14 +545,14 @@
         "y": 180,
         "wires": [
             [
-                "c5b195334ea64e8b"
+                "262e17beb8c3914d"
             ]
         ]
     },
     {
-        "id": "92491e1e366e783c",
+        "id": "09620285f9847a0f",
         "type": "function",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "name": "temp_min",
         "func": "msg.topic = \"tmin\";\nmsg.payload = msg.payload.status.temperatureMin;\nconsole.log(\"tmin : \" + String(msg.payload));\nreturn msg;\n",
         "outputs": 1,
@@ -565,14 +565,14 @@
         "y": 300,
         "wires": [
             [
-                "389454bbdb51a049"
+                "69433d6f8162e69b"
             ]
         ]
     },
     {
-        "id": "8a88709642aff579",
+        "id": "bfccf1a4bb12faf0",
         "type": "ui_toast",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "position": "top right",
         "displayTime": "3",
         "highlight": "",
@@ -589,9 +589,9 @@
         "wires": []
     },
     {
-        "id": "1be79303da81c614",
+        "id": "16df83eb7620a6dc",
         "type": "worldmap",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "name": "Emplacement",
         "lat": "",
         "lon": "",
@@ -621,9 +621,9 @@
         "wires": []
     },
     {
-        "id": "606710f0e8e4fcf7",
+        "id": "52b21f25789ad77e",
         "type": "function",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "name": "gps",
         "func": "var lat = msg.payload.location.gps.lat; // Votre latitude\nvar lon = msg.payload.location.gps.lon; // Votre longitude\nvar room = msg.payload.location.room; // Numéro de la salle\nvar address = msg.payload.location.address; // Adresse\nvar name = room + \", \"+ address; // Nom comprenant l'adresse et le numéro de la salle\nvar ssid = msg.payload.net.ssid; // SSID du réseau\nvar mac = msg.payload.net.mac; // Adresse MAC\nvar ip = msg.payload.net.ip; // Adresse IP\n\n// Configuration du serveur de tuiles pour la carte en français\nvar tileServerConfig = {\n    command: \"config\",\n    map: {\n        tileLayer: \"http://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png\",\n        tileServer: \"http://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png\"\n    }\n};\n\n// Créer le message pour la carte avec les détails du réseau et de l'emplacement\nvar markerMessage = {\n  name: name, // Le nom de votre marqueur\n  lat: lat,   // La latitude\n  lon: lon,   // La longitude\n  layer: \"localisationLayer\",\n  infos: \"<h3>Adresse : \" + address + \"</h3>\" +\n        \"<p>Salle : \" + room + \"</p>\" +\n        \"<h3>Réseau :</h3>\" +\n        \"<p>SSID : \" + ssid + \"<br>\" +\n        \"MAC : \" + mac + \"<br>\" +\n        \"IP : \" + ip + \"</p>\"\n};\n\n// Envoyer le message de configuration du serveur de tuiles en premier\nnode.send({\n  payload: tileServerConfig\n});\n\n// Ensuite, envoyer le message avec le marqueur et les détails réseau\nmsg.payload = markerMessage;\n\nreturn msg; // Cela enverra le deuxième message\n",
         "outputs": 1,
@@ -636,15 +636,15 @@
         "y": 60,
         "wires": [
             [
-                "1be79303da81c614",
-                "f55ae2906dd16b16"
+                "16df83eb7620a6dc",
+                "92dbd2b6a6552641"
             ]
         ]
     },
     {
-        "id": "fbbb222312db3e27",
+        "id": "d880e997bc952ea9",
         "type": "function",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "name": "regul",
         "func": "msg.topic = \"regul\";\nmsg.payload = msg.payload.status.regul;\nconsole.log(\"regul : \" + String(msg.payload));\nreturn msg;",
         "outputs": 1,
@@ -657,14 +657,14 @@
         "y": 660,
         "wires": [
             [
-                "b3b0433507cc9ca6"
+                "5aed39cb435874e8"
             ]
         ]
     },
     {
-        "id": "e67079ad366c3fd5",
+        "id": "bdf3e58394757fba",
         "type": "ui_toast",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "position": "bottom right",
         "displayTime": "3",
         "highlight": "",
@@ -682,9 +682,9 @@
         "info": "``"
     },
     {
-        "id": "bafc7746467cd243",
+        "id": "58fd21a4f17ee31b",
         "type": "function",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "name": "regul2",
         "func": "// Définir le sujet du message\nmsg.topic = \"regul2\";\n\n// Obtenir le statut de régulation\nvar regulStatus = msg.payload.status.regul;\n\n// Vérifier si regulStatus est une chaîne\nif (typeof regulStatus === \"string\") {\n    console.log(\"regul2 : \" + regulStatus);\n\n    // Vérifier si regul est WALK\n    if (regulStatus === \"WALK\") {\n        // Obtenir le temps actuel en timestamp\n        let now = new Date().getTime();\n\n        // Obtenir le temps du dernier envoi depuis le contexte du flow\n        let lastSentTime = flow.get(\"lastSentTime\") || 0;\n\n        // Calculer la différence en minutes\n        let diffMinutes = (now - lastSentTime) / 60000; // 60000 ms en 1 minute\n\n        // Vérifier si 1 minutes se sont écoulées\n        if (diffMinutes >= 1) {\n            // Mettre à jour le temps du dernier envoi\n            flow.set(\"lastSentTime\", now);\n\n            // Préparer le message pour l'envoi\n            msg.payload = regulStatus;\n\n            // Envoyer le message\n            return msg;\n        } else {\n            // Si moins de 5 minutes se sont écoulées, ne rien faire\n            console.log(\"Attente de 5 minutes nécessaire avant le prochain envoi.\");\n            return null;\n        }\n    }\n}\n\n// Si regul n'est pas WALK, ou si regulStatus n'est pas une chaîne, ne rien retourner\nconsole.log(\"regul2 n'est pas WALK ou regulStatus n'est pas une chaîne.\");\nreturn null;\n",
         "outputs": 1,
@@ -697,14 +697,14 @@
         "y": 780,
         "wires": [
             [
-                "e67079ad366c3fd5"
+                "bdf3e58394757fba"
             ]
         ]
     },
     {
-        "id": "076b54412a1ad004",
+        "id": "835b4a2637a1a7dd",
         "type": "function",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "name": "feuDetecte2",
         "func": "msg.topic = \"feu\";\nvar fireStatus = msg.payload.status.fire;\n\n// Vérifiez si fireStatus est bien un booléen et si c'est le cas, vérifiez s'il est vrai\nif (typeof fireStatus === \"boolean\" && fireStatus === true) {\n    console.log(\"feu : \" + fireStatus);\n    // Si fireStatus est true, retournez le message\n    msg.payload = fireStatus;\n    return msg;\n}\n\n// Si fireStatus n'est pas true, ne rien retourner\nreturn null;\n",
         "outputs": 1,
@@ -717,14 +717,14 @@
         "y": 900,
         "wires": [
             [
-                "8a88709642aff579"
+                "bfccf1a4bb12faf0"
             ]
         ]
     },
     {
-        "id": "9997ea4481e6acfb",
+        "id": "b5c7f4eb6650e596",
         "type": "function",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "name": "fanspeed",
         "func": "msg.topic = \"fanspeed\";\nmsg.payload = msg.payload.status.fanspeed;\nconsole.log(\"fanspeed : \" + String(msg.payload));\nreturn msg;\n",
         "outputs": 1,
@@ -737,14 +737,14 @@
         "y": 1140,
         "wires": [
             [
-                "cbe7b97718b50b82"
+                "dbcdda831f9a5952"
             ]
         ]
     },
     {
-        "id": "cbe7b97718b50b82",
+        "id": "dbcdda831f9a5952",
         "type": "ui_chart",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "name": "Ventilateur par ms",
         "group": "7387bee681bcee7d",
         "order": 6,
@@ -786,9 +786,9 @@
         ]
     },
     {
-        "id": "68dea5ec8be8fea2",
+        "id": "07df009c0396f425",
         "type": "ui_slider",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "name": "Température d'alerte",
         "label": "Température d'alerte",
         "tooltip": "",
@@ -808,14 +808,14 @@
         "y": 1200,
         "wires": [
             [
-                "dcf4b08e33e53232"
+                "8985ada607e93570"
             ]
         ]
     },
     {
-        "id": "eea3e1238847136b",
+        "id": "f45c1f389d604d4a",
         "type": "function",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "name": "temp_alerte",
         "func": "msg.topic = \"tempAlerte\";\nmsg.payload = msg.payload.regul.temperatureAlerte;\nconsole.log(\"tempAlerte : \" + String(msg.payload));\nreturn msg;\n",
         "outputs": 1,
@@ -828,14 +828,14 @@
         "y": 1200,
         "wires": [
             [
-                "68dea5ec8be8fea2"
+                "07df009c0396f425"
             ]
         ]
     },
     {
-        "id": "2651bdf8ed9f8079",
+        "id": "c3f473bd7da636dd",
         "type": "function",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "name": "lum_alerte",
         "func": "msg.topic = \"lumAlerte\";\nmsg.payload = msg.payload.regul.lumiereAlerte;\nconsole.log(\"lumAlerte : \" + String(msg.payload));\nreturn msg;\n",
         "outputs": 1,
@@ -848,15 +848,15 @@
         "y": 540,
         "wires": [
             [
-                "bc381b75c5648694",
-                "42fde6bb5c389257"
+                "27b6e5831a9bce25",
+                "2a0c84b36e307878"
             ]
         ]
     },
     {
-        "id": "65a472656315dd89",
+        "id": "bc95b1350493506b",
         "type": "ui_led",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "order": 2,
         "group": "dd57374ab95ec8ce",
         "width": 0,
@@ -885,9 +885,9 @@
         "wires": []
     },
     {
-        "id": "a7f455e6c3045f72",
+        "id": "51e552dfde8c1b91",
         "type": "ui_led",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "order": 3,
         "group": "dd57374ab95ec8ce",
         "width": 0,
@@ -916,9 +916,9 @@
         "wires": []
     },
     {
-        "id": "b3b0433507cc9ca6",
+        "id": "5aed39cb435874e8",
         "type": "ui_led",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "order": 4,
         "group": "dd57374ab95ec8ce",
         "width": 0,
@@ -947,9 +947,9 @@
         "wires": []
     },
     {
-        "id": "eac1af41a99e3918",
+        "id": "e6778ac54d3e18f5",
         "type": "ui_led",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "order": 5,
         "group": "dd57374ab95ec8ce",
         "width": 0,
@@ -978,9 +978,9 @@
         "wires": []
     },
     {
-        "id": "f71a93341f5b3dce",
+        "id": "743a5c9d222e9b04",
         "type": "ui_gauge",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "name": "Température",
         "group": "d21e2a924ea4a840",
         "order": 2,
@@ -1006,9 +1006,9 @@
         "wires": []
     },
     {
-        "id": "7ea149fe79435d3c",
+        "id": "8889e56f348f115d",
         "type": "ui_gauge",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "name": "Luminosité",
         "group": "d21e2a924ea4a840",
         "order": 1,
@@ -1034,9 +1034,9 @@
         "wires": []
     },
     {
-        "id": "2fb584516a889044",
+        "id": "dfacdddc8cb2e5c9",
         "type": "function",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "name": "regul3",
         "func": "// Récupération de l'état du régulateur à partir du payload entrant\nlet etatRegul = msg.payload.status.regul;\n\n// Initialisation ou récupération des compteurs depuis le contexte de flux\nlet allume = flow.get(\"AllumeR\") || 0;\n\n// Mise à jour du compteur basée sur l'état du régulateur\nif (etatRegul === \"WALK\") {\n    allume += 1; // Incrémenter le compteur pour \"allumé\"\n    flow.set(\"AllumeR\", allume); // Mise à jour du compteur dans le contexte de flux\n}\n\n// Préparation du message à envoyer au noeud ui_chart pour le graphique\n// ou à tout autre noeud suivant qui nécessite cette information.\nmsg.payload = allume;\nmsg.topic = \"AllumeR\";\n\n// Log pour vérifier la valeur de \"allume\" dans la console de debug Node-RED\nconsole.log(\"Allumé: \" + allume);\n\nreturn msg;\n",
         "outputs": 1,
@@ -1049,14 +1049,14 @@
         "y": 1260,
         "wires": [
             [
-                "547595053634e06b"
+                "a523daf01fb5544d"
             ]
         ]
     },
     {
-        "id": "f55ae2906dd16b16",
+        "id": "92dbd2b6a6552641",
         "type": "ui_worldmap",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "group": "75754c907f5cfb78",
         "order": 3,
         "width": 0,
@@ -1090,9 +1090,9 @@
         "wires": []
     },
     {
-        "id": "c5b195334ea64e8b",
+        "id": "262e17beb8c3914d",
         "type": "ui_text",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "group": "964393819945c32a",
         "order": 3,
         "width": 0,
@@ -1111,9 +1111,9 @@
         "wires": []
     },
     {
-        "id": "389454bbdb51a049",
+        "id": "69433d6f8162e69b",
         "type": "ui_text",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "group": "964393819945c32a",
         "order": 4,
         "width": 0,
@@ -1132,9 +1132,9 @@
         "wires": []
     },
     {
-        "id": "55df2a1214ad9515",
+        "id": "909d46d07ccb1d0c",
         "type": "function",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "name": "temp_alerte",
         "func": "msg.topic = \"tempAlerte\";\nmsg.payload = msg.payload.regul.temperatureAlerte;\nconsole.log(\"tempAlerte : \" + String(msg.payload));\nreturn msg;\n",
         "outputs": 1,
@@ -1147,14 +1147,14 @@
         "y": 260,
         "wires": [
             [
-                "84138fbfee0a4bb4"
+                "f3ce63428cbfe560"
             ]
         ]
     },
     {
-        "id": "547595053634e06b",
+        "id": "a523daf01fb5544d",
         "type": "ui_chart",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "name": "Evalution du régulateur",
         "group": "9a41170d10313c68",
         "order": 3,
@@ -1196,9 +1196,9 @@
         ]
     },
     {
-        "id": "b91419379b03dd13",
+        "id": "8e9844f20a2bed14",
         "type": "function",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "name": "regul3",
         "func": "// Récupération de l'état du régulateur à partir du payload entrant\nlet etatRegul = msg.payload.status.regul;\n\n// Initialisation ou récupération des compteurs depuis le contexte de flux\nlet eteint = flow.get(\"EteintR\") || 0;\n\n// Mise à jour du compteur basée sur l'état du régulateur\nif (etatRegul === \"HALT\") {\n    eteint += 1; // Incrémenter le compteur pour \"éteint\"\n    flow.set(\"EteintR\", eteint); // Mise à jour du compteur dans le contexte de flux\n}\n\n// Préparation du message à envoyer au noeud ui_chart pour le graphique\n// ou à tout autre noeud suivant qui nécessite cette information.\nmsg.payload = eteint;\nmsg.topic = \"EteintR\";\n\n// Log pour vérifier la valeur de \"eteint\" dans la console de debug Node-RED\nconsole.log(\"Éteint: \" + eteint);\n\nreturn msg;\n",
         "outputs": 1,
@@ -1211,15 +1211,15 @@
         "y": 1320,
         "wires": [
             [
-                "547595053634e06b",
-                "0f896fcaab350d45"
+                "a523daf01fb5544d",
+                "38211b600d155e59"
             ]
         ]
     },
     {
-        "id": "0f896fcaab350d45",
+        "id": "38211b600d155e59",
         "type": "ui_template",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "group": "dd57374ab95ec8ce",
         "name": "",
         "order": 1,
@@ -1238,9 +1238,9 @@
         ]
     },
     {
-        "id": "4868cb7ee882f742",
+        "id": "f4339e92661494d4",
         "type": "ui_template",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "group": "b52fd2b1fb7da787",
         "name": "",
         "order": 1,
@@ -1259,9 +1259,9 @@
         ]
     },
     {
-        "id": "cfb813331851be7e",
+        "id": "f56abb4dcbde8652",
         "type": "ui_template",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "group": "55a3d326b25f4b41",
         "name": "",
         "order": 1,
@@ -1280,9 +1280,9 @@
         ]
     },
     {
-        "id": "42fde6bb5c389257",
+        "id": "2a0c84b36e307878",
         "type": "ui_slider",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "name": "Lumière d'alerte",
         "label": "Lumière d'alerte",
         "tooltip": "",
@@ -1302,14 +1302,14 @@
         "y": 580,
         "wires": [
             [
-                "dcf4b08e33e53232"
+                "8985ada607e93570"
             ]
         ]
     },
     {
-        "id": "dcf4b08e33e53232",
+        "id": "8985ada607e93570",
         "type": "function",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "name": "send ESP",
         "func": "// Supposons que context.global.regul contienne les valeurs actuelles pour lt, ht, temperatureAlerte et lumiereAlerte\nvar regulCurrent = context.global.regul || { lt: null, ht: null, temperatureAlerte: null, lumiereAlerte: null };\n\n// Mettez à jour le champ spécifique basé sur le sujet du message et conservez les valeurs actuelles pour les autres champs\nvar payloadObj = {\n    status: {\n        temperature: null,\n        temperatureMax: null,\n        temperatureMin: null,\n        light: null,\n        regul: null,\n        fire: null,\n        heat: null,\n        cold: null,\n        fanspeed: null\n    },\n    location: {\n        room: null,\n        gps: {\n            lat: null,\n            lon: null\n        },\n        address: null\n    },\n    regul: {\n        lt: regulCurrent.lt, // Conserve la valeur actuelle de lt\n        ht: regulCurrent.ht, // Conserve la valeur actuelle de ht\n        lumiereAlerte: regulCurrent.lumiereAlerte, // Conserve la valeur actuelle de lumiereAlerte\n        temperatureAlerte: regulCurrent.temperatureAlerte, // Conserve la valeur actuelle de temperatureAlerte\n        pourcentageAvantAlerte: null\n    },\n    information: {\n        ident: null,\n        user: null,\n        loc: null\n    },\n    net: {\n        uptime: null,\n        ssid: null,\n        mac: null,\n        ip: null\n    },\n    reporthost: {\n        target_ip: null,\n        target_port: null,\n        sp: null\n    }\n};\n\n// Déterminez quel paramètre mettre à jour en fonction du sujet du message\nswitch (msg.topic) {\n    case \"tempAlerte\":\n        payloadObj.regul.temperatureAlerte = parseFloat(msg.payload); // Met à jour temperatureAlerte\n        regulCurrent.temperatureAlerte = parseFloat(msg.payload); // Met à jour la valeur dans context\n        break;\n    case \"lumAlerte\":\n        payloadObj.regul.lumiereAlerte = parseFloat(msg.payload); // Met à jour lumiereAlerte\n        regulCurrent.lumiereAlerte = parseFloat(msg.payload); // Met à jour la valeur dans context\n        break;\n    case \"sb\":\n        payloadObj.regul.ht = parseFloat(msg.payload); // Met à jour ht\n        regulCurrent.ht = parseFloat(msg.payload); // Met à jour la valeur dans context\n        break;\n    case \"sh\":\n        payloadObj.regul.lt = parseFloat(msg.payload); // Met à jour lt\n        regulCurrent.lt = parseFloat(msg.payload); // Met à jour la valeur dans context\n        break;\n}\n\n// Mise à jour de context.global.regul avec les nouvelles valeurs\ncontext.global.regul = regulCurrent;\n\n// Convertissez l'objet en chaîne JSON\nvar newMsg = {\n    payload: JSON.stringify(payloadObj)\n};\n\n// Log le JSON complet pour la vérification\nconsole.log(msg.topic + \" envoyé vers l'ESP : \", newMsg.payload);\n\nreturn newMsg; // Envoyez le message\n\n\n/*\n// Supposons que context.global.regul contienne les valeurs actuelles pour lt, ht, temperatureAlerte et lumiereAlerte\nvar regulCurrent = context.global.regul || { lt: null, ht: null, temperatureAlerte: null, lumiereAlerte: null };\n\n// Créez un objet pour stocker les données à envoyer\nvar payloadObj = {\n    regul: {\n        lt: regulCurrent.lt,\n        ht: regulCurrent.ht,\n        lumiereAlerte: regulCurrent.lumiereAlerte,\n        temperatureAlerte: regulCurrent.temperatureAlerte,\n        pourcentageAvantAlerte: 0\n    }\n};\n\n// Déterminez quel paramètre mettre à jour en fonction du sujet du message\nswitch (msg.topic) {\n    case \"tempAlerte\":\n        payloadObj.regul.temperatureAlerte = parseFloat(msg.payload); // Met à jour temperatureAlerte\n        regulCurrent.temperatureAlerte = parseFloat(msg.payload); // Met à jour la valeur dans context\n        break;\n    case \"lumAlerte\":\n        payloadObj.regul.lumiereAlerte = parseFloat(msg.payload); // Met à jour lumiereAlerte\n        regulCurrent.lumiereAlerte = parseFloat(msg.payload); // Met à jour la valeur dans context\n        break;\n    case \"sb\":\n        payloadObj.regul.ht = parseFloat(msg.payload); // Met à jour ht\n        regulCurrent.ht = parseFloat(msg.payload); // Met à jour la valeur dans context\n        break;\n    case \"sh\":\n        payloadObj.regul.lt = parseFloat(msg.payload); // Met à jour lt\n        regulCurrent.lt = parseFloat(msg.payload); // Met à jour la valeur dans context\n        break;\n}\n\n// Mise à jour de context.global.regul avec les nouvelles valeurs\ncontext.global.regul = regulCurrent;\n\n// Convertissez l'objet en chaîne JSON\nvar jsonString = JSON.stringify(payloadObj);\n\n// Log le JSON complet pour la vérification\nconsole.log(msg.topic + \" envoyé vers l'ESP : \", jsonString);\n\n// Préparez le message pour le nœud HTTP request\nmsg.headers = {\n    \"Content-Type\": \"application/json\"\n};\nmsg.payload = payloadObj;\n\nreturn msg; // Envoyez le message\n*/",
         "outputs": 1,
@@ -1322,15 +1322,15 @@
         "y": 580,
         "wires": [
             [
-                "b219f0eb525d97aa",
-                "7e28d917b8e274e8"
+                "b3859f43c50165fb",
+                "ddb0aa586bfc62e8"
             ]
         ]
     },
     {
-        "id": "3c905cdc1c3b2b05",
+        "id": "1f3fb91d4d6ced2f",
         "type": "function",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "name": "chaufage1",
         "func": "// Récupération de l'état de la climatisation à partir du payload entrant\nlet etatChauffage = msg.payload.status.heat;\n\n// Initialisation ou récupération des compteurs depuis le contexte de flux\nlet chauffageAllumee = flow.get(\"AllumeeC\") || 0;\n\n// Mise à jour du compteur basée sur l'état de la climatisation\nif (etatChauffage === \"ON\") {\n    chauffageAllumee += 1; // Incrémenter le compteur pour \"climatisation allumée\"\n    flow.set(\"AllumeeC\", chauffageAllumee); // Mise à jour du compteur dans le contexte de flux\n}\n\n// Préparation du message à envoyer\nmsg.payload = chauffageAllumee;\nmsg.topic = \"AllumeeC\";\n\n// Log pour vérifier la valeur de \"climatisationAllumee\" dans la console de debug Node-RED\nconsole.log(\"Chauffage Allumé: \" + chauffageAllumee);\n\nreturn msg;\n",
         "outputs": 1,
@@ -1343,14 +1343,14 @@
         "y": 1380,
         "wires": [
             [
-                "97ef680e54fa4364"
+                "899cc1c1526854af"
             ]
         ]
     },
     {
-        "id": "cf718d118b5e3d27",
+        "id": "cc2e7e1b51a70c41",
         "type": "function",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "name": "chaufage2",
         "func": "// Récupération de l'état de la climatisation à partir du payload entrant\nlet etatChauffage = msg.payload.status.heat;\n\n// Initialisation ou récupération des compteurs depuis le contexte de flux\nlet chauffageEteinte = flow.get(\"EteinteC\") || 0;\n\n// Mise à jour du compteur basée sur l'état de la climatisation\nif (etatChauffage === \"OFF\") {\n    chauffageEteinte += 1; // Incrémenter le compteur pour \"climatisation éteinte\"\n    flow.set(\"EteinteC\", chauffageEteinte); // Mise à jour du compteur dans le contexte de flux\n}\n\n// Préparation du message à envoyer\nmsg.payload = chauffageEteinte;\nmsg.topic = \"EteinteC\";\n\n// Log pour vérifier la valeur de \"climatisationEteinte\" dans la console de debug Node-RED\nconsole.log(\"Chauffage Éteinte: \" + chauffageEteinte);\n\nreturn msg;\n",
         "outputs": 1,
@@ -1363,14 +1363,14 @@
         "y": 1440,
         "wires": [
             [
-                "97ef680e54fa4364"
+                "899cc1c1526854af"
             ]
         ]
     },
     {
-        "id": "97ef680e54fa4364",
+        "id": "899cc1c1526854af",
         "type": "ui_chart",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "name": "Evalution du chauffage",
         "group": "9a41170d10313c68",
         "order": 3,
@@ -1412,9 +1412,9 @@
         ]
     },
     {
-        "id": "534d1930c1402b86",
+        "id": "1fa8e2003f3534d6",
         "type": "function",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "name": "clim1",
         "func": "// Récupération de l'état de la climatisation à partir du payload entrant\nlet etatClimatisation = msg.payload.status.cold;\n\n// Initialisation ou récupération des compteurs depuis le contexte de flux\nlet climatisationAllumee = flow.get(\"AllumeeCl\") || 0;\n\n// Mise à jour du compteur basée sur l'état de la climatisation\nif (etatClimatisation === \"ON\") {\n    climatisationAllumee += 1; // Incrémenter le compteur pour \"climatisation allumée\"\n    flow.set(\"AllumeeCl\", climatisationAllumee); // Mise à jour du compteur dans le contexte de flux\n}\n\n// Préparation du message à envoyer\nmsg.payload = climatisationAllumee;\nmsg.topic = \"AllumeeCl\";\n\n// Log pour vérifier la valeur de \"climatisationAllumee\" dans la console de debug Node-RED\nconsole.log(\"Climatisation Allumée: \" + climatisationAllumee);\n\nreturn msg;\n",
         "outputs": 1,
@@ -1427,14 +1427,14 @@
         "y": 1500,
         "wires": [
             [
-                "ebcc8c1be0840ec0"
+                "60bff5f78c20a398"
             ]
         ]
     },
     {
-        "id": "c40e70072ec9fec8",
+        "id": "af6a060b1e1b7956",
         "type": "function",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "name": "clim2",
         "func": "// Récupération de l'état de la climatisation à partir du payload entrant\nlet etatClimatisation = msg.payload.status.cold;\n\n// Initialisation ou récupération des compteurs depuis le contexte de flux\nlet climatisationEteinte = flow.get(\"EteinteCl\") || 0;\n\n// Mise à jour du compteur basée sur l'état de la climatisation\nif (etatClimatisation === \"OFF\") {\n    climatisationEteinte += 1; // Incrémenter le compteur pour \"climatisation éteinte\"\n    flow.set(\"EteinteCl\", climatisationEteinte); // Mise à jour du compteur dans le contexte de flux\n}\n\n// Préparation du message à envoyer\nmsg.payload = climatisationEteinte;\nmsg.topic = \"EteinteCl\";\n\n// Log pour vérifier la valeur de \"climatisationEteinte\" dans la console de debug Node-RED\nconsole.log(\"Climatisation Éteinte: \" + climatisationEteinte);\n\nreturn msg;\n",
         "outputs": 1,
@@ -1447,14 +1447,14 @@
         "y": 1560,
         "wires": [
             [
-                "ebcc8c1be0840ec0"
+                "60bff5f78c20a398"
             ]
         ]
     },
     {
-        "id": "ebcc8c1be0840ec0",
+        "id": "60bff5f78c20a398",
         "type": "ui_chart",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "name": "Evalution de la climatiation",
         "group": "9a41170d10313c68",
         "order": 3,
@@ -1496,9 +1496,9 @@
         ]
     },
     {
-        "id": "e7b8912131a6eb49",
+        "id": "b8065ead57998994",
         "type": "function",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "name": "feu1",
         "func": "// Récupération de l'état de l'incendie à partir du payload entrant\nlet etatIncendie = msg.payload.status.fire;\n\n// Initialisation ou récupération des compteurs depuis le contexte de flux\nlet incendieDetecte = flow.get(\"Detecte\") || 0;\n\n// Mise à jour du compteur basée sur l'état de l'incendie\nif (etatIncendie === true) {\n    incendieDetecte += 1; // Incrémenter le compteur pour \"incendie détecté\"\n    flow.set(\"Detecte\", incendieDetecte); // Mise à jour du compteur dans le contexte de flux\n}\n\n// Préparation du message à envoyer\nmsg.payload = incendieDetecte;\nmsg.topic = \"Detecte\";\n\n// Log pour vérifier la valeur de \"incendieDetecte\" dans la console de debug Node-RED\nconsole.log(\"Incendie Détecté: \" + incendieDetecte);\n\nreturn msg;\n",
         "outputs": 1,
@@ -1511,14 +1511,14 @@
         "y": 1620,
         "wires": [
             [
-                "43887f75a3ccea62"
+                "88380d2e4d8d01af"
             ]
         ]
     },
     {
-        "id": "bc64c4f5bd76607a",
+        "id": "e3c297d19b92dd91",
         "type": "function",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "name": "feu2",
         "func": "// Récupération de l'état de l'incendie à partir du payload entrant\nlet etatIncendie = msg.payload.status.fire;\n\n// Initialisation ou récupération des compteurs depuis le contexte de flux\nlet incendieNonDetecte = flow.get(\"NonDetecte\") || 0;\n\n// Mise à jour du compteur basée sur l'absence d'état d'incendie\nif (etatIncendie === false) {\n    incendieNonDetecte += 1; // Incrémenter le compteur pour \"incendie non détecté\"\n    flow.set(\"NonDetecte\", incendieNonDetecte); // Mise à jour du compteur dans le contexte de flux\n}\n\n// Préparation du message à envoyer\nmsg.payload = incendieNonDetecte;\nmsg.topic = \"NonDetecte\";\n\n// Log pour vérifier la valeur de \"incendieNonDetecte\" dans la console de debug Node-RED\nconsole.log(\"Incendie Non Détecté: \" + incendieNonDetecte);\n\nreturn msg;\n",
         "outputs": 1,
@@ -1531,14 +1531,14 @@
         "y": 1680,
         "wires": [
             [
-                "43887f75a3ccea62"
+                "88380d2e4d8d01af"
             ]
         ]
     },
     {
-        "id": "43887f75a3ccea62",
+        "id": "88380d2e4d8d01af",
         "type": "ui_chart",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "name": "Evalution du feu",
         "group": "9a41170d10313c68",
         "order": 3,
@@ -1580,9 +1580,9 @@
         ]
     },
     {
-        "id": "b219f0eb525d97aa",
+        "id": "b3859f43c50165fb",
         "type": "debug",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "name": "debug 3",
         "active": true,
         "tosidebar": true,
@@ -1596,9 +1596,9 @@
         "wires": []
     },
     {
-        "id": "7e28d917b8e274e8",
+        "id": "ddb0aa586bfc62e8",
         "type": "http request",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "name": "",
         "method": "POST",
         "ret": "bin",
@@ -1622,14 +1622,14 @@
         "y": 580,
         "wires": [
             [
-                "b219f0eb525d97aa"
+                "b3859f43c50165fb"
             ]
         ]
     },
     {
-        "id": "a71ca752c07242de",
+        "id": "643583b438c17628",
         "type": "http request",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "name": "",
         "method": "GET",
         "ret": "bin",
@@ -1646,14 +1646,14 @@
         "y": 480,
         "wires": [
             [
-                "8b0a2673e57d6214"
+                "e26b72f2b063f594"
             ]
         ]
     },
     {
-        "id": "41c7e5da372cf4e7",
+        "id": "5d1ae58b740183f6",
         "type": "inject",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "name": "",
         "props": [
             {
@@ -1671,14 +1671,14 @@
         "y": 620,
         "wires": [
             [
-                "a71ca752c07242de"
+                "643583b438c17628"
             ]
         ]
     },
     {
-        "id": "8364214334b1f6d8",
+        "id": "a6855022b0fd662e",
         "type": "debug",
-        "z": "c6109c9bf399154d",
+        "z": "a9a33379edbd1e0a",
         "name": "debug 4",
         "active": false,
         "tosidebar": true,
@@ -1689,6 +1689,26 @@
         "statusType": "auto",
         "x": 200,
         "y": 340,
+        "wires": []
+    },
+    {
+        "id": "c6bb4b86cb27f0df",
+        "type": "comment",
+        "z": "a9a33379edbd1e0a",
+        "name": "Mettez dans ce noeud requête http votre adresse ip d'ESP/getJson",
+        "info": "",
+        "x": 240,
+        "y": 20,
+        "wires": []
+    },
+    {
+        "id": "39b123d6a47e0778",
+        "type": "comment",
+        "z": "a9a33379edbd1e0a",
+        "name": "Mettez dans ce noeud requête http votre adresse ip d'ESP/setData",
+        "info": "",
+        "x": 1440,
+        "y": 620,
         "wires": []
     },
     {

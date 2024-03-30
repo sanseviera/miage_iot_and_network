@@ -1,0 +1,88 @@
+{
+    "$schema": "http://json-shema.org/draft-07/shema#",
+    "$id": "1",
+    "title": "Shema pour le JSON du regulateur de température",
+    "properties": {
+        "status": {
+            "type": "object",
+            "properties": {
+                "temperature":{"type":"number"},
+                "temperatureMax":{"type":"number"},
+                "temperatureMin":{"type":"number"},
+                "light":{"type":"integer"},
+                "regul":{"type":"string", "enum": ["WALK", "HALT"]},
+                "fire":{"type":"boolean"},
+                "heat":{"type":"string", "enum": ["ON", "OFF"]},
+                "cold":{"type":"string", "enum": ["ON", "OFF"]},
+                "fanspeed":{"type":"integer"}
+            },
+            "required": ["temperature","light","regul","fire","heat","cold","fanspeed"],
+            "additionalProperties": false
+        },
+        "location": {
+            "type": "object",
+            "properties": {
+                "room":{"type":"integer"},
+                "gps": {
+                    "type": "object",
+                    "properties": {
+                        "lat":{"type": "number"},                        
+                        "lon":{"type": "number"}
+                    },
+                    "required": [],
+                    "additionalProperties": false
+                },
+                "address":{"type": "string"}
+            },
+            "required": [],
+            "additionalProperties": false
+        },
+        "regul": {
+            "type": "object",
+            "properties": {
+                "lt":{"type": "integer"},
+                "ht":{"type": "integer"},
+                "lumiereAlerte":{"type": "integer"},
+                "temperatureAlerte":{"type": "integer"},
+                "pourcentageAvantAlerte":{"type": "integer"}
+            },
+            "required": [],
+            "additionalProperties": false
+        },
+        "information": {
+            "type": "object",
+            "properties": {
+                "ident":{"type": "string"},
+                "user":{"type": "string"},
+                "loc":{"type": "string"}
+            },
+            "required": [],
+            "additionalProperties": false
+        },
+        "net": {
+            "type": "object",
+            "properties": {
+                "uptime":{"type": "string"},
+                "ssid":{"type": "string"},
+                "mac":{"type": "string"},
+                "ip":{"type": "string"}
+            },
+            "required": [],
+            "additionalProperties": false
+        },
+        "reporthost": {
+            "type": "object",
+            "properties": {
+                "target_ip":{"type": "string"},
+                "target_port":{"type": "integer"},
+                "sp":{"type": "integer"}
+
+            },
+            "required": [],
+            "additionalProperties": false
+        }
+    },
+    "required": [],
+    "additionalProperties": false
+}
+
