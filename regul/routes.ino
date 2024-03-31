@@ -150,6 +150,7 @@ void setup_http_routes(AsyncWebServer* server) {
 
   /*
    * Permet de régler les variables du serveur Node  RED
+   * La route est présente mais n'est plus utilisé pour le moment
    */
   server->on("/setNetwork", HTTP_POST, [](AsyncWebServerRequest *request) {
     if (request->hasArg("box")) {
