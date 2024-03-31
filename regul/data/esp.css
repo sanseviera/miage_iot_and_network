@@ -18,6 +18,7 @@ h2 { font-size: 3.0rem; }
 div {
   max-width : 500px;
   word-wrap: break-word;
+  text-align: left; 
 }
 .grid-container {
   display: grid;
@@ -52,7 +53,9 @@ p {
   box-shadow: 2px 2px 2px black;
   margin-bottom: 15px;
   border-radius: 3px;
+  max-width: 1200px;
 }
 .card:hover {
   box-shadow: 4px 4px 4px black;
+  transform: scale(1.01);
 }

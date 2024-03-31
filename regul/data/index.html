@@ -12,11 +12,39 @@
   
   <body>
     <h1>ESP32</h1>
+    <p>Projet de M. DIOP et M. BORREANI.</p>
 
     <div class=card>
-      <h3>Object status :</h3>
-      Uptime      : %UPTIME%<br/>
-      Where       : %WHERE%<br/>
+      <h3>Object status WITH GLYPHS:</h3>
+      <div class="grid-container">
+
+        <div class="grid-item">
+          <i class="fas fa-robot"></i>
+        </div>
+        <div class="grid-item">
+          <span class="sensors-labels">Hostname</span>
+          <span>%HOSTNAME%</span>
+          <sup class="units"></sup>
+        </div>
+       
+        <div class="grid-item">
+          <i class="fas fa-clock"></i>  </div>
+        <div class="grid-item">
+          <span class="sensors-labels">Uptime</span>
+          <span id="uptime">%UPTIME%</span>
+          <sup class="units">s</sup>
+        </div>
+
+        <div class="grid-item">
+          <i class="fas fa-map-marker-alt"></i>
+        </div>
+        <div class="grid-item">
+          <span class="sensors-labels">Where</span>
+          <span><div>%WHERE%</div></span>
+          <sup class="units"></sup>
+        </div>
+
+        </div>
     </div>
 
     <div class=card>
@@ -27,39 +55,9 @@
     </div>
 
     <div class=card>
-      <h3>Sensors status :</h3>
-      <div class="container">
-        <p>Temperature : </p>
-        <p>%TEMPERATURE%</p> 
-        <p>C</p>
-      </div>
-      <div class="container">
-        <p>Light : </p>  
-        <p>%LIGHT%</p>
-        <p>Lumen</p>
-      </div>
-      <div class="container">
-              
-        <p>Cooler :</p>
-        <p>%COOLER%</p>
-      </div>
-      <div class="container">
-        <p>Heater : </p>
-        <p>%HEATER%</p>
-     </div>
-    </div>
-
-
-    <div class=card>
       <h3>Sensors status WITH GLYPHS :</h3>
       <div class="grid-container">
-        <div class="grid-item">
-          <i class="fas fa-clock" style="color:#007bff;"></i>  </div>
-        <div class="grid-item">
-          <span class="sensors-labels">Uptime</span>
-          <span id="uptime">%UPTIME%</span>
-          <sup class="units">s</sup>
-        </div>
+
         <div class="grid-item">
 	        <i class="fas fa-thermometer-half" style="color:#059e8a;"></i>
         </div>
@@ -68,6 +66,7 @@
 	        <span id="temperature">%TEMPERATURE%</span>
 	        <sup class="units">&deg;C</sup>
         </div>
+
         <div class="grid-item">
 	        <i class="far fa-lightbulb" style="color:#00add6;"></i>
         </div>
@@ -76,6 +75,7 @@
 	        <span id="light">%LIGHT%</span>
 	        <sup class="units">Lumen</sup>
         </div>
+
         <div class="grid-item">
 	        <i class="fas fa-snowflake" style="color:#007bff;"></i>
         </div>
@@ -84,6 +84,7 @@
 	        <span id="cooler">%COOLER%</span>
 	        <sup class="units">Boolean</sup>
         </div>
+
         <div class="grid-item">
 	        <i class="fas fa-fire" style="color:#ff4500;"></i>
         </div>
@@ -92,6 +93,61 @@
 	        <span id="heater">%HEATER%</span>
 	        <sup class="units">Boolean</sup>
         </div>
+
+      </div>
+    </div>
+
+    <div class=card>
+      <h3>Sensors status WITH GLYPHS :</h3>
+      <div class="grid-container">
+
+        <div class="grid-item">
+	        <i class="fas fa-thermometer-half" style="color:#059e8a;"></i>
+        </div>
+        <div class="grid-item">      
+	        <span class="sensors-labels">Chance de feu</span> 
+	        <span id="chancefeu">%CHANCEFEU%</span>
+	        <sup class="units"></sup>
+        </div>
+
+        <div class="grid-item">
+	        <i class="fas fa-thermometer-half" style="color:#059e8a;"></i>
+        </div>
+        <div class="grid-item">      
+	        <span class="sensors-labels">Feu</span> 
+	        <span id="feu">%FEU%</span>
+	        <sup class="units"></sup>
+        </div>
+
+        <div class="grid-item">
+	        <i class="fas fa-thermometer-half" style="color:#059e8a;"></i>
+        </div>
+        <div class="grid-item">      
+	        <span class="sensors-labels">Température min enregisté</span> 
+	        <span id="tempmin">%TEMPMIN%</span>
+	        <sup class="units"></sup>
+        </div>
+
+        <div class="grid-item">
+	        <i class="fas fa-thermometer-half" style="color:#059e8a;"></i>
+        </div>
+        <div class="grid-item">      
+	        <span class="sensors-labels">Température max enregisté</span> 
+	        <span id="tempmax">%TEMPMAX%</span>
+	        <sup class="units"></sup>
+        </div>
+
+        <div class="grid-item">
+	        <i class="fas fa-thermometer-half" style="color:#059e8a;"></i>
+        </div>
+        <div class="grid-item">      
+	        <span class="sensors-labels">Vitesse du ventilateur</span> 
+	        <span id="ventilateur">%VENTILATEUR%</span>
+	        <sup class="units"></sup>
+        </div>
+
+
+        
       </div>
     </div>
 
@@ -174,6 +230,12 @@
         startUpdate('cooler');
         startUpdate('heater');
         startUpdate('uptime');
+        startUpdate('chancefeu');
+        startUpdate('feu');
+        startUpdate('tempmin');
+        startUpdate('tempmax');
+        startUpdate('ventilateur');
+      
     });
     </script>
   </body>

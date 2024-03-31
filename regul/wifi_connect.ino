@@ -1,8 +1,8 @@
 void functionWificonnect(){
 
-  String hostname = "Mon petit objet ESP32";
 
-  wifi_connect_multi(hostname);               
+  
+  wifi_connect_multi(info.hostname);               
   
   if (WiFi.status() == WL_CONNECTED){
     Serial.print("\nWiFi connected : yes ! \n"); 

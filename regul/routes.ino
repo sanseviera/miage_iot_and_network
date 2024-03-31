@@ -17,7 +17,7 @@
  */
 String processor(const String& var){
   
-  char buffer[20];
+  char buffer[30];
   if (var.equals("UPTIME")) {
     // Get uptime in milliseconds
     unsigned long currentMillis = millis();
@@ -28,7 +28,7 @@ String processor(const String& var){
   }
   else if (var.equals("WHERE")) {
     char buffer[100];
-    sprintf(buffer, "Salle : %s, Latitude : %s, Longitude : %s, Adresse : %s.",  parametre.room, parametre.lat ,  parametre.lon , parametre.address);
+    sprintf(buffer, "<br>Salle : %s<br>Latitude : %s<br>Longitude : %s<br>Adresse : %s.",  parametre.room, parametre.lat ,  parametre.lon , parametre.address);
     return buffer ;
   }
   else if (var.equals("SSID")) {  
@@ -57,6 +57,26 @@ String processor(const String& var){
   }
   else if (var.equals("HEATER")) {
     return info.etatRegulateurTemperature==2 ? "true" : "false";
+  }
+  else if (var.equals("HOSTNAME")){
+    return info.hostname; 
+  }
+  else if (var.equals("CHANCEFEU")){
+    return dtostrf(info.chanceFeu, 3, 2, buffer);
+  }
+  else if (var.equals("TEMPMAX")){
+    return dtostrf(info.maxEnregistre, 10, 2, buffer);  
+  }
+  else if (var.equals("TEMPMIN")){
+    return dtostrf(info.minEnregistre, 10, 2, buffer);
+  }
+  else if (var.equals("VENTILATEUR")){
+    char buffer[5]; 
+    sprintf(buffer, "%d", info.vitesseVentilateur);
+    return buffer;
+  }
+  else if (var.equals("FEU")){
+    return info.feu==1 ? "true" : "false"; 
   }
   else {
     return String();
@@ -221,6 +241,36 @@ void setup_http_routes(AsyncWebServer* server) {
     unsigned long uptime = millis();
     snprintf(uptimeString, sizeof(uptimeString), "%lu", uptime / 1000);
     request->send(200, "text/plain", uptimeString);
+  });
+
+  server->on("/chancefeu", HTTP_GET, [](AsyncWebServerRequest *request) {
+    char tmp[10]; // Supposons que la température ne dépasse pas 10 caractères
+    snprintf(tmp, sizeof(tmp), "%d", info.chanceFeu); // "%.2f" pour afficher 2 décimales
+    request->send(200, "text/plain", tmp);
+  });
+
+  server->on("/feu", HTTP_GET, [](AsyncWebServerRequest *request) {   
+    request->send(200, "text/plain",  info.feu==1 ? "true" : "false");
+  });
+
+  server->on("/tempmax", HTTP_GET, [](AsyncWebServerRequest *request) {
+    char tmp[10]; // Supposons que la température ne dépasse pas 10 caractères
+    snprintf(tmp, sizeof(tmp), "%.2f", info.maxEnregistre); // "%.2f" pour afficher 2 décimales
+    
+    request->send(200, "text/plain", tmp);
+  });
+
+  server->on("/tempmin", HTTP_GET, [](AsyncWebServerRequest *request) {
+    char tmp[10]; // Supposons que la température ne dépasse pas 10 caractères
+    snprintf(tmp, sizeof(tmp), "%.2f", info.minEnregistre); // "%.2f" pour afficher 2 décimales
+    request->send(200, "text/plain", tmp);
+  });
+
+  server->on("/vitesseventilateur", HTTP_GET, [](AsyncWebServerRequest *request) {    
+    char tmp[5]; 
+    snprintf(tmp, sizeof(tmp), "%d", info.vitesseVentilateur); // "%.2f" pour afficher 2 décimales
+    
+    request->send(200, "text/plain", tmp);
   });
 
 }

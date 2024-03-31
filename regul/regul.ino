@@ -44,6 +44,7 @@
  * et des variables spéciales permettant d'appeler les fonctions avec un timer différent entre elles
  */
 struct Information { 
+  char hostname[30]  ; 
   //-----Variable d'informations------
   int chanceFeu; // une valeur en pourcentage
   float lumiere;
@@ -60,7 +61,7 @@ struct Information {
   int regulation; // 1 ou 0 on régul ou non
   //-----
 };
-struct Information info = {0 , 0.0 , 0.0 , 0.0 , 100000.0 , 0, 0.0, 0.0, 0.0, 0 , 0};
+struct Information info = {"diop_borreani", 0 , 0.0 , 0.0 , 0.0 , 100000.0 , 0, 0.0, 0.0, 0.0, 0 , 0};
 
 struct Tampon{
   char payload[2048]; 
@@ -71,6 +72,7 @@ struct Tampon tampon = {""};
  * À noter qu'ils sont désormais modifiables depuis Node-RED.
  */
 struct Parametre{
+  
 
   //-----------Parametres du régulateur--------------
   int temperatureSeuilHaut = 25;
