@@ -35,7 +35,7 @@
 #define USE_SERIAL Serial
 
 // Pour régler les problèmes de compatibilités la passer si besoin de 1 à 0 et inverse
-#define Old 1
+#define Old 0
 
 
 //-------------Structures---------------------    

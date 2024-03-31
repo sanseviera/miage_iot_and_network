@@ -7,85 +7,113 @@
 	  integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
 	  crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="esp.css">
-
     <title>ESP32</title>
   </head>
   
   <body>
     <h1>ESP32</h1>
-    <h3>Object status :</h3>
-    Uptime      : %UPTIME%<br/>
-    Where       : %WHERE%<br/>
 
-    <h3>Network link status :</h3>
-    WiFi SSID   : %SSID%<br/>
-    MAC address : %MAC%<br/>
-    IP address  : %IP%<br/>
+    <div class=card>
+      <h3>Object status :</h3>
+      Uptime      : %UPTIME%<br/>
+      Where       : %WHERE%<br/>
+    </div>
 
-    <h3>Sensors status :</h3>
-    Temperature : %TEMPERATURE% C<br/>
-    Light       : %LIGHT% Lumen<br/>
-    Cooler      : %COOLER%<br/>
-    Heater      : %HEATER%<br/>
+    <div class=card>
+      <h3>Network link status :</h3>
+      WiFi SSID   : %SSID%<br/>
+      MAC address : %MAC%<br/>
+      IP address  : %IP%<br/>
+    </div>
 
-    <h3>Sensors status WITH GLYPHS :</h3>
-    <div class="grid-container">
-      <div class="grid-item">
-        <i class="fas fa-clock" style="color:#007bff;"></i>  </div>
-      <div class="grid-item">
-        <span class="sensors-labels">Uptime</span>
-        <span id="uptime">%UPTIME%</span>
-        <sup class="units">s</sup>
+    <div class=card>
+      <h3>Sensors status :</h3>
+      <div class="container">
+        <p>Temperature : </p>
+        <p>%TEMPERATURE%</p> 
+        <p>C</p>
       </div>
-      <div class="grid-item">
-	      <i class="fas fa-thermometer-half" style="color:#059e8a;"></i>
+      <div class="container">
+        <p>Light : </p>  
+        <p>%LIGHT%</p>
+        <p>Lumen</p>
       </div>
-      <div class="grid-item">      
-	      <span class="sensors-labels">Temperature</span> 
-	      <span id="temperature">%TEMPERATURE%</span>
-	      <sup class="units">&deg;C</sup>
+      <div class="container">
+              
+        <p>Cooler :</p>
+        <p>%COOLER%</p>
       </div>
-      <div class="grid-item">
-	      <i class="far fa-lightbulb" style="color:#00add6;"></i>
-      </div>
-      <div class="grid-item">
-	      <span class="sensors-labels">Light</span>
-	      <span id="light">%LIGHT%</span>
-	      <sup class="units">Lumen</sup>
-      </div>
-      <div class="grid-item">
-	      <i class="fas fa-snowflake" style="color:#007bff;"></i>
-      </div>
-      <div class="grid-item">
-	      <span class="sensors-labels">Cooler</span>
-	      <span id="cooler">%COOLER%</span>
-	      <sup class="units">Boolean</sup>
-      </div>
-      <div class="grid-item">
-	      <i class="fas fa-fire" style="color:#ff4500;"></i>
-      </div>
-      <div class="grid-item">
-	      <span class="sensors-labels">Heater</span>
-	      <span id="heater">%HEATER%</span>
-	      <sup class="units">Boolean</sup>
+      <div class="container">
+        <p>Heater : </p>
+        <p>%HEATER%</p>
+     </div>
+    </div>
+
+
+    <div class=card>
+      <h3>Sensors status WITH GLYPHS :</h3>
+      <div class="grid-container">
+        <div class="grid-item">
+          <i class="fas fa-clock" style="color:#007bff;"></i>  </div>
+        <div class="grid-item">
+          <span class="sensors-labels">Uptime</span>
+          <span id="uptime">%UPTIME%</span>
+          <sup class="units">s</sup>
+        </div>
+        <div class="grid-item">
+	        <i class="fas fa-thermometer-half" style="color:#059e8a;"></i>
+        </div>
+        <div class="grid-item">      
+	        <span class="sensors-labels">Temperature</span> 
+	        <span id="temperature">%TEMPERATURE%</span>
+	        <sup class="units">&deg;C</sup>
+        </div>
+        <div class="grid-item">
+	        <i class="far fa-lightbulb" style="color:#00add6;"></i>
+        </div>
+        <div class="grid-item">
+	        <span class="sensors-labels">Light</span>
+	        <span id="light">%LIGHT%</span>
+	        <sup class="units">Lumen</sup>
+        </div>
+        <div class="grid-item">
+	        <i class="fas fa-snowflake" style="color:#007bff;"></i>
+        </div>
+        <div class="grid-item">
+	        <span class="sensors-labels">Cooler</span>
+	        <span id="cooler">%COOLER%</span>
+	        <sup class="units">Boolean</sup>
+        </div>
+        <div class="grid-item">
+	        <i class="fas fa-fire" style="color:#ff4500;"></i>
+        </div>
+        <div class="grid-item">
+	        <span class="sensors-labels">Heater</span>
+	        <span id="heater">%HEATER%</span>
+	        <sup class="units">Boolean</sup>
+        </div>
       </div>
     </div>
-    
-    <h3>Temp. Regul. Thresholds :</h3>
-    Low Temp  : %LT% C<br/>
-    High Temp : %HT% C<br/>
 
-    <h3> Periodic status report to :</h3>
-    <form action="/target" method="post">
-      <label for="ip">IP Address :</label>
-      <input id="target_ip" type="text" name="ip" placeholder="%PRT_IP%"/><br/>
-      <label for="port">Port :</label>
-      <input id="target_port" type="text" name="port" placeholder="%PRT_PORT%"/><br/>
-      <label for="sp"> Sampling Period (in seconds) :</label>
-      <input id="sp" type="text" name="sp" placeholder="%PRT_T%"/><br/>
-      <input id="monBouton" type="submit" value="Change reporting host !"/>
-    </form>
-    
+    <div class=card>
+      <h3>Temp. Regul. Thresholds :</h3>
+      Low Temp  : %LT% C<br/>
+      High Temp : %HT% C<br/>
+    </div>
+
+    <div class=card>
+      <h3> Periodic status report to :</h3>
+      <form action="/target" method="post">
+        <label for="ip">IP Address :</label>
+        <input id="target_ip" type="text" name="ip" placeholder="%PRT_IP%"/><br/>
+        <label for="port">Port :</label>
+        <input id="target_port" type="text" name="port" placeholder="%PRT_PORT%"/><br/>
+        <label for="sp"> Sampling Period (in seconds) :</label>
+        <input id="sp" type="text" name="sp" placeholder="%PRT_T%"/><br/>
+        <input id="monBouton" type="submit" value="Change reporting host !"/>
+      </form>
+    </div>
+
     <script>
       var bouton = document.getElementById("monBouton");
       // Ajoutez un gestionnaire d'événements pour le clic
