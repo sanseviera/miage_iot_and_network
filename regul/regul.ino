@@ -21,7 +21,10 @@
   #include "ESPAsyncWebServer.h"
   #include <ArduinoOTA.h>
   #include <HTTPClient.h>
-
+  #include <PubSubClient.h>
+  #include "wifi_utils.h"
+  #include <WiFi.h>
+  #include <PubSubClient.h>
 // Nos fichiers
   #include "json_manager.h"
   #include "colors.h"
@@ -96,13 +99,19 @@ struct Parametre{
   const double periodeTimerCommunication = 5000;
   //--------------Cible-------------------
   char* target_ip = "172.20.10.2";
-  int target_port = 1880;
+  int target_port = 1883;
   int sp = 10;
   //--------------Lieu------------------
   char* room = "312";
-  char* lat = "43.62453842";
-  char* lon = "43.62453842";
+  char* lat = "43.70313";
+  char* lon = "7.26608";
   char* address = "Les lucioles";
+  //--------------Mqtt------------------
+  char* mqtt_server = "test.mosquitto.org"; 
+  // topic
+  char* topic_temp = "uca/M1/iot/temp";
+  char* topic_led = "uca/M1/iot/led";
+  char* topic_json = "uca/iot/piscine";
 
 };
 struct Parametre parametre = {};
@@ -111,14 +120,12 @@ struct Parametre parametre = {};
 
 
 //-------------------------------------------------------
-
-
-
+WiFiClient espClient; // Wifi
+PubSubClient mqttclient(espClient); // MQTT client
 OneWire oneWire(parametre.brocheTermometre);
 DallasTemperature tempSensor(&oneWire);
 int numberKeyPresses = 0;
 Adafruit_NeoPixel strip(parametre.bandeLedPin, parametre.brocheBande, NEO_GRB + NEO_KHZ800);
-
 void setup_OTA(); // from ota.ino
 // Create AsyncWebServer object on port 80
 AsyncWebServer server(80);
@@ -408,7 +415,8 @@ void setup(){
    //setup_http_routes(&server);
    // Start ESP Web server
    server.begin();
-
+   mqttclient.setServer(parametre.mqtt_server, 1883);
+   mqttclient.setCallback(mqtt_pubcallback); 
 }
 
 
@@ -436,7 +444,16 @@ void loop() {
   if(info.timerCommunication == 0 || millis() - info.timerCommunication > parametre.periodeTimerCommunication){
     info.timerCommunication=millis();
     //readData();
-    makeJSON();
+    char payload[3048];
+    strncpy(payload, makeJSON(), sizeof(payload));
+    Serial.print("-----------zzz---------");
+    Serial.print(payload);
+    Serial.print("--------------------");
+
+    mqttclient.publish(parametre.topic_json, payload);
+ 
+  
+
   }
 
   // Lecture des données JSON reçues sur la connexion série

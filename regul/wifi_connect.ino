@@ -1,7 +1,6 @@
 void functionWificonnect(){
 
 
-  
   wifi_connect_multi(info.hostname);               
   
   if (WiFi.status() == WL_CONNECTED){
@@ -11,4 +10,6 @@ void functionWificonnect(){
   else {
     Serial.print("\nWiFi connected : no ! \n"); 
   }
+
+
 }

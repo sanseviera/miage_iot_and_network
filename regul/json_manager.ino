@@ -12,6 +12,7 @@ char* makeJSON(){
   JsonDocument information;
   JsonDocument net;
   JsonDocument reporthost;
+  JsonDocument piscine;
 
   /* 1) Build the JSON object ... easily with API !*/
   
@@ -44,7 +45,7 @@ char* makeJSON(){
   regul["temperatureAlerte"] = parametre.temperatureAlerte;
   regul["pourcentageAvantAlerte"] = parametre.pourcentageAvantAlerte;
 
-  information["ident"] = "ESP32 123";
+  information["ident"] = "ESP32-21904310";
   information["user"] = "GM";
   information["loc"] = "A biot";
 
@@ -57,6 +58,8 @@ char* makeJSON(){
   reporthost["target_port"] = parametre.target_port ;
   reporthost["sp"] = parametre.sp ;
 
+  piscine["hotspot"]  = "False";
+  piscine["occuped"]  = "True";
   /* 1.3) Etage 1 */
   
   jdoc["status"] =  status;
@@ -65,6 +68,7 @@ char* makeJSON(){
   jdoc["information"] =  information;
   jdoc["net"] =  net;
   jdoc["reporthost"] =  reporthost;
+  jdoc["piscine"] =  piscine;
 
   /* 2) SERIALIZATION => fill the payload string from jdoc object */
   serializeJson(jdoc, tampon.payload);
