@@ -1,0 +1,242 @@
+<!DOCTYPE HTML><html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <link rel="stylesheet"
+	  href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+	  integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
+	  crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="esp.css">
+    <title>ESP32</title>
+  </head>
+  
+  <body>
+    <h1>ESP32</h1>
+    <p>Projet de M. DIOP et M. BORREANI.</p>
+
+    <div class=card>
+      <h3>Object status WITH GLYPHS:</h3>
+      <div class="grid-container">
+
+        <div class="grid-item">
+          <i class="fas fa-robot"></i>
+        </div>
+        <div class="grid-item">
+          <span class="sensors-labels">Hostname</span>
+          <span>%HOSTNAME%</span>
+          <sup class="units"></sup>
+        </div>
+       
+        <div class="grid-item">
+          <i class="fas fa-clock"></i>  </div>
+        <div class="grid-item">
+          <span class="sensors-labels">Uptime</span>
+          <span id="uptime">%UPTIME%</span>
+          <sup class="units">s</sup>
+        </div>
+
+        <div class="grid-item">
+          <i class="fas fa-map-marker-alt"></i>
+        </div>
+        <div class="grid-item">
+          <span class="sensors-labels">Where</span>
+          <span><div>%WHERE%</div></span>
+          <sup class="units"></sup>
+        </div>
+
+        </div>
+    </div>
+
+    <div class=card>
+      <h3>Network link status :</h3>
+      WiFi SSID   : %SSID%<br/>
+      MAC address : %MAC%<br/>
+      IP address  : %IP%<br/>
+    </div>
+
+    <div class=card>
+      <h3>Sensors status WITH GLYPHS :</h3>
+      <div class="grid-container">
+
+        <div class="grid-item">
+	        <i class="fas fa-thermometer-half" style="color:#059e8a;"></i>
+        </div>
+        <div class="grid-item">      
+	        <span class="sensors-labels">Temperature</span> 
+	        <span id="temperature">%TEMPERATURE%</span>
+	        <sup class="units">&deg;C</sup>
+        </div>
+
+        <div class="grid-item">
+	        <i class="far fa-lightbulb" style="color:#00add6;"></i>
+        </div>
+        <div class="grid-item">
+	        <span class="sensors-labels">Light</span>
+	        <span id="light">%LIGHT%</span>
+	        <sup class="units">Lumen</sup>
+        </div>
+
+        <div class="grid-item">
+	        <i class="fas fa-snowflake" style="color:#007bff;"></i>
+        </div>
+        <div class="grid-item">
+	        <span class="sensors-labels">Cooler</span>
+	        <span id="cooler">%COOLER%</span>
+	        <sup class="units">Boolean</sup>
+        </div>
+
+        <div class="grid-item">
+	        <i class="fas fa-fire" style="color:#ff4500;"></i>
+        </div>
+        <div class="grid-item">
+	        <span class="sensors-labels">Heater</span>
+	        <span id="heater">%HEATER%</span>
+	        <sup class="units">Boolean</sup>
+        </div>
+
+      </div>
+    </div>
+
+    <div class=card>
+      <h3>Sensors status WITH GLYPHS :</h3>
+      <div class="grid-container">
+
+        <div class="grid-item">
+	        <i class="fas fa-fire" style="color:red;"></i>
+        </div>
+        <div class="grid-item">      
+	        <span class="sensors-labels">Chance de feu</span> 
+	        <span id="chancefeu">%CHANCEFEU%</span>
+	        <sup class="units"></sup>
+        </div>
+
+        <div class="grid-item">
+	        <i class="fas fa-fire" style="color:red;"></i>
+        </div>
+        <div class="grid-item">      
+	        <span class="sensors-labels">Feu</span> 
+	        <span id="feu">%FEU%</span>
+	        <sup class="units"></sup>
+        </div>
+
+        <div class="grid-item">
+	        <i class="fas fa-thermometer-half" style="color:blue;"></i>
+        </div>
+        <div class="grid-item">      
+	        <span class="sensors-labels">Température min enregisté</span> 
+	        <span id="tempmin">%TEMPMIN%</span>
+	        <sup class="units"></sup>
+        </div>
+
+        <div class="grid-item">
+	        <i class="fas fa-thermometer-half" style="color:red;"></i>
+        </div>
+        <div class="grid-item">      
+	        <span class="sensors-labels">Température max enregisté</span> 
+	        <span id="tempmax">%TEMPMAX%</span>
+	        <sup class="units"></sup>
+        </div>
+
+        <div class="grid-item">
+          <i class="fas fa-wind"></i>
+        </div>
+        <div class="grid-item">      
+	        <span class="sensors-labels">Vitesse du ventilateur</span> 
+	        <span id="ventilateur">%VENTILATEUR%</span>
+	        <sup class="units"></sup>
+        </div>
+
+
+        
+      </div>
+    </div>
+
+    <div class=card>
+      <h3>Temp. Regul. Thresholds :</h3>
+      Low Temp  : %LT% C<br/>
+      High Temp : %HT% C<br/>
+    </div>
+
+    <div class=card>
+      <h3> Periodic status report to :</h3>
+      <form action="/target" method="post">
+        <label for="ip">IP Address :</label>
+        <input id="target_ip" type="text" name="ip" placeholder="%PRT_IP%"/><br/>
+        <label for="port">Port :</label>
+        <input id="target_port" type="text" name="port" placeholder="%PRT_PORT%"/><br/>
+        <label for="sp"> Sampling Period (in seconds) :</label>
+        <input id="sp" type="text" name="sp" placeholder="%PRT_T%"/><br/>
+        <input id="monBouton" type="submit" value="Change reporting host !"/>
+      </form>
+    </div>
+
+    <script>
+      var bouton = document.getElementById("monBouton");
+      // Ajoutez un gestionnaire d'événements pour le clic
+      bouton.addEventListener("click", function() {
+        // Récupérer les valeurs des champs du formulaire
+        var target_ip = document.getElementById("target_ip").value;
+        var target_port = document.getElementById("target_port").value;
+        var sp = document.getElementById("sp").value;
+
+        // Construire l'URL de manière dynamique
+        var dynamicUrl = "http://" + ip + "/target";
+      
+        // Créer un objet avec les données à envoyer
+        var data = {
+          target_ip: target_ip,
+          target_port: target_port,
+          sp: sp
+        };
+        
+        // Envoyer les données au serveur en utilisant une requête AJAX
+        $.ajax({
+          type: "POST",
+          url: dynamicUrl,
+          contentType: "application/json",
+          data: JSON.stringify(data),
+          success: function(response) {
+            console.log("Données envoyées avec succès !");
+            console.log(response);
+          },
+          error: function(error) {
+            console.error("Erreur lors de l'envoi des données au serveur : " + error);
+          }
+        });
+
+      });
+    </script>
+    <script>
+      function startUpdate(sensor) {
+        setInterval(function() {
+            fetch(sensor)
+                .then(function(response) {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error: ${response.status}`);
+                    }
+                    return response.text();
+                })
+                .then(function(text) {
+                    document.getElementById(sensor).innerHTML = text;
+                })
+                .catch(function(error) {
+                    console.log(error);
+                });
+        }, 2000);
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+        startUpdate('temperature');
+        startUpdate('light');
+        startUpdate('cooler');
+        startUpdate('heater');
+        startUpdate('uptime');
+        startUpdate('chancefeu');
+        startUpdate('feu');
+        startUpdate('tempmin');
+        startUpdate('tempmax');
+        startUpdate('ventilateur');
+      
+    });
+    </script>
+  </body>
+</html>

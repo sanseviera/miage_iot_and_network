@@ -1,0 +1,389 @@
+[
+    {
+        "id": "91d3e3e2f3d403b2",
+        "type": "tab",
+        "label": "Swimming Pools",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "e8451161fd518278",
+        "type": "inject",
+        "z": "91d3e3e2f3d403b2",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "str",
+        "x": 190,
+        "y": 220,
+        "wires": [
+            [
+                "00cfe8bb3c2ae70c"
+            ]
+        ]
+    },
+    {
+        "id": "00cfe8bb3c2ae70c",
+        "type": "function",
+        "z": "91d3e3e2f3d403b2",
+        "name": "Téléportation",
+        "func": "// create random position\nvar lat = 43.61999752 + Math.random() * 0.1;\nvar lon = 7.0499998 + Math.random() * 0.1;\nmsg.payload={\n    lat:lat, \n    lon:lon, \n    name:\"Gilles\", \n    description: \"Temperature in my swimming pool\",\n    value: 20.5,\n    unit: \"°C\",\n    icon:\"male\", \n    color:\"#000\"};\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 380,
+        "y": 280,
+        "wires": [
+            [
+                "4fbe6756507df24d",
+                "42b8ea3596ba0a99",
+                "26974a09caba3580"
+            ]
+        ]
+    },
+    {
+        "id": "6b986ec77b36c4d7",
+        "type": "ui_button",
+        "z": "91d3e3e2f3d403b2",
+        "name": "",
+        "group": "c381d97f0297a045",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "label": "Move Gilles",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "fa-male",
+        "payload": "",
+        "payloadType": "str",
+        "topic": "",
+        "topicType": "str",
+        "x": 190,
+        "y": 280,
+        "wires": [
+            [
+                "00cfe8bb3c2ae70c"
+            ]
+        ]
+    },
+    {
+        "id": "925f3b7965da3271",
+        "type": "mqtt in",
+        "z": "91d3e3e2f3d403b2",
+        "name": "",
+        "topic": "uca/iot/piscine",
+        "qos": "0",
+        "datatype": "utf8",
+        "broker": "2440edb5d689cbd1",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 170,
+        "y": 460,
+        "wires": [
+            [
+                "c9af18af38a83c29",
+                "eef78ebae73f06df"
+            ]
+        ]
+    },
+    {
+        "id": "26974a09caba3580",
+        "type": "debug",
+        "z": "91d3e3e2f3d403b2",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 860,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "c9af18af38a83c29",
+        "type": "json",
+        "z": "91d3e3e2f3d403b2",
+        "name": "",
+        "property": "payload",
+        "action": "obj",
+        "pretty": false,
+        "x": 372,
+        "y": 419,
+        "wires": [
+            [
+                "d4e00a19d43a8be2"
+            ]
+        ]
+    },
+    {
+        "id": "26dc85a71fbf815e",
+        "type": "ui_button",
+        "z": "91d3e3e2f3d403b2",
+        "name": "",
+        "group": "c381d97f0297a045",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "label": "Reset",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "",
+        "payloadType": "str",
+        "topic": "",
+        "topicType": "str",
+        "x": 150,
+        "y": 360,
+        "wires": [
+            [
+                "d22925aa4c16abf6"
+            ]
+        ]
+    },
+    {
+        "id": "d22925aa4c16abf6",
+        "type": "function",
+        "z": "91d3e3e2f3d403b2",
+        "name": "Reset Layer",
+        "func": "// clear the \"by default\" layer \nmsg.payload = {\"command\": { \"clear\": \"unknown\" } };\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 384.5,
+        "y": 349,
+        "wires": [
+            [
+                "42b8ea3596ba0a99"
+            ]
+        ]
+    },
+    {
+        "id": "d4e00a19d43a8be2",
+        "type": "function",
+        "z": "91d3e3e2f3d403b2",
+        "name": "json adapt",
+        "func": "// Votre code existant pour préparer l'objet de la piscine\nvar nmsg = { // on crée un nouveau message Node-RED\n    topic: msg.topic  // on garde le vieux topic\n};\n\n// Gestion de l'occupation (adaptez cette partie selon votre logique réelle)\nvar busy = msg.payload.piscine.occuped ? \"battery-full\" : \"battery-empty\";\n\n// Gestion de la couleur du hotspot\nvar hsc = msg.payload.piscine.hotspot ? \"Red\" : \"Blue\";\n\n// Préparation de l'objet de la piscine\nvar poolObject = {\n    layer: \"swimming pools\",\n    name: msg.payload.info.ident,\n    description: msg.payload.info.user,\n    unit: \"C\",\n    color: \"#000\",\n    value: msg.payload.status.temperature,\n    lat: msg.payload.location.gps.lat,\n    lon: msg.payload.location.gps.lon,\n    iconColor: hsc,\n    icon: busy    \n};\n\n// Préparation de l'objet du cercle de 10 km autour de la piscine\nvar circleObject = {\n    name: msg.payload.info.ident + \"_circle\",\n    lat: msg.payload.location.gps.lat,\n    lon: msg.payload.location.gps.lon,\n    radius: 10000, // Rayon en mètres pour 10 km\n    options: {\n        color: \"#ff69b4\",\n        fillColor: \"#f0b6da\",\n        fillOpacity: 0.1\n    },\n    layer: \"circles\"\n};\n\n// Envoi de l'objet piscine\nnode.send({payload: poolObject});\n\n// Envoi de l'objet cercle avec un léger délai pour s'assurer qu'il est traité comme un message distinct\nsetTimeout(function() {\n    node.send({payload: circleObject});\n}, 10);",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 610.5,
+        "y": 379,
+        "wires": [
+            [
+                "42b8ea3596ba0a99",
+                "26974a09caba3580"
+            ]
+        ]
+    },
+    {
+        "id": "68db9c99cb7efd02",
+        "type": "comment",
+        "z": "91d3e3e2f3d403b2",
+        "name": "Fichier mapflow.json  : How to embed Map in Dashboard and connect it via MQTT.",
+        "info": "This example shows how to embed the Worldmap \nwithin the `node-red-dashboard`\n\nThe  flow creates a dashboard button that \ngenerates a randon position, with the required \nicon, and passes that to the worldmap. The\nmap is configured to automatically pan to the\nposition of any point that arrives.\n",
+        "x": 380,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "4fbe6756507df24d",
+        "type": "worldmap-tracks",
+        "z": "91d3e3e2f3d403b2",
+        "name": "",
+        "depth": "6",
+        "layer": "combined",
+        "smooth": false,
+        "x": 593,
+        "y": 232,
+        "wires": [
+            [
+                "42b8ea3596ba0a99"
+            ]
+        ]
+    },
+    {
+        "id": "42b8ea3596ba0a99",
+        "type": "ui_worldmap",
+        "z": "91d3e3e2f3d403b2",
+        "group": "c381d97f0297a045",
+        "order": 4,
+        "width": "0",
+        "height": "0",
+        "name": "",
+        "lat": "43.61999752",
+        "lon": "7.0499998",
+        "zoom": "11",
+        "layer": "OSMC",
+        "cluster": "",
+        "maxage": "",
+        "usermenu": "show",
+        "layers": "show",
+        "panit": "true",
+        "panlock": "false",
+        "zoomlock": "false",
+        "hiderightclick": "true",
+        "coords": "deg",
+        "showgrid": "true",
+        "allowFileDrop": "false",
+        "path": "/worldmap",
+        "overlist": "DR,CO,RA,DN,TL,HM",
+        "maplist": "OSMG,OSMC,EsriC,EsriS,EsriT,EsriO,EsriDG,NatGeo,UKOS,OpTop",
+        "mapname": "",
+        "mapurl": "",
+        "mapopt": "",
+        "mapwms": false,
+        "x": 860,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "01b369780431a3cf",
+        "type": "ui_led",
+        "z": "91d3e3e2f3d403b2",
+        "order": 0,
+        "group": "8cac27d44580223b",
+        "width": 0,
+        "height": 0,
+        "label": "another tab sp",
+        "labelPlacement": "left",
+        "labelAlignment": "left",
+        "colorForValue": [
+            {
+                "color": "#ff0000",
+                "value": "false",
+                "valueType": "bool"
+            },
+            {
+                "color": "#008000",
+                "value": "true",
+                "valueType": "bool"
+            }
+        ],
+        "allowColorForValueInMessage": false,
+        "shape": "circle",
+        "showGlow": true,
+        "name": "",
+        "x": 170,
+        "y": 660,
+        "wires": []
+    },
+    {
+        "id": "eef78ebae73f06df",
+        "type": "debug",
+        "z": "91d3e3e2f3d403b2",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 380,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "c381d97f0297a045",
+        "type": "ui_group",
+        "z": "91d3e3e2f3d403b2",
+        "name": "SP",
+        "tab": "580b23053f774d4a",
+        "order": 1,
+        "disp": true,
+        "width": "25",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "2440edb5d689cbd1",
+        "type": "mqtt-broker",
+        "name": "Mosquitto broker",
+        "broker": "test.mosquitto.org",
+        "port": "1883",
+        "tls": "",
+        "clientid": "GMM",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "8cac27d44580223b",
+        "type": "ui_group",
+        "name": "Pour mettre votre dashboard de l'ESP/piscine",
+        "tab": "5f184e1fabd409d3",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "580b23053f774d4a",
+        "type": "ui_tab",
+        "z": "91d3e3e2f3d403b2",
+        "name": "Tab of  Swimming Pools",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "5f184e1fabd409d3",
+        "type": "ui_tab",
+        "name": "Dash de l'ESP",
+        "icon": "dashboard",
+        "order": 3,
+        "disabled": false,
+        "hidden": false
+    }
+]

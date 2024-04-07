@@ -1,0 +1,61 @@
+html {
+  font-family: Arial;
+  display: flex;
+  margin: 0px auto;
+  text-align: left;
+  justify-content: center; /* Centrer horizontalement */
+  background-color: rgb(243, 243, 243);
+
+}
+h2 { font-size: 3.0rem; }
+/*p { font-size: 3.0rem; }*/
+.units { font-size: 1.2rem; }
+.sensors-labels{
+  font-size: 1.5rem;
+  vertical-align:middle;
+  padding-bottom: 15px;
+}
+div {
+  max-width : 500px;
+  word-wrap: break-word;
+  text-align: left; 
+}
+.grid-container {
+  display: grid;
+  grid-template-columns: auto auto;
+  background-color: black;
+  padding: 10px;
+  border-radius: 3px;
+}
+.grid-item {
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.8);
+  padding: 20px;
+  font-size: 30px;
+  text-align: center;
+}
+
+input {
+  margin-bottom: 5px; /* Ajoute un espace en bas de chaque champ de saisie à l'intérieur de la carte */
+}
+
+.container {
+  white-space: nowrap; /* Pour éviter les sauts de ligne */
+}
+p {
+  display: inline-block;}
+
+.card {
+  background: white;
+  transition: height 0.3s ease;
+  padding: 15px;
+  border: 0.1mm solid black ;
+  box-shadow: 2px 2px 2px black;
+  margin-bottom: 15px;
+  border-radius: 3px;
+  max-width: 1200px;
+}
+.card:hover {
+  box-shadow: 4px 4px 4px black;
+  transform: scale(1.01);
+}
