@@ -107,12 +107,17 @@ struct Parametre{
   char* lat = "43.7102271";
   char* lon = "7.2599507";
   char* address = "12 Boulevard Joseph Garnier";
+  char* identifiant = "P_22016588";
   //--------------Mqtt------------------
   char* mqtt_server = "test.mosquitto.org"; 
   // topic
   char* topic_temp = "uca/M1/iot/temp";
   char* topic_led = "uca/M1/iot/led";
   char* topic_json = "uca/iot/piscine";
+  char* topic_etat = "uca/M1/iot/etat2201";
+
+  // Piscine
+  int piscineEtat = 1;
 
 };
 struct Parametre parametre = {};
@@ -280,7 +285,8 @@ void setBandeLed(){
   strip.show();
 }
 
-void setLed(){
+// Gestion  Led pour les premiers TPs
+/*void setLed(){
   int colorA = 0; 
   int colorB = 0; 
   int colorC = 0; 
@@ -307,6 +313,56 @@ void setLed(){
   for(int i=0; i<5; i++) {
     strip.setPixelColor(i, strip.Color(colorA, colorB, colorC));
   }
+    strip.show();
+}*/
+
+// Gestion  Led pour la piscine
+void setLedPiscine() {
+    int colorA = 0;
+    int colorB = 0;
+    int colorC = 0;
+
+    // Changer les indices en fonction de votre configuration de couleur dans rgball
+    if (parametre.piscineEtat == 1) { // Disponible - Vert
+      colorA = 0;
+      colorB = 255;
+      colorC = 0;
+    } 
+    else if (parametre.piscineEtat == 0) { // Accordé - Jaune
+      colorA = 255;
+      colorB = 0;
+      colorC = 0;
+    }
+    else if (parametre.piscineEtat == 2) { // Accès refusé - Rouge
+      colorA = 255;
+      colorB = 0;
+      colorC = 0;
+
+        // Afficher la couleur rouge pendant 30 secondes
+        for (int i = 0; i < 5; i++) {
+            strip.setPixelColor(i, strip.Color(colorA, colorB, colorC));
+        }
+        strip.show();
+        delay(30000); // Attendre 30 secondes
+
+        // Retour à la couleur verte pour disponible
+        for (int i = 0; i < 5; i++) {
+            strip.setPixelColor(i, strip.Color(0, 255, 0));
+        }
+        strip.show();
+    }
+
+    // Appliquer la couleur choisie immédiatement pour les états autres que refusé
+    if (parametre.piscineEtat != 2) {
+        for (int i = 0; i < 5; i++) {
+            strip.setPixelColor(i, strip.Color(colorA, colorB, colorC));
+        }
+        strip.show();
+    }
+    // Appliquer la couleur choisie
+    for (int i = 0; i < strip.numPixels(); i++) {  // Utilise numPixels() pour couvrir toute la bande LED
+        strip.setPixelColor(i, strip.Color(colorA, colorB, colorC));
+    }
     strip.show();
 }
 
@@ -402,6 +458,7 @@ struct TemperatureData {
     int count; // Nombre de températures reçues
     float latitudes[15]; // Pour stocker la latitude de chaque température reçue
     float longitudes[15]; // Pour stocker la longitude de chaque température reçue
+    const char* receivedIDs[15];
 } tempData;
 
 void resetTemperatureData() {
@@ -411,6 +468,7 @@ void resetTemperatureData() {
         tempData.receivedTemperatures[i] = -999.0; // Initialise avec une valeur non valide
         tempData.latitudes[i] = -999.0; // Initialise avec une valeur non valide
         tempData.longitudes[i] = -999.0; // Initialise avec une valeur non valide
+        tempData.receivedIDs[i] = NULL;
     }
 }
 
@@ -426,11 +484,12 @@ double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
     return distance;
 }
 
-void addReceivedTemperature(float temperature, float latitude, float longitude) {
+void addReceivedTemperature(float temperature, float latitude, float longitude, const char* ident) {
     if (tempData.count < 15) {
         tempData.receivedTemperatures[tempData.count] = temperature;
         tempData.latitudes[tempData.count] = latitude;
         tempData.longitudes[tempData.count] = longitude;
+        tempData.receivedIDs[tempData.count] = ident;
         tempData.count++;
     }
 }
@@ -438,40 +497,29 @@ void addReceivedTemperature(float temperature, float latitude, float longitude) 
 double myLat = atof(parametre.lat);
 double myLon = atof(parametre.lon);
 
-/*void checkAndSetHotspot() {
-    //tempData.isHotspot = true; // Supposons que c'est un hotspot jusqu'à preuve du contraire
-    
-    for (int i = 0; i < tempData.count; i++) {
-      double distance = calculateDistance(myLat, myLon, tempData.latitudes[i], tempData.longitudes[i]);
-        if (distance <= 10.0 && tempData.receivedTemperatures[i] > info.temperature) {
-            digitalWrite(2, LOW);  // Éteint la LED sur la broche 2
-            hspot = false; // Si une température reçue est plus élevée, ce n'est pas un hotspot
-            Serial.println("Nous ne sommes pas un hotspot.");
-            //break;
-        } else if (distance <= 10.0 && tempData.receivedTemperatures[i] < info.temperature) {
-            digitalWrite(2, HIGH); // Allume la LED sur la broche 2
-            hspot = true; // Si une température reçue est plus élevée, ce n'est pas un hotspot
-            Serial.println("Nous sommes un hotspot !");
-            //break;
-        }
-    }
-}*/
-
 void checkAndSetHotspot() {
-    float maxTemperature = -999; // Initialise avec une valeur basse pour être sûr de trouver une température plus élevée
+    char ESP_ID[18];  // Buffer pour stocker l'identifiant de l'ESP
+    strcpy(ESP_ID, parametre.identifiant);  // Copie directe sans .as<const char*>()
+
+    float maxTemperature = -999;
+    const char* maxTempID = nullptr;  // Utilisez nullptr pour l'initialisation de pointeurs
+
+    int devicesInRadius = 0;  // Compteur pour les dispositifs dans le rayon de 10 km
 
     // Trouvez la température maximale parmi les températures reçues dans un rayon de 10 km
     for (int i = 0; i < tempData.count; i++) {
         double distance = calculateDistance(myLat, myLon, tempData.latitudes[i], tempData.longitudes[i]);
         if (distance <= 10.0) {
+            devicesInRadius++;
             if (tempData.receivedTemperatures[i] > maxTemperature) {
                 maxTemperature = tempData.receivedTemperatures[i];
+                maxTempID = tempData.receivedIDs[i];
             }
         }
     }
 
     // Comparez cette température maximale avec la température de l'ESP
-    if (info.temperature > maxTemperature) {
+    if (devicesInRadius > 1 && (info.temperature > maxTemperature || (maxTempID && strcmp(maxTempID, ESP_ID) == 0))) {
         digitalWrite(2, HIGH); // Allume la LED sur la broche 2 pour indiquer que c'est un hotspot
         hspot = true;
         Serial.println("Nous sommes un hotspot !");
@@ -482,16 +530,41 @@ void checkAndSetHotspot() {
     }
 }
 
-
 void checkAndSetOccuped() {
         // Détection de présence basée sur la luminosité
-        if (info.lumiere < 3000) {
+        if (info.lumiere < 50) {
           occupe = true;
+          parametre.piscineEtat = 0;
           Serial.println("Nous sommes occupés.");
         } else {
           occupe = false;
+          parametre.piscineEtat = 1;
           Serial.println("Nous ne sommes pas occupés.");
         }
+}
+
+void publishPoolStatus() {
+  if (mqttclient.connected()) {
+    char statusPayload[50];
+    snprintf(statusPayload, sizeof(statusPayload), "{\"etatPiscine\": %d}", parametre.piscineEtat);
+    mqttclient.publish(parametre.topic_etat, statusPayload);
+  }
+}
+
+
+void reconnectMQTT() {
+    while (!mqttclient.connected()) {
+        Serial.print("Attempting MQTT connection...");
+        if (mqttclient.connect("ESP32-22016588")) {
+            Serial.println("connected");
+            mqttclient.subscribe(parametre.topic_etat);
+        } else {
+            Serial.print("failed, rc=");
+            Serial.print(mqttclient.state());
+            Serial.println(" try again in 5 seconds");
+            delay(5000);
+        }
+    }
 }
 
 //-------------Fonction native---------------------
@@ -520,18 +593,18 @@ void setup(){
   
    
    mqttclient.setServer(parametre.mqtt_server, 1883);
-   mqttclient.setCallback(mqtt_pubcallback); 
+   mqttclient.setCallback(mqtt_pubcallback);
+
+   reconnectMQTT(); // Ensure MQTT is connected and subscribed at setup
 }
 
 
 void loop() {
   // Ce type de condition permet d'exécuter le contenu toutes les N millisecondes, ce qui évite d'avoir un programme trop linéaire.
   if(info.timerGeneral == 0 || millis() - info.timerGeneral > parametre.periodeTimerGeneral){
-
     info.timerGeneral=millis();
     info.lumiere = lireCapteurLumiere();
     info.temperature = lireCapteurChaleur();
-    
     setMaxTemperature();
     setMinTemperature();
     setDetectorFire();
@@ -539,49 +612,36 @@ void loop() {
     setChauffage();
     setVentilo();
     setAlerte();
-    
   }
-  if(info.timerBandeLed == 0 || millis() - info.timerBandeLed > parametre.periodeTimerBandeLed){
+  /*if(info.timerBandeLed == 0 || millis() - info.timerBandeLed > parametre.periodeTimerBandeLed){
     info.timerBandeLed=millis();
-    setLed();
-  }
+    //setLed();
+    setLedPiscine();
+  }*/
   if(info.timerCommunication == 0 || millis() - info.timerCommunication > parametre.periodeTimerCommunication){
     info.timerCommunication=millis();
     //readData();
-
-    //int32_t period = 5000; // 5 sec
   
-    /*--- subscribe to TOPIC_LED if not yet ! */
-    /*mqtt_subscribe_mytopics();
-    char payload[100];
-
-    USE_SERIAL.print("Publish payload : "); USE_SERIAL.print(payload); 
-    USE_SERIAL.print(" on topic : "); USE_SERIAL.println(parametre.topic_json);
-    /*strncpy(payload, makeJSON(), sizeof(payload));
-    Serial.print("-----------zzz---------");
-    Serial.print(payload);
-    Serial.print("--------------------");*/
-
-    /*mqttclient.publish(parametre.topic_json, payload);
-
-    /* Process MQTT ... une fois par loop() ! */
-    //mqttclient.loop(); // Process MQTT event/action
-
     mqtt_subscribe_mytopics(); // Assurez-vous que vous êtes abonné à vos topics si nécessaire
   
     char* payload = makeJSON(); // Génère le JSON
   
     USE_SERIAL.print("Publish payload : "); USE_SERIAL.println(payload); 
     USE_SERIAL.print(" on topic : "); USE_SERIAL.println(parametre.topic_json);
-  
     mqttclient.publish(parametre.topic_json, payload);
+    
+    USE_SERIAL.print(" on topic etat piscine : "); USE_SERIAL.println(parametre.topic_etat);
+
+    //setLedPiscine();
+    
+    // Publie l'état de la piscine à chaque mise à jour
+    publishPoolStatus();
+    //mqttclient.publish(parametre.topic_etat, payload);
 
     checkAndSetOccuped();
     checkAndSetHotspot();
     
     mqttclient.loop(); // Gère les callbacks et maintient la connexion active
- 
-  
 
   }
 
@@ -613,6 +673,12 @@ void loop() {
     // Fermez la connexion après l'envoi
     http.end();
   }*/
+
+    // Regular MQTT maintenance
+    if (!mqttclient.connected()) {
+        reconnectMQTT();  // Implement this to handle MQTT reconnections
+    }
+    mqttclient.loop();
   
 }
 

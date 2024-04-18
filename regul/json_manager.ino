@@ -43,8 +43,8 @@ char* makeJSON(){
   //regul["temperatureAlerte"] = parametre.temperatureAlerte;
   //regul["pourcentageAvantAlerte"] = parametre.pourcentageAvantAlerte;
 
-  information["ident"] = "P_22016588";
-  information["user"] = "DIOP Serigne Rawane";
+  information["ident"] = parametre.identifiant;
+  information["user"] = "Epsilon";
   information["loc"] = "A Libération-Nice";
 
   net["uptime"] = String(millis());

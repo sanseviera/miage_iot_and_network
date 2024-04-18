@@ -1,7 +1,5 @@
 #include <ArduinoJson.h>  // Assurez-vous d'inclure cette bibliothèque en haut de votre fichier
 
-
-
 void mqtt_pubcallback(char* topic, byte* payload, unsigned int length) {
   Serial.print("Message arrived [");
   Serial.print(topic);
@@ -17,15 +15,24 @@ void mqtt_pubcallback(char* topic, byte* payload, unsigned int length) {
   // Désérialisation du JSON
   StaticJsonDocument<1024> doc; // Augmentez la taille si nécessaire
   DeserializationError error = deserializeJson(doc, msg);
-
-  if (error) {
-    Serial.print("deserializeJson() failed: ");
-    Serial.println(error.f_str());
+    
+  if (!error) {
+    if (String(topic) == parametre.topic_etat) {
+      int etatPiscine = doc["etatPiscine"];  // Make sure the key matches what's sent by your device
+      //parametre.piscineEtat = etatPiscine;
+      //setLedPiscine();  // Update the LED based on the pool status
+      if (etatPiscine != parametre.piscineEtat) {
+            parametre.piscineEtat = etatPiscine;
+            setLedPiscine();
+        }
+    }
+  } else {
+    Serial.print("Erreur de désérialisation: ");
+    Serial.println(error.c_str());
     return;
   }
 
   float temperature = doc["status"]["temperature"];
-  
 
   // Extraction de la température depuis le JSON
   //float temperature2 = doc["status"]["temperature"];  // Accès au chemin complet dans le document JSON
@@ -40,24 +47,13 @@ void mqtt_pubcallback(char* topic, byte* payload, unsigned int length) {
   Serial.print("Longitude: ");
   Serial.println(longitude, 6);  // Affiche la température avec 2 décimales
 
-  addReceivedTemperature(temperature, latitude, longitude);
+  const char* ident = doc["info"]["ident"]; // Ajouter l'identifiant ESP si disponible
 
-  /*// Vous pouvez également accéder à d'autres valeurs de la même manière
-  int light = doc["status"]["light"];
-  Serial.print("Light: ");
-  Serial.println(light);
-
-  // Exemple pour extraire une valeur booléenne
-  bool fire = doc["status"]["fire"];
-  Serial.print("Fire: ");
-  Serial.println(fire ? "true" : "false");
-
-  // Pour des chaînes de caractères
-  const char* regul = doc["status"]["regul"];
-  Serial.print("Regulation status: ");
-  Serial.println(regul);*/
+  if (ident != nullptr) {
+    addReceivedTemperature(temperature, latitude, longitude, ident); // Passer l'identifiant ici
+  }
+  
 }
-
 
 /*============= SUBSCRIBE to TOPICS ===================*/
 void mqtt_subscribe_mytopics() {
@@ -85,8 +81,8 @@ void mqtt_subscribe_mytopics() {
       USE_SERIAL.println("connected");
           
       // then Subscribe topics
-      mqttclient.subscribe(parametre.topic_json,1);
-      // mqttclient.subscribe(anothertopic ?);
+      mqttclient.subscribe(parametre.topic_json, 1);
+      mqttclient.subscribe(parametre.topic_etat);
     } 
     else { // Connection to broker failed : retry !
       USE_SERIAL.print("failed, rc=");
